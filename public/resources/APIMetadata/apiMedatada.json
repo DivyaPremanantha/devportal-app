@@ -1,0 +1,11 @@
+{
+    "apiInfo": {
+        "additionalProperties": {
+            "api-landing-page-section-one": "Welcome to AccommodationAPI, your ultimate destination for finding the perfect accommodation. Whether it's a vacation, business trip, or any other travel, we make it easy to discover and book accommodations tailored to your preferences.",
+            "api-landing-page-section-one-list-one": "Extensive Database: Access a vast collection of accommodations worldwide.",
+            "api-landing-page-section-one-list-two": "Easy Search: Effortlessly find accommodations based on your criteria.",
+            "api-landing-page-section-one-list-three": "Secure Booking: Ensure a safe and reliable booking experience.",
+            "api-landing-page-section-one-list-four": "Personalized Recommendations: Receive suggestions based on your preferences."
+        }
+    }
+}

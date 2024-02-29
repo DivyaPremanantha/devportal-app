@@ -1,0 +1,22 @@
+{
+  "name": "devportal-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^14.1.0",
+    "nextjs-current-url": "^1.0.3",
+    "nextjs-routes": "^2.1.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-helmet": "^6.1.0",
+    "react-markdown": "^9.0.1",
+    "react-router-dom": "^6.22.1",
+    "rehype-raw": "^7.0.0"
+  }
+}
