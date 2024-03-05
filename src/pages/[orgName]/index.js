@@ -1,20 +1,34 @@
-import React from "react";
+import { React, useEffect} from "react";
 import Navbar from '../../app/Navbar';
 import Footer from '../../app/Footer';
-import {Helmet} from "react-helmet";
 import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
-  const orgName = context.params.orgName;
   const content = {}
+  var htmlRef;
+  var stylesheetRef;
 
-  console.log(process.env.HOST);
+  if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
+    htmlRef = process.env.NEXT_PUBLIC_HOST + "resources/OrgLandingPage/template/org-landing-page.html"
+    stylesheetRef = process.env.NEXT_PUBLIC_HOST + "resources/OrgLandingPage/stylesheet/org-landing-page.css"
 
-  const res = await fetch(process.env.NEXT_PUBLIC_HOST + "/resources/OrgLandingPage/template/org-landing-page.html")
+  } else {
+    htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/OrgLandingPage/template/org-landing-page.html"
+    stylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/OrgLandingPage/stylesheet/org-landing-page.css"
+  }
+
+  const res = await fetch(htmlRef)
   const htmlContent = await res.text()
   content.orgContent = htmlContent
-  content.orgName = orgName
-  
+
+  const respo = await fetch(stylesheetRef);
+  const stylesheetContent = await respo.text();
+  content.stylesheetContent = stylesheetContent;
+
+
+  content.orgName = context.params.orgName
+  content.stylesheetRef = stylesheetRef
+
   // Pass data to the page via props
   return { props: { content } }
 }
@@ -23,18 +37,18 @@ export default function Page({ content }) {
   const router = useRouter();
   router.asPath = "/" + content.orgName;
 
-  const stylesheetRef = process.env.NEXT_PUBLIC_HOST + "/resources/OrgLandingPage/stylesheet/org-landing-page.css"
+  useEffect(() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = content.stylesheetContent;
+    document.head.appendChild(styleElement);
+
+}, []);
 
   return (
     <>
-      <Helmet>
-        <link href={stylesheetRef}  rel="stylesheet" />
-        <link rel="icon" href="/favicon.ico" />
-      </Helmet>
-
       <div className="div">
         <Navbar />
-        <div dangerouslySetInnerHTML={{__html : content.orgContent}}></div>
+        <div dangerouslySetInnerHTML={{ __html: content.orgContent }}></div>
         <Footer />
       </div>
     </>
