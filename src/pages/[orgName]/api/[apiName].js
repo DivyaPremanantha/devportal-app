@@ -66,11 +66,9 @@ function API({ content }) {
 
     return (
         <>
-            <div>
-                <Navbar />
-                <div dangerouslySetInnerHTML={{ __html: content.orgContent }}></div>
-                <Footer />
-            </div>
+            <Navbar />
+            <div dangerouslySetInnerHTML={{ __html: content.orgContent }}></div>
+            <Footer />
         </>
     )
 }
