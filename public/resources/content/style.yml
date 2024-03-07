@@ -1,0 +1,63 @@
+palette:
+  type: string
+  background:
+    primary:
+      light: string
+      dark: string
+    secondary:
+      light: string
+      dark: string
+  text:
+    primary:
+      light: string
+      dark: string
+    secondary:
+      light: string
+      dark: string
+  button:
+    primary:
+      light: string
+      dark: string
+    secondary:
+      light: string
+      dark: string
+typography:
+  heading:
+    fontFamily: string
+  body:
+    fontFamily: string
+  paragraph:
+    fontFamily: string
+assets:
+  logoUrl:
+    header: string
+    footer: string
+    favicon: string
+footerLink:
+  terms: string
+  privacyPolicy: string
+  support: string
+apiListingPage:
+  apiTilePalette:
+    type: string
+    background:
+      primary:
+        light: string
+        dark: string
+      secondary:
+        light: string
+        dark: string
+    text:
+      primary:
+        light: string
+        dark: string
+      secondary:
+        light: string
+        dark: string
+    button:
+      primary:
+        light: string
+        dark: string
+      secondary:
+        light: string
+        dark: string

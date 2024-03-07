@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "zip" : "sh src/compress.sh"
+    "zip": "sh src/compress.sh"
   },
   "dependencies": {
     "jszip": "^3.10.1",
@@ -19,6 +19,7 @@
     "react-helmet": "^6.1.0",
     "react-markdown": "^9.0.1",
     "react-router-dom": "^6.22.1",
+    "read-yaml": "^1.1.0",
     "rehype-raw": "^7.0.0"
   },
   "devDependencies": {
