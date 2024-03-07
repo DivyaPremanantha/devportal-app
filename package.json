@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "zip" : "sh src/zip.sh"
+    "zip" : "sh src/compress.sh"
   },
   "dependencies": {
     "jszip": "^3.10.1",
