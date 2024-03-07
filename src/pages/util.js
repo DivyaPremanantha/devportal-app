@@ -29,7 +29,6 @@ export const LoadAPIContent = (filePath) => {
         .then(response => response.json())
         .then(apiData => {
             var data = apiData.apiInfo.additionalProperties;
-            console.log(data);
             if (data !== null) {
                 for (const [key, value] of Object.entries(data)) {
                     if (document.getElementById(key) !== null) {

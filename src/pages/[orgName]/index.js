@@ -9,12 +9,12 @@ export async function getServerSideProps(context) {
   var stylesheetRef;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-    htmlRef = process.env.NEXT_PUBLIC_HOST + "resources/OrgLandingPage/template/org-landing-page.html"
-    stylesheetRef = process.env.NEXT_PUBLIC_HOST + "resources/OrgLandingPage/stylesheet/org-landing-page.css"
+    htmlRef = process.env.NEXT_PUBLIC_HOST + "resources/template/org-landing-page.html"
+    stylesheetRef = process.env.NEXT_PUBLIC_HOST + "resources/stylesheet/org-landing-page.css"
 
   } else {
-    htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/OrgLandingPage/template/org-landing-page.html"
-    stylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/OrgLandingPage/stylesheet/org-landing-page.css"
+    htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/org-landing-page.html"
+    stylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/org-landing-page.css"
   }
 
   const res = await fetch(htmlRef)

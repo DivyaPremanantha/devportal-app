@@ -13,7 +13,7 @@
                 "api-landing-page-details-two": "It also allows making a booking."
             },
             "apiImages": {
-                "api-landing-page-image": "/resources/APILandingPage/images/accommodation.png"
+                "api-landing-page-image": "/resources/images/accommodation.png"
             }
         }
     }

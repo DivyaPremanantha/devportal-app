@@ -11,13 +11,13 @@ export async function getServerSideProps(context) {
     var apiContentRef;
 
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-        htmlRef = process.env.NEXT_PUBLIC_HOST + "resources/APILandingPage/template/api-landing-page.html"
-        stylesheetRef = process.env.NEXT_PUBLIC_HOST + "resources/APILandingPage/stylesheet/api-landing-page.css";
-        apiContentRef = process.env.NEXT_PUBLIC_HOST + "resources/APIMetadata/apiMedatada.json";
+        htmlRef = process.env.NEXT_PUBLIC_HOST + "resources/template/api-landing-page.html"
+        stylesheetRef = process.env.NEXT_PUBLIC_HOST + "resources/stylesheet/api-landing-page.css";
+        apiContentRef = process.env.NEXT_PUBLIC_HOST + "resources/content/apiMedatada.json";
 
     } else {
-        htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/APILandingPage/template/api-landing-page.html"
-        stylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/APILandingPage/stylesheet/api-landing-page.css";
+        htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/api-landing-page.html"
+        stylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/api-landing-page.css";
         apiContentRef = process.env.NEXT_PUBLIC_API + "apiMetadata/api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
     }
 
@@ -43,8 +43,6 @@ export async function getServerSideProps(context) {
 function API({ content }) {
     const router = useRouter();
     router.asPath = "/" + content.orgName;
-    console.log(content.apiName);
-    console.log(content.apiArtifacts.apiContent);
 
     useEffect(() => {
         for (const [key, value] of Object.entries(content.apiArtifacts.apiContent)) {

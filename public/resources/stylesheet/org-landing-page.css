@@ -43,7 +43,6 @@ p {
 
 .div {
   justify-content: center;
-  background-color: #e2e6f6;
   align-self: stretch;
   display: flex;
   width: 100%;
