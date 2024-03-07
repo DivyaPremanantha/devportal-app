@@ -1,44 +1,32 @@
-
-palette:
-  type: string
-  background:
-    primary:
-      light: string
-      dark: string
-    secondary:
-      light: string
-      dark: string
-  text:
-    primary:
-      light: string
-      dark: string
-    secondary:
-      light: string
-      dark: string
-  button:
-    primary:
-      light: string
-      dark: string
-    secondary:
-      light: string
-      dark: string
-typography:
-  heading:
-    fontFamily: string
-  body:
-    fontFamily: string
-  paragraph:
-    fontFamily: string
-assets:
-  logoUrl:
-    header: string
-    footer: string
-    favicon: string
-footerLink:
-  terms: string
-  privacyPolicy: string
-  support: string
-apiListingPage:
+style:
+  palette:
+    type: string
+    background:
+      primary: "#eaf1f2"
+      secondary: "#eaf1f2"
+    text:
+      primary: '#000000'
+      secondary: '#551A8B'
+    button:
+      primary: '#5658BA'
+      secondary: '#5658BA'
+  typography:
+    heading:
+      fontFamily: Arial
+    body:
+      fontFamily: Times New Roman
+    paragraph:
+      fontFamily: Times New Roman
+  assets:
+    logoUrl:
+      header: string
+      footer: string
+      favicon: string
+  footerLink:
+    terms: string
+    privacyPolicy: string
+    support: string
+  apiListingPage:
   apiTilePalette:
     type: string
     background:

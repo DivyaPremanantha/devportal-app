@@ -32,15 +32,22 @@ export async function getServerSideProps(context) {
 
   var read = require('read-yaml');
   var config = read.sync('./public/resources/content/theme.yml');
+  console.log(config.style)
   content.orgContent = config.orgLandingPageContent;
+  content.theme = config.style;
 
   // Pass data to the page via props
   return { props: { content } }
 }
 
 export default function Page({ content }) {
+
   const router = useRouter();
   router.asPath = "/" + content.orgName;
+
+  console.log(content.style);
+
+
 
   useEffect(() => {
     document.getElementById("org-landing-page-section-one").innerHTML = content.orgContent.title;
@@ -50,6 +57,31 @@ export default function Page({ content }) {
     const styleElement = document.createElement('style');
     styleElement.innerHTML = content.stylesheetContent;
     document.head.appendChild(styleElement);
+
+    Object.assign(document.querySelector('body').style, {
+
+      'font-size': "20px",
+       'color': content.theme.palette.text.primary,
+       'background-color': content.theme.palette.background.primary,
+
+    })
+    Object.assign(document.querySelector('.nav-bar').style, {
+
+      'background': content.theme.palette.background.secondary,
+      'color': content.theme.palette.text.secondary,
+      'font-family': "Arial",
+
+    })
+    Object.assign(document.querySelector('.heading').style, {
+      'font-family': content.theme.typography.heading.fontFamily,
+    })
+    Object.assign(document.querySelector('.paragraph').style, {
+      'font-family': content.theme.typography.paragraph.fontFamily,
+    })
+    Object.assign(document.querySelector('.button').style, {
+      'background-color' : content.theme.palette.button.primary,
+      'font-family': content.theme.typography.paragraph.fontFamily,
+    })
 
   }, []);
 
