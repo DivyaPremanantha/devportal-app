@@ -50,9 +50,12 @@ export default function Page({ content }) {
 
 
   useEffect(() => {
-    document.getElementById("org-landing-page-section-one").innerHTML = content.orgContent.title;
-    document.getElementById("org-landing-page-section-two").innerHTML = content.orgContent.description;
-    document.getElementById("org-landing-page-image").src = content.orgContent.image;
+    if (document.getElementById("org-landing-page-section-one") !== null)
+      document.getElementById("org-landing-page-section-one").innerHTML = content.orgContent.title;
+    if (document.getElementById("org-landing-page-section-two") !== null)
+      document.getElementById("org-landing-page-section-two").innerHTML = content.orgContent.description;
+    if (document.getElementById("org-landing-page-image") !== null)
+      document.getElementById("org-landing-page-image").src = content.orgContent.image;
 
     const styleElement = document.createElement('style');
     styleElement.innerHTML = content.stylesheetContent;
