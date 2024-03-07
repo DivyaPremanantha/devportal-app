@@ -32,7 +32,6 @@ export async function getServerSideProps(context) {
 
   var read = require('read-yaml');
   var config = read.sync('./public/resources/content/theme.yml');
-  console.log(config.style)
   content.orgContent = config.orgLandingPageContent;
   content.theme = config.style;
 
@@ -44,10 +43,6 @@ export default function Page({ content }) {
 
   const router = useRouter();
   router.asPath = "/" + content.orgName;
-
-  console.log(content.style);
-
-
 
   useEffect(() => {
     if (document.getElementById("org-landing-page-section-one") !== null)
@@ -63,17 +58,13 @@ export default function Page({ content }) {
 
     Object.assign(document.querySelector('body').style, {
 
-      'font-size': "20px",
        'color': content.theme.palette.text.primary,
        'background-color': content.theme.palette.background.primary,
-
     })
     Object.assign(document.querySelector('.nav-bar').style, {
 
       'background': content.theme.palette.background.secondary,
       'color': content.theme.palette.text.secondary,
-      'font-family': "Arial",
-
     })
     Object.assign(document.querySelector('.heading').style, {
       'font-family': content.theme.typography.heading.fontFamily,
