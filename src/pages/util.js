@@ -1,43 +1,32 @@
-export const LoadAndRenderHTML = (targetElementId, assertsFilePath) => {
+export const LoadCSS = (content) => {
 
-    fetch(assertsFilePath)
-        .then(response => response.text())
-        .then(htmlContent => {
-            if (document.getElementById(targetElementId) !== null) {
-                document.getElementById(targetElementId).innerHTML = htmlContent;
-                return htmlContent;
-            }
+    Object.assign(document.querySelector('body').style, {
+
+        'color': content.theme.palette.text.primary,
+        'background-color': content.theme.palette.background.primary,
+    })
+    Object.assign(document.querySelector('.nav-bar').style, {
+
+        'background': content.theme.palette.background.secondary,
+        'color': content.theme.palette.text.secondary,
+    })
+
+    if (document.querySelector('.heading') !== null) {
+        Object.assign(document.querySelector('.heading').style, {
+            'font-family': content.theme.typography.heading.fontFamily,
         })
-        .catch(error => console.error('Error loading stylesheet file:', error));
-}
+    }
 
-
-export const LoadAndRenderCSS = (assertsFilePath) => {
-
-    fetch(assertsFilePath)
-        .then(response => response.text())
-        .then(styleSheetContent => {
-            const styleElement = document.createElement('style');
-            styleElement.innerHTML = styleSheetContent;
-            document.head.appendChild(styleElement);
+    if (document.querySelector('.paragraph') !== null) {
+        Object.assign(document.querySelector('.paragraph').style, {
+            'font-family': content.theme.typography.paragraph.fontFamily,
         })
+    }
 
-}
-
-export const LoadAPIContent = (filePath) => {
-    fetch(filePath)
-        .then(response => response.json())
-        .then(apiData => {
-            var data = apiData.apiInfo.additionalProperties;
-            if (data !== null) {
-                for (const [key, value] of Object.entries(data)) {
-                    if (document.getElementById(key) !== null) {
-                        document.getElementById(key).innerHTML = value;
-                    }
-                }
-            }
-            return apiData;
+    if (document.querySelector('.button') !== null) {
+        Object.assign(document.querySelector('.button').style, {
+            'background-color': content.theme.palette.button.primary,
+            'font-family': content.theme.typography.paragraph.fontFamily,
         })
+    }
 }
-
-

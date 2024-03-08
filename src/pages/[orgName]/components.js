@@ -2,10 +2,15 @@ import '../components.css';
 import Navbar from '../../app/Navbar';
 import Footer from '../../app/Footer';
 import { useRouter } from "next/router";
+import { useEffect } from 'react';
+import { LoadCSS } from '../util';
 
 export async function getServerSideProps(context) {
   const content = {}
   content.orgName = context.params.orgName;
+  var read = require('read-yaml');
+  var config = read.sync('./public/resources/content/theme.yml');
+  content.theme = config.style;
   // Pass data to the page via props
   return { props: { content } }
 }
@@ -14,8 +19,12 @@ export default function Components({ content }) {
   const router = useRouter();
   router.asPath = "/" + content.orgName;
 
-    return (
-      <>
+  useEffect(() => {
+    LoadCSS(content);
+  }, []);
+
+  return (
+    <>
       <div class="components-div">
         <Navbar />
         <div class="components-div">
@@ -223,4 +232,5 @@ export default function Components({ content }) {
       <Footer />
     </>
   );
+
 }

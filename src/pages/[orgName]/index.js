@@ -2,12 +2,17 @@ import { React, useEffect } from "react";
 import Navbar from '../../app/Navbar';
 import Footer from '../../app/Footer';
 import { useRouter } from "next/router";
+import { LoadCSS } from '../util';
 
 
 export async function getServerSideProps(context) {
   const content = {}
   var htmlRef;
   var stylesheetRef;
+
+  var read = require('read-yaml');
+  var config = read.sync('./public/resources/content/theme.yml');
+  content.theme = config.style;
 
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
@@ -56,26 +61,7 @@ export default function Page({ content }) {
     styleElement.innerHTML = content.stylesheetContent;
     document.head.appendChild(styleElement);
 
-    Object.assign(document.querySelector('body').style, {
-
-       'color': content.theme.palette.text.primary,
-       'background-color': content.theme.palette.background.primary,
-    })
-    Object.assign(document.querySelector('.nav-bar').style, {
-
-      'background': content.theme.palette.background.secondary,
-      'color': content.theme.palette.text.secondary,
-    })
-    Object.assign(document.querySelector('.heading').style, {
-      'font-family': content.theme.typography.heading.fontFamily,
-    })
-    Object.assign(document.querySelector('.paragraph').style, {
-      'font-family': content.theme.typography.paragraph.fontFamily,
-    })
-    Object.assign(document.querySelector('.button').style, {
-      'background-color' : content.theme.palette.button.primary,
-      'font-family': content.theme.typography.paragraph.fontFamily,
-    })
+    LoadCSS(content);
 
   }, []);
 

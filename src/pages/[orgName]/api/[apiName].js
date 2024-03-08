@@ -3,6 +3,7 @@ import Footer from '../../../app/Footer';
 import { Helmet } from "react-helmet";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { LoadCSS } from '../../util';
 
 export async function getServerSideProps(context) {
     const content = {}
@@ -36,6 +37,10 @@ export async function getServerSideProps(context) {
     content.orgName = context.params.orgName;
     content.apiName = context.params.apiName;
 
+    var read = require('read-yaml');
+    var config = read.sync('./public/resources/content/theme.yml');
+    content.theme = config.style;
+
     // Pass data to the page via props
     return { props: { content } }
 }
@@ -61,6 +66,8 @@ function API({ content }) {
         const styleElement = document.createElement('style');
         styleElement.innerHTML = content.stylesheetContent;
         document.head.appendChild(styleElement);
+
+        LoadCSS(content);
 
     }, []);
 

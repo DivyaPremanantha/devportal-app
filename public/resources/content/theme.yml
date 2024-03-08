@@ -17,39 +17,6 @@ style:
       fontFamily: Times New Roman
     paragraph:
       fontFamily: Times New Roman
-  assets:
-    logoUrl:
-      header: string
-      footer: string
-      favicon: string
-  footerLink:
-    terms: string
-    privacyPolicy: string
-    support: string
-  apiListingPage:
-  apiTilePalette:
-    type: string
-    background:
-      primary:
-        light: string
-        dark: string
-      secondary:
-        light: string
-        dark: string
-    text:
-      primary:
-        light: string
-        dark: string
-      secondary:
-        light: string
-        dark: string
-    button:
-      primary:
-        light: string
-        dark: string
-      secondary:
-        light: string
-        dark: string
 orgLandingPageContent:
   title: "ABC Organization"
   description: "At ABC Organization, we are dedicated to making a positive impact on communities worldwide. Our mission is to [briefly describe your mission and goals]. Since 2015, we have been tirelessly working towards creating a better world for all."
