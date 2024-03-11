@@ -1,9 +1,9 @@
 {
   "name": "devportal-app",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -24,7 +24,24 @@
     "read-yaml": "^1.1.0",
     "rehype-raw": "^7.0.0"
   },
+  "type": "module",
   "devDependencies": {
     "npm-build-zip": "^1.0.4"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "src/pages/[orgName]/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DivyaPremanantha/devportal-app.git"
+  },
+  "keywords": [
+    "NPM",
+    "DEVPORTAL"
+  ],
+  "author": "divya premanantha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DivyaPremanantha/devportal-app/issues"
+  },
+  "homepage": "https://github.com/DivyaPremanantha/devportal-app#readme"
 }

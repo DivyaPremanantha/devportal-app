@@ -9,36 +9,36 @@ export async function getServerSideProps(context) {
   const content = {}
   var htmlRef;
   var stylesheetRef;
-
-  var read = require('read-yaml');
-  var config = read.sync('./public/resources/content/theme.yml');
-  content.theme = config.style;
-
+  var yamlRef;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
     htmlRef = process.env.NEXT_PUBLIC_HOST + "resources/template/org-landing-page.html"
     stylesheetRef = process.env.NEXT_PUBLIC_HOST + "resources/stylesheet/org-landing-page.css"
+    yamlRef = process.env.NEXT_PUBLIC_HOST + "resources/content/theme.json"
 
   } else {
     htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/org-landing-page.html"
     stylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/org-landing-page.css"
   }
 
-  const res = await fetch(htmlRef)
-  const htmlContent = await res.text()
+  const yamlResponse = await fetch(yamlRef)
+  const yamlContent = await yamlResponse.json()
+  var read = require('read-yaml');
+
+
+  content.orgContent = yamlContent.orgLandingPageContent;
+  content.theme = yamlContent.style;
+
+  const htmlResponse = await fetch(htmlRef)
+  const htmlContent = await htmlResponse.text()
   content.orgHTMLContent = htmlContent
 
-  const respo = await fetch(stylesheetRef);
-  const stylesheetContent = await respo.text();
+  const stylesheetResponse = await fetch(stylesheetRef);
+  const stylesheetContent = await stylesheetResponse.text();
   content.stylesheetContent = stylesheetContent;
 
   content.orgName = context.params.orgName;
   content.stylesheetRef = stylesheetRef;
-
-  var read = require('read-yaml');
-  var config = read.sync('./public/resources/content/theme.yml');
-  content.orgContent = config.orgLandingPageContent;
-  content.theme = config.style;
 
   // Pass data to the page via props
   return { props: { content } }
