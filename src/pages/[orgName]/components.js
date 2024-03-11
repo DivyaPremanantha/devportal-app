@@ -8,9 +8,19 @@ import { LoadCSS } from '../util';
 export async function getServerSideProps(context) {
   const content = {}
   content.orgName = context.params.orgName;
-  var read = require('read-yaml');
-  var config = read.sync('./public/resources/content/theme.yml');
-  content.theme = config.style;
+
+  var yamlRef;
+
+  if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
+    yamlRef = process.env.NEXT_PUBLIC_HOST + "resources/content/theme.json"
+
+  }
+
+  const yamlResponse = await fetch(yamlRef)
+  const yamlContent = await yamlResponse.json()
+  content.orgContent = yamlContent.orgLandingPageContent;
+  content.theme = yamlContent.style;
+  
   // Pass data to the page via props
   return { props: { content } }
 }

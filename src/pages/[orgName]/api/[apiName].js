@@ -10,17 +10,23 @@ export async function getServerSideProps(context) {
     var htmlRef;
     var stylesheetRef;
     var apiContentRef;
+    var yamlRef;
 
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
         htmlRef = process.env.NEXT_PUBLIC_HOST + "resources/template/api-landing-page.html"
         stylesheetRef = process.env.NEXT_PUBLIC_HOST + "resources/stylesheet/api-landing-page.css";
         apiContentRef = process.env.NEXT_PUBLIC_HOST + "resources/content/apiMedatada.json";
+        yamlRef = process.env.NEXT_PUBLIC_HOST + "resources/content/theme.json"
 
     } else {
         htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/api-landing-page.html"
         stylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/api-landing-page.css";
         apiContentRef = process.env.NEXT_PUBLIC_API + "apiMetadata/api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
     }
+
+    const yamlResponse = await fetch(yamlRef)
+    const yamlContent = await yamlResponse.json()
+    content.theme = yamlContent.style;
 
     const res = await fetch(htmlRef);
     const htmlContent = await res.text();
@@ -36,10 +42,6 @@ export async function getServerSideProps(context) {
 
     content.orgName = context.params.orgName;
     content.apiName = context.params.apiName;
-
-    var read = require('read-yaml');
-    var config = read.sync('./public/resources/content/theme.yml');
-    content.theme = config.style;
 
     // Pass data to the page via props
     return { props: { content } }

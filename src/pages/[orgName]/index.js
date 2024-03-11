@@ -23,9 +23,6 @@ export async function getServerSideProps(context) {
 
   const yamlResponse = await fetch(yamlRef)
   const yamlContent = await yamlResponse.json()
-  var read = require('read-yaml');
-
-
   content.orgContent = yamlContent.orgLandingPageContent;
   content.theme = yamlContent.style;
 
