@@ -1,20 +1,24 @@
 import { React, useEffect } from "react";
-import Navbar from '../../app/Navbar';
-import Footer from '../../app/Footer';
+import Navbar from '../../app/navbar';
 import { useRouter } from "next/router";
 import { LoadCSS } from '../util';
+import Footer from '../../app/Footer';
 
 
 export async function getServerSideProps(context) {
   const content = {}
   var htmlRef;
+  var navRef;
   var stylesheetRef;
+  var mainStylesheetRef;
   var yamlRef;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
     htmlRef = process.env.NEXT_PUBLIC_HOST + "resources/template/org-landing-page.html"
     stylesheetRef = process.env.NEXT_PUBLIC_HOST + "resources/stylesheet/org-landing-page.css"
+    mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + "resources/stylesheet/style.css"
     yamlRef = process.env.NEXT_PUBLIC_HOST + "resources/content/theme.json"
+    navRef = process.env.NEXT_PUBLIC_HOST + "resources/template/nav-bar.html"
 
   } else {
     htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/org-landing-page.html"
@@ -30,9 +34,17 @@ export async function getServerSideProps(context) {
   const htmlContent = await htmlResponse.text()
   content.orgHTMLContent = htmlContent
 
+  const navResponse = await fetch(navRef)
+  const navContent = await navResponse.text()
+  content.navContent = navContent
+
   const stylesheetResponse = await fetch(stylesheetRef);
   const stylesheetContent = await stylesheetResponse.text();
   content.stylesheetContent = stylesheetContent;
+
+  const mainStylesheetResponse = await fetch(mainStylesheetRef);
+  const mainStylesheetContent = await mainStylesheetResponse.text();
+  content.mainStylesheetContent = mainStylesheetContent;
 
   content.orgName = context.params.orgName;
   content.stylesheetRef = stylesheetRef;
@@ -58,13 +70,11 @@ export default function Page({ content }) {
     styleElement.innerHTML = content.stylesheetContent;
     document.head.appendChild(styleElement);
 
-    LoadCSS(content);
-
   }, []);
 
   return (
     <>
-      <Navbar />
+      <Navbar content={content}/>
       <div dangerouslySetInnerHTML={{ __html: content.orgHTMLContent }}></div>
       <Footer />
     </>

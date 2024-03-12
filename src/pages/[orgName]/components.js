@@ -1,5 +1,5 @@
 import '../components.css';
-import Navbar from '../../app/Navbar';
+import Navbar from '../../app/navbar';
 import Footer from '../../app/Footer';
 import { useRouter } from "next/router";
 import { useEffect } from 'react';
@@ -10,17 +10,28 @@ export async function getServerSideProps(context) {
   content.orgName = context.params.orgName;
 
   var yamlRef;
+  var navRef;
+  var mainStylesheetRef;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
     yamlRef = process.env.NEXT_PUBLIC_HOST + "resources/content/theme.json"
-
+    mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + "resources/stylesheet/style.css"
+    navRef = process.env.NEXT_PUBLIC_HOST + "resources/template/nav-bar.html"
   }
 
+  const navResponse = await fetch(navRef)
+  const navContent = await navResponse.text()
+  content.navContent = navContent;
+
+  const mainStylesheetResponse = await fetch(mainStylesheetRef);
+  const mainStylesheetContent = await mainStylesheetResponse.text();
+  content.mainStylesheetContent = mainStylesheetContent;
+  
   const yamlResponse = await fetch(yamlRef)
   const yamlContent = await yamlResponse.json()
   content.orgContent = yamlContent.orgLandingPageContent;
   content.theme = yamlContent.style;
-  
+
   // Pass data to the page via props
   return { props: { content } }
 }
@@ -36,7 +47,7 @@ export default function Components({ content }) {
   return (
     <>
       <div class="components-div">
-        <Navbar />
+        <Navbar content={content}/>
         <div class="components-div">
           <div class="components-div-2">
             <div class="components-column">
