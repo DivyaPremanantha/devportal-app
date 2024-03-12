@@ -5,11 +5,11 @@ export const LoadCSS = (content) => {
         'color': content.theme.palette.text.primary,
         'background-color': content.theme.palette.background.primary,
     })
-    Object.assign(document.querySelector('.nav-bar').style, {
+    // Object.assign(document.querySelector('.nav-bar').style, {
 
-        'background': content.theme.palette.background.secondary,
-        'color': content.theme.palette.text.secondary,
-    })
+    //     'background': content.theme.palette.background.secondary,
+    //     'color': content.theme.palette.text.secondary,
+    // })
 
     if (document.querySelector('.heading') !== null) {
         Object.assign(document.querySelector('.heading').style, {
