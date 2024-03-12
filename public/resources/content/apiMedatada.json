@@ -3,14 +3,7 @@
         "apiArtifacts": {
             "apiContent": {
                 "api-landing-page-heading": "The Accommodation API",
-                "api-landing-page-description": "The accommodation API allows you to check the availability of rooms in a particular hotel for a given time period. This returns the room types available and a list of amenities provided for the particular room type. This API also allows you to make a reservation for a particular room and also cancel or modify the reservations.",
-                "api-landing-page-key-feature-one": "Get all types of rooms available for a period",
-                "api-landing-page-key-feature-two": "Filter the reservation based on room type",
-                "api-landing-page-key-feature-three": "Create or Modify a reservation easily!",
-                "api-landing-page-usage-one": "A reservation system can make use of the API to check for available reservations and make a booking",
-                "api-landing-page-usage-two": "A hotel management system can make use of the API to manage the reservations",
-                "api-landing-page-details-one": "This API allows checking the availability of rooms for a given period of time and number of guests.",
-                "api-landing-page-details-two": "It also allows making a booking."
+                "api-landing-page-description": "The accommodation API allows you to check the availability of rooms in a particular hotel for a given time period. This returns the room types available and a list of amenities provided for the particular room type. This API also allows you to make a reservation for a particular room and also cancel or modify the reservations."
             },
             "apiImages": {
                 "api-landing-page-image": "/resources/images/accommodation.png"
