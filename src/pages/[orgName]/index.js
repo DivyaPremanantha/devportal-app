@@ -1,7 +1,8 @@
-import { React, useEffect } from "react";
+import React from 'react';
+import { useEffect } from 'react';
 import Navbar from '../../app/navbar';
 import { useRouter } from "next/router";
-import Footer from '../../app/Footer';
+import Footer from '../../app/footer';
 import { promises as fs } from 'fs';
 
 
@@ -9,19 +10,18 @@ export async function getServerSideProps(context) {
   const content = {}
   var htmlRef;
   var navRef;
+  var footerRef;
   var stylesheetRef;
   var mainStylesheetRef;
   var yamlRef;
 
-  console.log(process.env.npm_config_path);
-
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-
-    content.orgHTMLContent = await fs.readFile(process.env.npm_config_path + "/resources/template/org-landing-page.html", 'utf8');
-    content.stylesheetContent = await fs.readFile(process.env.npm_config_path + "/resources/stylesheet/org-landing-page.css", 'utf8');
-    content.mainStylesheetContent = await fs.readFile(process.env.npm_config_path + "/resources/stylesheet/style.css", 'utf8');
-    content.orgContent = JSON.parse(await fs.readFile(process.env.npm_config_path + "/resources/content/orgContent.json", 'utf8')).orgLandingPageContent;
-    content.navContent = await fs.readFile(process.env.npm_config_path + "/resources/template/nav-bar.html", 'utf8');
+    content.orgHTMLContent = await fs.readFile(process.cwd() + "/../../resources/template/org-landing-page.html", 'utf8');
+    content.stylesheetContent = await fs.readFile(process.cwd() + "/../../resources/stylesheet/org-landing-page.css", 'utf8');
+    content.mainStylesheetContent = await fs.readFile(process.cwd() + "/../../resources/stylesheet/style.css", 'utf8');
+    content.orgContent = JSON.parse(await fs.readFile(process.cwd() + "/../../resources/content/orgContent.json", 'utf8')).orgLandingPageContent;
+    content.navContent = await fs.readFile(process.cwd() + "/../../resources/template/nav-bar.html", 'utf8');
+    content.footerContent = await fs.readFile(process.cwd() + "/../../resources/template/footer.html", 'utf8');
   } else {
     htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/org-landing-page.html"
     stylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/org-landing-page.css"
@@ -40,6 +40,10 @@ export async function getServerSideProps(context) {
     const navResponse = await fetch(navRef)
     const navContent = await navResponse.text()
     content.navContent = navContent
+
+    const footerResponse = await fetch(footerRef)
+    const footerContent = await footerResponse.text()
+    content.navContent = footerContent
 
     const stylesheetResponse = await fetch(stylesheetRef);
     const stylesheetContent = await stylesheetResponse.text();
@@ -75,10 +79,10 @@ export default function Page({ content }) {
   }, []);
 
   return (
-    <>
+    <div>
       <Navbar content={content} />
       <div dangerouslySetInnerHTML={{ __html: content.orgHTMLContent }}></div>
-      <Footer />
-    </>
+      <Footer content={content}/>
+    </div>
   );
 }

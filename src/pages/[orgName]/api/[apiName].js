@@ -1,5 +1,5 @@
 import Navbar from '../../../app/navbar';
-import Footer from '../../../app/Footer';
+import Footer from '../../../app/footer';
 import { Helmet } from "react-helmet";
 import Markdown from 'react-markdown'
 import { createRoot } from 'react-dom/client'
@@ -7,6 +7,7 @@ import rehypeRaw from 'rehype-raw'
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { promises as fs } from 'fs';
+import React from 'react';
 
 export async function getServerSideProps(context) {
     const content = {}
@@ -17,14 +18,16 @@ export async function getServerSideProps(context) {
     var yamlRef;
     var navRef;
     var mainStylesheetRef;
+    var footerRef;
 
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-        content.apiHTMLContent = await fs.readFile(process.env.npm_config_path + "/resources/template/api-landing-page.html", 'utf8');
-        content.stylesheetContent = await fs.readFile(process.env.npm_config_path + "/resources/stylesheet/api-landing-page.css", 'utf8');
-        content.mainStylesheetContent = await fs.readFile(process.env.npm_config_path + "/resources/stylesheet/style.css", 'utf8');
-        content.apiArtifacts = JSON.parse(await fs.readFile(process.env.npm_config_path + "/resources/content/apiMedatada.json", 'utf8')).apiInfo.apiArtifacts;
-        content.apiPage = await fs.readFile(process.env.npm_config_path + "/resources/content/apiContent.md", 'utf8');
-        content.navContent = await fs.readFile(process.env.npm_config_path + "/resources/template/nav-bar.html", 'utf8');
+        content.apiHTMLContent = await fs.readFile(process.cwd() + "/../../resources/template/api-landing-page.html", 'utf8');
+        content.stylesheetContent = await fs.readFile(process.cwd() + "/../../resources/stylesheet/api-landing-page.css", 'utf8');
+        content.mainStylesheetContent = await fs.readFile(process.cwd() + "/../../resources/stylesheet/style.css", 'utf8');
+        content.apiArtifacts = JSON.parse(await fs.readFile(process.cwd() + "/../../resources/content/apiMedatada.json", 'utf8')).apiInfo.apiArtifacts;
+        content.apiPage = await fs.readFile(process.cwd() + "/../../resources/content/apiContent.md", 'utf8');
+        content.navContent = await fs.readFile(process.cwd() + "/../../resources/template/nav-bar.html", 'utf8');
+        content.footerContent = await fs.readFile(process.cwd() + "/../../resources/template/footer.html", 'utf8');
 
     } else {
         htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/api-landing-page.html"
@@ -33,10 +36,15 @@ export async function getServerSideProps(context) {
         apiContentRefMD = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/content/apiContent.md";
         mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/stylesheet/style.css"
         navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/template/nav-bar.html";
+        footerRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/template/footer.html";
 
         const navResponse = await fetch(navRef)
         const navContent = await navResponse.text()
         content.navContent = navContent;
+
+        const footerResponse = await fetch(footerRef)
+        const footerContent = await footerResponse.text()
+        content.footerContent = footerContent;
       
         const mainStylesheetResponse = await fetch(mainStylesheetRef);
         const mainStylesheetContent = await mainStylesheetResponse.text();
@@ -98,11 +106,11 @@ function API({ content }) {
     }, []);
 
     return (
-        <>
+        <div>
             <Navbar content={content}/>
             <div dangerouslySetInnerHTML={{ __html: content.apiHTMLContent }}></div>
-            <Footer />
-        </>
+            <Footer content={content}/>
+        </div>
     )
 }
 

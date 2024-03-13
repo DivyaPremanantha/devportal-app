@@ -1,13 +1,10 @@
-function Footer() {
+import React from 'react';
+
+function Footer({content}) {
 
     return (
         <>
-        <div>
-        <footer>
-                &copy; 2023 XYZ Organization. All rights reserved.
-            </footer>
-        </div>
-
+            <div dangerouslySetInnerHTML={{ __html: content.footerContent }}></div>
         </>
     )
 }

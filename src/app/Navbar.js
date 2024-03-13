@@ -1,5 +1,5 @@
-import Footer from './Footer';
 import { useEffect } from 'react';
+import React from 'react';
 
 function Navbar({ content }) {
 

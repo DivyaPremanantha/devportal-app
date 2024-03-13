@@ -1,6 +1,7 @@
 import '../components.css';
+import React from 'react';
 import Navbar from '../../app/navbar';
-import Footer from '../../app/Footer';
+import Footer from '../../app/footer';
 import { useRouter } from "next/router";
 import { promises as fs } from 'fs';
 
@@ -12,8 +13,9 @@ export async function getServerSideProps(context) {
   var mainStylesheetRef;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-    content.mainStylesheetContent = await fs.readFile(process.env.npm_config_path + "/resources/stylesheet/style.css", 'utf8');
-    content.navContent = await fs.readFile(process.env.npm_config_path + "/resources/template/nav-bar.html", 'utf8');
+    content.mainStylesheetContent = await fs.readFile(process.cwd() + "/../../resources/stylesheet/style.css", 'utf8');
+    content.navContent = await fs.readFile(process.cwd() + "/../../resources/template/nav-bar.html", 'utf8');
+    content.footerContent = await fs.readFile(process.cwd() + "/../../resources/template/footer.html", 'utf8');
   } else {
     mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/stylesheet/style.css"
     navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/template/nav-bar.html"
@@ -37,7 +39,7 @@ export default function Components({ content }) {
   router.asPath = "/" + content.orgName;
 
   return (
-    <>
+    <div>
       <div class="components-div">
         <Navbar content={content} />
         <div class="components-div">
@@ -242,8 +244,8 @@ export default function Components({ content }) {
           </div>
         </div>
       </div>
-      <Footer />
-    </>
+      <Footer content={content}/>
+    </div>
   );
 
 }
