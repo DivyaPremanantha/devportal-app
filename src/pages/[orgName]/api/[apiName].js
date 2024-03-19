@@ -33,10 +33,10 @@ export async function getServerSideProps(context) {
         htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/api-landing-page.html"
         stylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/api-landing-page.css";
         apiContentRef = process.env.NEXT_PUBLIC_API + "apiMetadata/api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
-        apiContentRefMD = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/content/apiContent.md";
-        mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/stylesheet/style.css"
-        navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/template/nav-bar.html";
-        footerRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/template/footer.html";
+        apiContentRefMD = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/content/apiContent.md";
+        mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/style.css";
+        navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html";
+        footerRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/footer.html";
 
         const navResponse = await fetch(navRef)
         const navContent = await navResponse.text()
@@ -50,9 +50,9 @@ export async function getServerSideProps(context) {
         const mainStylesheetContent = await mainStylesheetResponse.text();
         content.mainStylesheetContent = mainStylesheetContent;
         
-        const yamlResponse = await fetch(yamlRef)
-        const yamlContent = await yamlResponse.json()
-        content.theme = yamlContent.style;
+        // const yamlResponse = await fetch(yamlRef)
+        // const yamlContent = await yamlResponse.json()
+        // content.theme = yamlContent.style;
     
         const res = await fetch(htmlRef);
         const htmlContent = await res.text();

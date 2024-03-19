@@ -20,8 +20,8 @@ export async function getServerSideProps(context) {
     content.componentsHTMLContent = await fs.readFile(process.cwd() + "/../../resources/template/components-page.html", 'utf8');
     content.apiArtifacts = JSON.parse(await fs.readFile(process.cwd() + "/../../resources/content/apiMedatada.json", 'utf8')).apiInfo.apiArtifacts;
   } else {
-    mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/stylesheet/style.css"
-    navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/template/nav-bar.html"
+    mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/style.css"
+    navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html"
 
     const navResponse = await fetch(navRef)
     const navContent = await navResponse.text()
@@ -30,6 +30,13 @@ export async function getServerSideProps(context) {
     const mainStylesheetResponse = await fetch(mainStylesheetRef);
     const mainStylesheetContent = await mainStylesheetResponse.text();
     content.mainStylesheetContent = mainStylesheetContent;
+
+    const apiArtifactRef = process.env.NEXT_PUBLIC_API + "apiMetadata/apiList?orgName=" + context.params.orgName;
+    const apiResponse = await fetch(apiArtifactRef);
+    const apiContent = await apiResponse.json();
+    content.apiContent = apiContent;
+    console.log("API COntent")
+    console.log(content.apiContent);
   }
 
 
@@ -41,19 +48,25 @@ export default function Components({ content }) {
   const router = useRouter();
   router.asPath = "/" + content.orgName;
 
+  var apiList = content.apiContent
   useEffect(() => {
-    for (const [key, value] of Object.entries(content.apiArtifacts.apiContent)) {
-        if (document.getElementById(key) !== null) {
-            document.getElementById(key).innerHTML = value;
+    apiList.forEach(function(element) {
+      {
+        for (const [key, value] of Object.entries(element.apiInfo.apiArtifacts.apiContent)) {
+          if (document.getElementById(key) !== null) {
+              document.getElementById(key).innerHTML = value;
+          }
         }
-    }
+        for (const [key, value] of Object.entries(element.apiInfo.apiArtifacts.apiImages)) {
+          if (document.getElementById(key) !== null) {
+              const apiImage = document.getElementById(key);
+              apiImage.src = value;
+          }
+      }
+      }
+     });
 
-    for (const [key, value] of Object.entries(content.apiArtifacts.apiImages)) {
-        if (document.getElementById(key) !== null) {
-            const apiImage = document.getElementById(key);
-            apiImage.src = value;
-        }
-    }
+    
   } , []);
 
   return (

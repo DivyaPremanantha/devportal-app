@@ -24,9 +24,10 @@ export async function getServerSideProps(context) {
   } else {
     htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/org-landing-page.html"
     stylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/org-landing-page.css"
-    mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/stylesheet/style.css"
-    yamlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/content/orgContent.json"
-    navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/template/nav-bar.html"
+    mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/style.css"
+    yamlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/content/orgContent.json"
+    navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html"
+    footerRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/footer.html";
 
     const yamlResponse = await fetch(yamlRef)
     const yamlContent = await yamlResponse.json()
@@ -42,7 +43,7 @@ export async function getServerSideProps(context) {
 
     const footerResponse = await fetch(footerRef)
     const footerContent = await footerResponse.text()
-    content.navContent = footerContent
+    content.footerContent = footerContent
 
     const stylesheetResponse = await fetch(stylesheetRef);
     const stylesheetContent = await stylesheetResponse.text();
