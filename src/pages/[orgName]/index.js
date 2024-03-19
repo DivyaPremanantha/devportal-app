@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import Footer from '../../app/footer';
 import { promises as fs } from 'fs';
 
-
 export async function getServerSideProps(context) {
   const content = {}
   var htmlRef;
@@ -69,8 +68,9 @@ export default function Page({ content }) {
       document.getElementById("org-landing-page-section-one").innerHTML = content.orgContent.title;
     if (document.getElementById("org-landing-page-section-two") !== null)
       document.getElementById("org-landing-page-section-two").innerHTML = content.orgContent.description;
-    if (document.getElementById("org-landing-page-image") !== null)
+    if (document.getElementById("org-landing-page-image") !== null) {
       document.getElementById("org-landing-page-image").src = content.orgContent.image;
+    }
 
     const styleElement = document.createElement('style');
     styleElement.innerHTML = content.stylesheetContent;
