@@ -60,9 +60,6 @@ export default function Components({ content }) {
     <div>
       <Navbar content={content} />
       <div dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>
-      {[...Array(5)].map((_, index) => (
-        <MyChildComponent key={index} />
-      ))}
       <Footer content={content} />
     </div>
   );
