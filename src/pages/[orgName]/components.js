@@ -3,7 +3,6 @@ import Navbar from '../../app/navbar';
 import Footer from '../../app/footer';
 import { useRouter } from "next/router";
 import { promises as fs } from 'fs';
-import { useEffect } from "react";
 import Tile from './tile';
 
 export async function getServerSideProps(context) {
@@ -53,7 +52,6 @@ export default function Components({ content }) {
   router.asPath = "/" + content.orgName;
 
   return (
-    console.log(content.isParentHTMLPresent),
     <div>
       <Navbar content={content} />
       <div dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>

@@ -14,14 +14,13 @@ export async function getServerSideProps(context) {
     var htmlRef;
     var apiContentRef;
     var apiContentRefMD;
-    var yamlRef;
     var navRef;
     var footerRef;
 
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
         content.apiHTMLContent = await fs.readFile(process.cwd() + "/../../resources/template/api-landing-page.html", 'utf8');
-        content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/../../resources/content/apiMedatada.json", 'utf8'));
-        content.apiPage = await fs.readFile(process.cwd() + "/../../resources/content/apiContent.md", 'utf8');
+        content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/../../resources/content/" + context.params.apiName + "/apiMedatada.json", 'utf8'));
+        content.apiPage = await fs.readFile(process.cwd() + "/../../resources/content/" + context.params.apiName + "/apiContent.md", 'utf8');
         content.navContent = await fs.readFile(process.cwd() + "/../../resources/template/nav-bar.html", 'utf8');
         content.footerContent = await fs.readFile(process.cwd() + "/../../resources/template/footer.html", 'utf8');
 
@@ -39,10 +38,6 @@ export async function getServerSideProps(context) {
         const footerResponse = await fetch(footerRef)
         const footerContent = await footerResponse.text()
         content.footerContent = footerContent;
-        
-        // const yamlResponse = await fetch(yamlRef)
-        // const yamlContent = await yamlResponse.json()
-        // content.theme = yamlContent.style;
     
         const res = await fetch(htmlRef);
         const htmlContent = await res.text();
@@ -70,13 +65,13 @@ function API({ content }) {
     router.asPath = "/" + content.orgName;
 
     useEffect(() => {
-        for (const [key, value] of Object.entries(content.apiResources[0].apiInfo.apiArtifacts.apiContent)) {
+        for (const [key, value] of Object.entries(content.apiResources.apiInfo.apiArtifacts.apiContent)) {
             if (document.getElementById(key) !== null) {
                 document.getElementById(key).innerHTML = value;
             }
         }
 
-        for (const [key, value] of Object.entries(content.apiResources[0].apiInfo.apiArtifacts.apiImages)) {
+        for (const [key, value] of Object.entries(content.apiResources.apiInfo.apiArtifacts.apiImages)) {
             if (document.getElementById(key) !== null) {
                 const apiImage = document.getElementById(key);
                 apiImage.src = value;
