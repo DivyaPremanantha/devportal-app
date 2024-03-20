@@ -23,6 +23,7 @@ export async function getServerSideProps(context) {
   } else {
     mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/style.css"
     navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html"
+    componentRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/components-page.html"
 
     const navResponse = await fetch(navRef)
     const navContent = await navResponse.text()
@@ -32,12 +33,15 @@ export async function getServerSideProps(context) {
     const mainStylesheetContent = await mainStylesheetResponse.text();
     content.mainStylesheetContent = mainStylesheetContent;
 
+    const componentResponse = await fetch(componentRef);
+    const componentContent = await componentResponse.text();
+    content.componentsHTMLContent = componentContent;
+
     const apiArtifactRef = process.env.NEXT_PUBLIC_API + "apiMetadata/apiList?orgName=" + context.params.orgName;
     const apiResponse = await fetch(apiArtifactRef);
     const apiContent = await apiResponse.json();
     content.apiContent = apiContent;
-    console.log("API COntent")
-    console.log(content.apiContent);
+
   }
 
 
@@ -52,21 +56,21 @@ export default function Components({ content }) {
 
   var apiList = content.apiContent
   useEffect(() => {
-    apiList.forEach(function(element) {
-      {
-        for (const [key, value] of Object.entries(element.apiInfo.apiArtifacts[0].apiInfo.apiArtifacts.apiContent)) {
-        if (document.getElementById(key) !== null) {
-          document.getElementById(key).innerHTML = value;
-        }
-        }
-        for (const [key, value] of Object.entries(element.apiInfo.apiArtifacts[0].apiInfo.apiArtifacts.apiImages)) {
-        if (document.getElementById(key) !== null) {
-          const apiImage = document.getElementById(key);
-          apiImage.src = value;
-        }
-      }
-      }
-     });
+    // apiList.forEach(function(element) {
+    //   {
+    //     for (const [key, value] of Object.entries(element.apiInfo.apiArtifacts[0].apiInfo.apiArtifacts.apiContent)) {
+    //     if (document.getElementById(key) !== null) {
+    //       document.getElementById(key).innerHTML = value;
+    //     }
+    //     }
+    //     for (const [key, value] of Object.entries(element.apiInfo.apiArtifacts[0].apiInfo.apiArtifacts.apiImages)) {
+    //     if (document.getElementById(key) !== null) {
+    //       const apiImage = document.getElementById(key);
+    //       apiImage.src = value;
+    //     }
+    //   }
+    //   }
+    //  });
 
     
 
