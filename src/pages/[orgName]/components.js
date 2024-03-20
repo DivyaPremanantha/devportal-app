@@ -13,6 +13,7 @@ export async function getServerSideProps(context) {
 
   var navRef;
   var mainStylesheetRef;
+  var componentRef;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
     content.mainStylesheetContent = await fs.readFile(process.cwd() + "/../../resources/stylesheet/style.css", 'utf8');
@@ -42,7 +43,7 @@ export async function getServerSideProps(context) {
     const apiArtifactRef = process.env.NEXT_PUBLIC_API + "apiMetadata/apiList?orgName=" + context.params.orgName;
     const apiResponse = await fetch(apiArtifactRef);
     const apiContent = await apiResponse.json();
-    content.apiContent = apiContent;
+    content.apiArtifacts = apiContent;
 
   }
 
