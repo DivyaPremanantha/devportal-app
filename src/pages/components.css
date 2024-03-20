@@ -89,10 +89,11 @@
     }
   }
   .components-img {
+    padding: 20px;
     aspect-ratio: 1.41;
     object-fit: auto;
     object-position: center;
-    width: 100%;
+    width: 90%;
   }
   .components-div-6 {
     align-self: center;
