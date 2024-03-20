@@ -40,9 +40,9 @@ export async function getServerSideProps(context) {
         const footerContent = await footerResponse.text()
         content.footerContent = footerContent;
         
-        const yamlResponse = await fetch(yamlRef)
-        const yamlContent = await yamlResponse.json()
-        content.theme = yamlContent.style;
+        // const yamlResponse = await fetch(yamlRef)
+        // const yamlContent = await yamlResponse.json()
+        // content.theme = yamlContent.style;
     
         const res = await fetch(htmlRef);
         const htmlContent = await res.text();

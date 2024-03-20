@@ -19,8 +19,9 @@ export async function getServerSideProps(context) {
     content.footerContent = await fs.readFile(process.cwd() + "/../../resources/template/footer.html", 'utf8');
   } else {
     htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/org-landing-page.html"
-    yamlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/content/orgContent.json"
-    navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/template/nav-bar.html"
+    yamlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/content/orgContent.json"
+    navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html"
+    footerRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/footer.html";
 
     const yamlResponse = await fetch(yamlRef)
     const yamlContent = await yamlResponse.json()
