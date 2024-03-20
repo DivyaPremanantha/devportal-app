@@ -1,13 +1,23 @@
 import React from 'react';
 
 export default function Tile({ content }) {
-    const length = content.apiArtifacts.length / 4;
-    console.log(length);
+
+    const chunkArray = (arr, size) => {
+        const chunkedArr = [];
+        for (let i = 0; i < arr.length; i += size) {
+          chunkedArr.push(arr.slice(i, i + size));
+        }
+        return chunkedArr;
+      };
+    
+    const data = chunkArray(content.apiArtifacts, 4);
     return (
-        <div class="components-div-2">
-            {/* {[...Array(length)].map((_, i) => { */}
-                <div class="components-div-4">
-                    {content.apiArtifacts.map((card, index) => {
+        <div class="components-div">
+            {[...Array(data.length)].map((_, i) => {
+                return (
+                <div class="components-div-4">                    
+                    {data[i] !== undefined && data[i].length > 0 && i < content.apiArtifacts.length && data[i].map((card, index) => {
+                        index = index + (i * 4);
                         return (
                             <div class="components-div-3">
                                 <div class="components-div-5">
@@ -32,7 +42,7 @@ export default function Tile({ content }) {
                         )}
                     )}
                 </div>
-         {/* })} */}
+          )})} 
         </div>
     )
 }

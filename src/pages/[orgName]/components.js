@@ -20,6 +20,8 @@ export async function getServerSideProps(context) {
     content.footerContent = await fs.readFile(process.cwd() + "/../../resources/template/footer.html", 'utf8');
     content.componentsHTMLContent = await fs.readFile(process.cwd() + "/../../resources/template/components-page.html", 'utf8');
     content.apiArtifacts = JSON.parse(await fs.readFile(process.cwd() + "/../../resources/content/apiMedatada.json", 'utf8'));
+
+    content.componentsHTMLLineCount = content.componentsHTMLContent.split(/\r\n|\r|\n/).length;
   } else {
     mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/style.css"
     navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html"
@@ -43,7 +45,6 @@ export async function getServerSideProps(context) {
     content.apiContent = apiContent;
 
   }
-
 
   // Pass data to the page via props
   return { props: { content } }
@@ -74,16 +75,9 @@ export default function Components({ content }) {
 
     
 
-
     const styleElement = document.createElement('style');
     styleElement.innerHTML = content.mainStylesheetContent;
     document.head.appendChild(styleElement);
-
-    if (document.getElementById('component-content') && document.getElementById('component-content').children.length > 0) {
-      content.isParentHTMLPresent = true;
-    }
-
-
 
   }, []);
 
@@ -91,9 +85,7 @@ export default function Components({ content }) {
     console.log(content.isParentHTMLPresent),
     <div>
       <Navbar content={content} />
-      <div dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>
-
-      {content.isParentHTMLPresent ? (
+      {content.componentsHTMLLineCount > 14 ? (
         <div dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>
       ) : (
           <Tile content={content} />

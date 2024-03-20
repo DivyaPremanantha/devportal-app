@@ -31,7 +31,8 @@
     }
   }
   .components-div-3 {
-    flex-grow: 1;
+    padding: 0 20px 20px 35px;
+    width: min-content;
   }
   @media (max-width: 991px) {
     .components-div-3 {
@@ -41,7 +42,6 @@
   }
   .components-div-4 {
     margin-top: 20px;
-    gap: 20px;
     display: flex;
   }
   @media (max-width: 991px) {
@@ -98,7 +98,7 @@
   .components-div-6 {
     align-self: center;
     display: flex;
-    margin-top: 29px;
+    margin-top: 20px;
     width: 327px;
     max-width: 100%;
     padding-right: 37px;
@@ -113,6 +113,7 @@
     }
   }
   .components-img-2 {
+    padding: 20px;
     aspect-ratio: 0.93;
     object-fit: auto;
     object-position: center;
