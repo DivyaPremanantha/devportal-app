@@ -12,29 +12,23 @@ import React from 'react';
 export async function getServerSideProps(context) {
     const content = {}
     var htmlRef;
-    var stylesheetRef;
     var apiContentRef;
     var apiContentRefMD;
     var yamlRef;
     var navRef;
-    var mainStylesheetRef;
     var footerRef;
 
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
         content.apiHTMLContent = await fs.readFile(process.cwd() + "/../../resources/template/api-landing-page.html", 'utf8');
-        content.stylesheetContent = await fs.readFile(process.cwd() + "/../../resources/stylesheet/api-landing-page.css", 'utf8');
-        content.mainStylesheetContent = await fs.readFile(process.cwd() + "/../../resources/stylesheet/style.css", 'utf8');
-        content.apiArtifacts = JSON.parse(await fs.readFile(process.cwd() + "/../../resources/content/apiMedatada.json", 'utf8')).apiInfo.apiArtifacts;
+        content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/../../resources/content/apiMedatada.json", 'utf8'));
         content.apiPage = await fs.readFile(process.cwd() + "/../../resources/content/apiContent.md", 'utf8');
         content.navContent = await fs.readFile(process.cwd() + "/../../resources/template/nav-bar.html", 'utf8');
         content.footerContent = await fs.readFile(process.cwd() + "/../../resources/template/footer.html", 'utf8');
 
     } else {
         htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/api-landing-page.html"
-        stylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/api-landing-page.css";
         apiContentRef = process.env.NEXT_PUBLIC_API + "apiMetadata/api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
         apiContentRefMD = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/content/apiContent.md";
-        mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/stylesheet/style.css"
         navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/template/nav-bar.html";
         footerRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/template/footer.html";
 
@@ -45,10 +39,6 @@ export async function getServerSideProps(context) {
         const footerResponse = await fetch(footerRef)
         const footerContent = await footerResponse.text()
         content.footerContent = footerContent;
-      
-        const mainStylesheetResponse = await fetch(mainStylesheetRef);
-        const mainStylesheetContent = await mainStylesheetResponse.text();
-        content.mainStylesheetContent = mainStylesheetContent;
         
         const yamlResponse = await fetch(yamlRef)
         const yamlContent = await yamlResponse.json()
@@ -66,9 +56,6 @@ export async function getServerSideProps(context) {
         const apiPageContent = await apiMDRes.text();
         content.apiPage = apiPageContent;
     
-        const respo = await fetch(stylesheetRef);
-        const stylesheetContent = await respo.text();
-        content.stylesheetContent = stylesheetContent;
     }
 
     content.orgName = context.params.orgName;
@@ -83,13 +70,13 @@ function API({ content }) {
     router.asPath = "/" + content.orgName;
 
     useEffect(() => {
-        for (const [key, value] of Object.entries(content.apiArtifacts.apiContent)) {
+        for (const [key, value] of Object.entries(content.apiResources[0].apiInfo.apiArtifacts.apiContent)) {
             if (document.getElementById(key) !== null) {
                 document.getElementById(key).innerHTML = value;
             }
         }
 
-        for (const [key, value] of Object.entries(content.apiArtifacts.apiImages)) {
+        for (const [key, value] of Object.entries(content.apiResources[0].apiInfo.apiArtifacts.apiImages)) {
             if (document.getElementById(key) !== null) {
                 const apiImage = document.getElementById(key);
                 apiImage.src = value;
@@ -98,10 +85,6 @@ function API({ content }) {
 
         //render rest of the API Landin Page content through a markdown
         createRoot(document.getElementById("api-details")).render( <Markdown rehypePlugins={[rehypeRaw]}>{content.apiPage}</Markdown> );
-
-        const styleElement = document.createElement('style');
-        styleElement.innerHTML = content.stylesheetContent;
-        document.head.appendChild(styleElement);
 
     }, []);
 

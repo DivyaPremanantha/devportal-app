@@ -2,8 +2,8 @@ import chokidar from "chokidar";
 import fs from "fs-extra";
 import path from "path";
 
-const source = process.cwd() + "/../../resources/images"
-const destination = "./public/resources/images" // Usually "./public/assets/" or "./public/"
+const source = process.cwd() + "/../../resources"
+const destination = "./public/resources" // Usually "./public/assets/" or "./public/"
 
 // Check if --watch flag is present in the command line arguments
 const watch = process.argv.includes("--watch")

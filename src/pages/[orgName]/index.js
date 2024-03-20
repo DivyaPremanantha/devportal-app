@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from '../../app/navbar';
 import { useRouter } from "next/router";
 import Footer from '../../app/footer';
@@ -10,21 +10,15 @@ export async function getServerSideProps(context) {
   var htmlRef;
   var navRef;
   var footerRef;
-  var stylesheetRef;
-  var mainStylesheetRef;
   var yamlRef;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
     content.orgHTMLContent = await fs.readFile(process.cwd() + "/../../resources/template/org-landing-page.html", 'utf8');
-    content.stylesheetContent = await fs.readFile(process.cwd() + "/../../resources/stylesheet/org-landing-page.css", 'utf8');
-    content.mainStylesheetContent = await fs.readFile(process.cwd() + "/../../resources/stylesheet/style.css", 'utf8');
     content.orgContent = JSON.parse(await fs.readFile(process.cwd() + "/../../resources/content/orgContent.json", 'utf8')).orgLandingPageContent;
     content.navContent = await fs.readFile(process.cwd() + "/../../resources/template/nav-bar.html", 'utf8');
     content.footerContent = await fs.readFile(process.cwd() + "/../../resources/template/footer.html", 'utf8');
   } else {
     htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/org-landing-page.html"
-    stylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/org-landing-page.css"
-    mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/stylesheet/style.css"
     yamlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/content/orgContent.json"
     navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "resources/template/nav-bar.html"
 
@@ -42,15 +36,7 @@ export async function getServerSideProps(context) {
 
     const footerResponse = await fetch(footerRef)
     const footerContent = await footerResponse.text()
-    content.navContent = footerContent
-
-    const stylesheetResponse = await fetch(stylesheetRef);
-    const stylesheetContent = await stylesheetResponse.text();
-    content.stylesheetContent = stylesheetContent;
-
-    const mainStylesheetResponse = await fetch(mainStylesheetRef);
-    const mainStylesheetContent = await mainStylesheetResponse.text();
-    content.mainStylesheetContent = mainStylesheetContent;
+    content.footerContent = footerContent;
   }
 
   content.orgName = context.params.orgName;
@@ -72,17 +58,13 @@ export default function Page({ content }) {
       document.getElementById("org-landing-page-image").src = content.orgContent.image;
     }
 
-    const styleElement = document.createElement('style');
-    styleElement.innerHTML = content.stylesheetContent;
-    document.head.appendChild(styleElement);
-
   }, []);
 
   return (
     <div>
       <Navbar content={content} />
       <div dangerouslySetInnerHTML={{ __html: content.orgHTMLContent }}></div>
-      <Footer content={content}/>
+      <Footer content={content} />
     </div>
   );
 }
