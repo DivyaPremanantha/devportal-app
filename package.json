@@ -1,13 +1,12 @@
 {
-  "name": "devportal-app-new",
-  "version": "1.0.24",
+  "name": "devportal-app",
+  "version": "1.0.7",
   "scripts": {
     "dev": "npm run sync --watch & next dev",
     "build": "npm run sync && next build",
     "sync": "node scripts/sync.js",
     "start": "next start",
-    "lint": "next lint",
-    "zip": "sh src/compress.sh"
+    "lint": "next lint"
   },
   "dependencies": {
     "@babel/preset-react": "^7.23.3",
@@ -35,7 +34,7 @@
     "npm-build-zip": "^1.0.4"
   },
   "bin": {
-    "execute": "devportalExec.js"
+    "execute": "scripts/devportalExec.js"
   },
   "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
   "main": "src/pages/[orgName]/index.js",

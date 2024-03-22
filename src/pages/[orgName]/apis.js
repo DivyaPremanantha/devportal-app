@@ -13,33 +13,25 @@ export async function getServerSideProps(context) {
   var componentRef;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-    content.navContent = await fs.readFile(process.cwd() + "/../../resources/template/nav-bar.html", 'utf8');
-    content.footerContent = await fs.readFile(process.cwd() + "/../../resources/template/footer.html", 'utf8');
-    content.componentsHTMLContent = await fs.readFile(process.cwd() + "/../../resources/template/components-page.html", 'utf8');
-    content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/../../resources/content/apiMedatada.json", 'utf8'));
+    content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
+    content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
+    content.componentsHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/components-page.html", 'utf8');
+    content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/content-mock/apiMedatada.json", 'utf8'));
 
     content.componentsHTMLLineCount = content.componentsHTMLContent.split(/\r\n|\r|\n/).length;
   } else {
-    mainStylesheetRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/stylesheet/style.css"
     navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html"
     componentRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/components-page.html"
 
     const navResponse = await fetch(navRef)
-    const navContent = await navResponse.text()
-    content.navContent = navContent;
-
-    const mainStylesheetResponse = await fetch(mainStylesheetRef);
-    const mainStylesheetContent = await mainStylesheetResponse.text();
-    content.mainStylesheetContent = mainStylesheetContent;
+    content.navContent = await navResponse.text()
 
     const componentResponse = await fetch(componentRef);
-    const componentContent = await componentResponse.text();
-    content.componentsHTMLContent = componentContent;
+    content.componentsHTMLContent = await componentResponse.text();
 
     const apiArtifactRef = process.env.NEXT_PUBLIC_API + "apiMetadata/apiList?orgName=" + context.params.orgName;
     const apiResponse = await fetch(apiArtifactRef);
-    const apiContent = await apiResponse.json();
-    content.apiArtifacts = apiContent;
+    content.apiResources = await apiResponse.json();
 
   }
 

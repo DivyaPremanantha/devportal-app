@@ -10,34 +10,31 @@ export async function getServerSideProps(context) {
   var htmlRef;
   var navRef;
   var footerRef;
-  var yamlRef;
+  var orgContent;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-    content.orgHTMLContent = await fs.readFile(process.cwd() + "/../../resources/template/org-landing-page.html", 'utf8');
-    content.orgContent = JSON.parse(await fs.readFile(process.cwd() + "/../../resources/content/orgContent.json", 'utf8')).orgLandingPageContent;
-    content.navContent = await fs.readFile(process.cwd() + "/../../resources/template/nav-bar.html", 'utf8');
-    content.footerContent = await fs.readFile(process.cwd() + "/../../resources/template/footer.html", 'utf8');
+    content.orgHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/org-landing-page.html", 'utf8');
+    content.orgContent = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/content/orgContent.json", 'utf8'));
+    content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
+    content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
   } else {
     htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/org-landing-page.html"
-    yamlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/content/orgContent.json"
     navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html"
     footerRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/footer.html";
+    orgContent = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/content/orgContent.json";
 
-    const yamlResponse = await fetch(yamlRef)
-    const yamlContent = await yamlResponse.json()
-    content.orgContent = yamlContent.orgLandingPageContent;
 
     const htmlResponse = await fetch(htmlRef)
-    const htmlContent = await htmlResponse.text()
-    content.orgHTMLContent = htmlContent
+    content.orgHTMLContent = await htmlResponse.text()
+
+    const orgContentResponse = await fetch(orgContent)
+    content.orgContent = await orgContentResponse.json()
 
     const navResponse = await fetch(navRef)
-    const navContent = await navResponse.text()
-    content.navContent = navContent
+    content.navContent = await navResponse.text()
 
     const footerResponse = await fetch(footerRef)
-    const footerContent = await footerResponse.text()
-    content.footerContent = footerContent;
+    content.footerContent = await footerResponse.text()
   }
 
   content.orgName = context.params.orgName;
@@ -52,11 +49,11 @@ export default function Page({ content }) {
 
   useEffect(() => {
     if (document.getElementById("org-landing-page-section-one") !== null)
-      document.getElementById("org-landing-page-section-one").innerHTML = content.orgContent.title;
+      document.getElementById("org-landing-page-section-one").innerHTML = content.orgContent.orgLandingPageContent.title;
     if (document.getElementById("org-landing-page-section-two") !== null)
-      document.getElementById("org-landing-page-section-two").innerHTML = content.orgContent.description;
+      document.getElementById("org-landing-page-section-two").innerHTML = content.orgContent.orgLandingPageContent.description;
     if (document.getElementById("org-landing-page-image") !== null) {
-      document.getElementById("org-landing-page-image").src = content.orgContent.image;
+      document.getElementById("org-landing-page-image").src = content.orgContent.orgLandingPageContent.image;
     }
 
   }, []);
