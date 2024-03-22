@@ -68,12 +68,6 @@ function API({ content }) {
 
     useEffect(() => {
         if (content.apiResources != null) {
-            for (const [key, value] of Object.entries(content.apiResources.apiInfo.apiArtifacts.apiContent)) {
-                if (document.getElementById(key) !== null) {
-                    document.getElementById(key).innerHTML = value;
-                }
-            }
-
             for (const [key, value] of Object.entries(content.apiResources.apiInfo.apiArtifacts.apiImages)) {
                 if (document.getElementById(key) !== null) {
                     const apiImage = document.getElementById(key);
@@ -81,9 +75,20 @@ function API({ content }) {
                 }
             }
         }
-        document.getElementById("api-version").innerHTML = content.apiResources.apiInfo.version;
-        document.getElementById("api-url").innerHTML = content.apiResources.apiInfo.serverUrl.productionUrl;
-        document.getElementById("api-url").href = content.apiResources.apiInfo.serverUrl.productionUrl;
+        if (document.getElementById("api-landing-page-heading") != null)
+        document.getElementById("api-landing-page-heading").innerHTML = content.apiResources.apiInfo.openApiDefinition.info.title;
+
+        if (document.getElementById("api-landing-page-description") != null)
+        document.getElementById("api-landing-page-description").innerHTML = content.apiResources.apiInfo.openApiDefinition.info.description;
+
+        if (document.getElementById("api-version") != null)
+        document.getElementById("api-version").innerHTML = content.apiResources.apiInfo.openApiDefinition.info.version;
+
+        if (document.getElementById("api-url") != null)
+        document.getElementById("api-url").innerHTML = content.apiResources.serverUrl.productionUrl;
+
+        if (document.getElementById("api-url") != null)
+        document.getElementById("api-url").href = content.apiResources.serverUrl.productionUrl;
 
         //render rest of the API Landin Page content through a markdown
         if (content.apiPage != null)
