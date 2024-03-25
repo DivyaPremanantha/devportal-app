@@ -11,23 +11,29 @@ export async function getServerSideProps(context) {
 
   var navRef;
   var componentRef;
+  var orgContent;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
     content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
     content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
     content.componentsHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/components-page.html", 'utf8');
     content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/content-mock/apiMedatada.json", 'utf8'));
+    content.orgContent = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/content/orgContent.json", 'utf8'));
 
     content.componentsHTMLLineCount = content.componentsHTMLContent.split(/\r\n|\r|\n/).length;
   } else {
     navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html"
     componentRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/components-page.html"
+    orgContent = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/content/orgContent.json";
 
     const navResponse = await fetch(navRef)
     content.navContent = await navResponse.text()
 
     const componentResponse = await fetch(componentRef);
     content.componentsHTMLContent = await componentResponse.text();
+
+    const orgContentResponse = await fetch(orgContent)
+    content.orgContent = await orgContentResponse.json()
 
     const apiArtifactRef = process.env.NEXT_PUBLIC_API + "apiMetadata/apiList?orgName=" + context.params.orgName;
     const apiResponse = await fetch(apiArtifactRef);
