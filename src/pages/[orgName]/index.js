@@ -14,15 +14,12 @@ export async function getServerSideProps(context) {
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
     content.orgHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/org-landing-page.html", 'utf8');
-    content.orgContent = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/content/orgContent.json", 'utf8'));
     content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
     content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
   } else {
     htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/org-landing-page.html"
     navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html"
     footerRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/footer.html";
-    orgContent = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/content/orgContent.json";
-
 
     const htmlResponse = await fetch(htmlRef)
     content.orgHTMLContent = await htmlResponse.text()
@@ -46,17 +43,6 @@ export default function Page({ content }) {
 
   const router = useRouter();
   router.asPath = "/" + content.orgName;
-
-  useEffect(() => {
-    if (document.getElementById("org-landing-page-section-one") !== null)
-      document.getElementById("org-landing-page-section-one").innerHTML = content.orgContent.orgLandingPageContent.title;
-    if (document.getElementById("org-landing-page-section-two") !== null)
-      document.getElementById("org-landing-page-section-two").innerHTML = content.orgContent.orgLandingPageContent.description;
-    if (document.getElementById("org-landing-page-image") !== null) {
-      document.getElementById("org-landing-page-image").src = content.orgContent.orgLandingPageContent.image;
-    }
-
-  }, []);
 
   return (
     <div>

@@ -6,6 +6,7 @@ export async function middleware(request) {
     }
 
     if (request.headers.get('referer') !== null) {
+        console.log(request.nextUrl.pathname)
         var url = process.env.NEXT_PUBLIC_HOST + request.headers.get('referer').split('/')[3];
         return NextResponse.redirect(new URL(url + request.nextUrl.pathname));
     }

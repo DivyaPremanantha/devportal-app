@@ -16,7 +16,6 @@ export async function getServerSideProps(context) {
     var apiContentRefMD;
     var navRef;
     var footerRef;
-    var orgContent;
 
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
         content.apiHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/api-landing-page.html", 'utf8');
@@ -32,7 +31,6 @@ export async function getServerSideProps(context) {
         }
         content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
         content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
-        content.orgContent = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/content/orgContent.json", 'utf8'));
 
     } else {
         htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/api-landing-page.html"
@@ -40,7 +38,6 @@ export async function getServerSideProps(context) {
         apiContentRefMD = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/content/" + context.params.apiName + "/apiContent.md";
         navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html";
         footerRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/footer.html";
-        orgContent = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/content/orgContent.json";
 
         const navResponse = await fetch(navRef)
         content.navContent = await navResponse.text()
@@ -50,9 +47,6 @@ export async function getServerSideProps(context) {
 
         const res = await fetch(htmlRef);
         content.apiHTMLContent = await res.text();
-
-        const orgContentResponse = await fetch(orgContent)
-        content.orgContent = await orgContentResponse.json()
 
         const resp = await fetch(apiContentRef);
         if (resp.status != 200) {

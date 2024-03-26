@@ -6,7 +6,6 @@ function Navbar({ content }) {
   const router = useRouter();
 
   useEffect(() => {
-    document.getElementById("org-img").src = content.orgContent.orgLandingPageContent.logo;
     document.getElementById("org-logo").href = router.asPath;
     document.getElementById("org-home").href = router.asPath;
     document.getElementById("org-apis").href = router.asPath + "/apis";
