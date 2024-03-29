@@ -24,9 +24,6 @@ export async function getServerSideProps(context) {
     const htmlResponse = await fetch(htmlRef)
     content.orgHTMLContent = await htmlResponse.text()
 
-    const orgContentResponse = await fetch(orgContent)
-    content.orgContent = await orgContentResponse.json()
-
     const navResponse = await fetch(navRef)
     content.navContent = await navResponse.text()
 

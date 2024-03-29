@@ -35,7 +35,7 @@ export async function getServerSideProps(context) {
     } else {
         htmlRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/api-landing-page.html"
         apiContentRef = process.env.NEXT_PUBLIC_API + "apiMetadata/api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
-        apiContentRefMD = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/content/" + context.params.apiName + "/apiContent.md";
+        apiContentRefMD = process.env.NEXT_PUBLIC_API + "apiMetadata/apiContent.md?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
         navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html";
         footerRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/footer.html";
 
