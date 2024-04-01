@@ -11,6 +11,7 @@ export async function getServerSideProps(context) {
 
   var navRef;
   var componentRef;
+  var footerRef;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
     content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
@@ -20,14 +21,18 @@ export async function getServerSideProps(context) {
 
     content.componentsHTMLLineCount = content.componentsHTMLContent.split(/\r\n|\r|\n/).length;
   } else {
-    navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html"
-    componentRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/components-page.html"
+    navRef = process.env.NEXT_ORG_PAGE + "admin/nav-bar.html?orgName=" + context.params.orgName ;
+    componentRef = process.env.NEXT_ORG_PAGE + "admin/components-page.html?orgName=" + context.params.orgName ;
+    footerRef = process.env.NEXT_ORG_PAGE + "admin/footer.html?orgName=" + context.params.orgName ;
 
     const navResponse = await fetch(navRef)
     content.navContent = await navResponse.text()
 
     const componentResponse = await fetch(componentRef);
     content.componentsHTMLContent = await componentResponse.text();
+
+    const footerResponse = await fetch(footerRef)
+    content.footerContent = await footerResponse.text()
 
     const apiArtifactRef = process.env.NEXT_PUBLIC_API + "apiMetadata/apiList?orgName=" + context.params.orgName;
     const apiResponse = await fetch(apiArtifactRef);

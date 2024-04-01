@@ -33,11 +33,11 @@ export async function getServerSideProps(context) {
         content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
 
     } else {
-        htmlRef =  process.env.NEXT_ORG_PAGE + "admin/api-landing-page.html/?orgName=" + context.params.orgName ;
+        htmlRef =  process.env.NEXT_ORG_PAGE + "admin/api-landing-page.html?orgName=" + context.params.orgName ;
         apiContentRef = process.env.NEXT_PUBLIC_API + "apiMetadata/api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
         apiContentRefMD = process.env.NEXT_PUBLIC_API + "apiMetadata/apiContent.md?orgName=" + context.params.orgName + "&apiName=" + context.params.apiName;
-        navRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/nav-bar.html";
-        footerRef = process.env.NEXT_PUBLIC_HOST + context.params.orgName + "/resources/template/footer.html";
+        navRef = process.env.NEXT_ORG_PAGE + "admin/nav-bar.html?orgName=" + context.params.orgName ;
+        footerRef = process.env.NEXT_ORG_PAGE + "admin/footer.html?orgName=" + context.params.orgName ;
 
         const navResponse = await fetch(navRef)
         content.navContent = await navResponse.text()
