@@ -9,7 +9,7 @@ function Navbar({ content }) {
     document.getElementById("org-logo").href = router.asPath;
     document.getElementById("org-home").href = router.asPath;
     document.getElementById("org-apis").href = router.asPath + "/apis";
-    
+    document.getElementById("org-login").href = "http://localhost:3000/api/auth/signin/";
   }, []);
 
   return (
