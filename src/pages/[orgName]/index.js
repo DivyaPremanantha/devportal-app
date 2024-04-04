@@ -12,14 +12,14 @@ export async function getServerSideProps(context) {
   var footerRef;
   var orgContent;
 
-  if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
+  if (process.env.DEPLOYMENT === "DEV") {
     content.orgHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/org-landing-page.html", 'utf8');
     content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
     content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
   } else {
-    htmlRef = process.env.NEXT_ORG_PAGE + "admin/org-landing-page.html?orgName=" + context.params.orgName ;
-    navRef = process.env.NEXT_ORG_PAGE + "admin/nav-bar.html?orgName=" + context.params.orgName ;
-    footerRef = process.env.NEXT_ORG_PAGE + "admin/footer.html?orgName=" + context.params.orgName ;
+    htmlRef = process.env.ADMIN_API_URL + "admin/org-landing-page.html?orgName=" + context.params.orgName ;
+    navRef = process.env.ADMIN_API_URL + "admin/nav-bar.html?orgName=" + context.params.orgName ;
+    footerRef = process.env.ADMIN_API_URL + "admin/footer.html?orgName=" + context.params.orgName ;
 
     const htmlResponse = await fetch(htmlRef)
     content.orgHTMLContent = await htmlResponse.text()

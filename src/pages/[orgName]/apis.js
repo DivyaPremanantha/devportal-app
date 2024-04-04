@@ -13,7 +13,7 @@ export async function getServerSideProps(context) {
   var componentRef;
   var footerRef;
 
-  if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
+  if (process.env.DEPLOYMENT === "DEV") {
     content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
     content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
     content.componentsHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/components-page.html", 'utf8');
@@ -21,9 +21,9 @@ export async function getServerSideProps(context) {
 
     content.componentsHTMLLineCount = content.componentsHTMLContent.split(/\r\n|\r|\n/).length;
   } else {
-    navRef = process.env.NEXT_ORG_PAGE + "admin/nav-bar.html?orgName=" + context.params.orgName ;
-    componentRef = process.env.NEXT_ORG_PAGE + "admin/components-page.html?orgName=" + context.params.orgName ;
-    footerRef = process.env.NEXT_ORG_PAGE + "admin/footer.html?orgName=" + context.params.orgName ;
+    navRef = process.env.ADMIN_API_URL + "admin/nav-bar.html?orgName=" + context.params.orgName ;
+    componentRef = process.env.ADMIN_API_URL + "admin/components-page.html?orgName=" + context.params.orgName ;
+    footerRef = process.env.ADMIN_API_URL + "admin/footer.html?orgName=" + context.params.orgName ;
 
     const navResponse = await fetch(navRef)
     content.navContent = await navResponse.text()
@@ -34,7 +34,7 @@ export async function getServerSideProps(context) {
     const footerResponse = await fetch(footerRef)
     content.footerContent = await footerResponse.text()
 
-    const apiArtifactRef = process.env.NEXT_PUBLIC_API + "apiMetadata/apiList?orgName=" + context.params.orgName;
+    const apiArtifactRef = process.env.METADATA_API_URL + "apiMetadata/apiList?orgName=" + context.params.orgName;
     const apiResponse = await fetch(apiArtifactRef);
     content.apiResources = await apiResponse.json();
 
