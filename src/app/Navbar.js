@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import React from 'react';
 import { useRouter } from "next/router";
+import { useSession, signIn, signOut } from "next-auth/react"
+
 
 function Navbar({ content }) {
   const router = useRouter();
@@ -8,8 +10,13 @@ function Navbar({ content }) {
   useEffect(() => {
     document.getElementById("org-logo").href = router.asPath;
     document.getElementById("org-home").href = router.asPath;
-    document.getElementById("org-apis").href = router.asPath + "/apis";
-    document.getElementById("org-login").href = "http://localhost:3000/api/auth/signin/";
+    document.getElementById("org-apis").href = router.asPath + "/apis"; 
+    document.getElementById("org-login").href = "#";
+    document.getElementById("org-login").addEventListener("click", function () {
+      signIn("asgardeo");
+    });
+
+
   }, []);
 
   return (
