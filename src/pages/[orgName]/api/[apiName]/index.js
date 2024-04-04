@@ -1,5 +1,5 @@
-import Navbar from '../../../app/navbar';
-import Footer from '../../../app/footer';
+import Navbar from '../../../../app/navbar';
+import Footer from '../../../../app/footer';
 import { Helmet } from "react-helmet";
 import Markdown from 'react-markdown'
 import { createRoot } from 'react-dom/client'
@@ -33,11 +33,11 @@ export async function getServerSideProps(context) {
         content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
 
     } else {
-        htmlRef =  process.env.ADMIN_API_URL + "admin/api-landing-page.html?orgName=" + context.params.orgName ;
+        htmlRef = process.env.ADMIN_API_URL + "admin/api-landing-page.html?orgName=" + context.params.orgName;
         apiContentRef = process.env.METADATA_API_URL + "apiMetadata/api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
         apiContentRefMD = process.env.METADATA_API_URL + "apiMetadata/apiContent.md?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
-        navRef = process.env.ADMIN_API_URL + "admin/nav-bar.html?orgName=" + context.params.orgName ;
-        footerRef = process.env.ADMIN_API_URL + "admin/footer.html?orgName=" + context.params.orgName ;
+        navRef = process.env.ADMIN_API_URL + "admin/nav-bar.html?orgName=" + context.params.orgName;
+        footerRef = process.env.ADMIN_API_URL + "admin/footer.html?orgName=" + context.params.orgName;
 
         const navResponse = await fetch(navRef)
         content.navContent = await navResponse.text()
@@ -73,7 +73,7 @@ export async function getServerSideProps(context) {
 
 function API({ content }) {
     const router = useRouter();
-    router.asPath = "/" + content.orgName;
+    // router.asPath = "/" + content.orgName;
 
     useEffect(() => {
         if (content.apiResources != null && content.apiResources.apiInfo != null) {
