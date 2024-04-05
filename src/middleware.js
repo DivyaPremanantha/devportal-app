@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 export async function middleware(request) {
-    if (process.env.DEPLOYMENT === "DEV") {
+    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
         return NextResponse.next();
     }
 
