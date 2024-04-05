@@ -5,9 +5,6 @@ import { useSession, signIn, signOut } from "next-auth/react"
 
 
 function Navbar({ content }) {
-  const router = useRouter();
-
-  console.log(content);
 
   useEffect(() => {
     document.getElementById("org-logo").href = "/" + content.orgName;
