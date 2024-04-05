@@ -10,13 +10,6 @@ function Login({ context, content }) {
             console.log("Bingo");
             signIn("asgardeo", { callbackUrl: router.asPath.split("/login")[0] });
         }
-    } else {
-        try {
-            const router = useRouter();
-            router.push(router.asPath.split("/login")[0]);
-        } catch (e) {
-            console.log(e);
-        }
     }
 }
 
