@@ -7,17 +7,17 @@ function Login({ context, content }) {
     if (session === undefined) {
         const router = useRouter()
         if (router.query) {
-            console.log("Bingo");
             signIn("asgardeo", { callbackUrl: router.asPath.split("/login")[0] });
         }
-    } else {
-        try {
-            const router = useRouter();
-            router.push(router.asPath.split("/login")[0]);
-        } catch (e) {
-            console.log(e);
-        }
-    }
+    } 
+    // else {
+    //     try {
+    //         const router = useRouter();
+    //         router.push(router.asPath.split("/login")[0]);
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
 }
 
 export default Login;
