@@ -8,21 +8,10 @@ export async function middleware(request, event) {
     if (request.nextUrl.pathname.endsWith('/login') && isAuthenticated) {
         return NextResponse.redirect(new URL(request.nextUrl.href.split("/login")[0]));
     }
-
-    if (process.env.DEPLOYMENT === "DEV" && !request.nextUrl.pathname.endsWith('/login')) {
-        return NextResponse.next();
-    }
-
-    if (request.headers.get('referer') !== null && !request.nextUrl.pathname.endsWith('/login')) {
-        var url = process.env.AWS_URL + request.headers.get('referer').split('/')[3];
-        return NextResponse.redirect(new URL(url + request.nextUrl.pathname));
-    }
 }
 
 export const config = {
     matcher: [
         '/:path*/login',
-        '/resources/images/:path*',
-        '/resources/stylesheet/:path*',
     ]
 }
