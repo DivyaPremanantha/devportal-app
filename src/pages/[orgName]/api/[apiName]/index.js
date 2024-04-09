@@ -17,7 +17,7 @@ export async function getServerSideProps(context) {
     var navRef;
     var footerRef;
 
-    if (process.env.DEPLOYMENT === "DEV") {
+    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
         content.apiHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/api-landing-page.html", 'utf8');
         try {
             content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/content-mock/" + context.params.apiName + "/apiMedatada.json", 'utf8'));

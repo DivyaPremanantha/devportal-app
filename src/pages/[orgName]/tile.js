@@ -18,7 +18,6 @@ export default function Tile({ content }) {
                         {data[i] !== undefined && data[i].length > 0 && i < content.apiResources.length && data[i].map((card, index) => {
                             index = index + (i * 4);
                             var auth = content.apiResources[index].apiInfo.authenticate;
-
                             return (
                                 <div class="components-section">
                                     <div class="components-inner-section">
