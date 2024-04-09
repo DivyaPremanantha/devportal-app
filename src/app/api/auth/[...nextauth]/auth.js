@@ -2,12 +2,12 @@ import NextAuth from "next-auth"
 import AsgardeoProvider from "next-auth/providers/asgardeo";
 
 function getConfig() {
-  if (process.env.NEXT_PUBLIC_DEPLOYMENT == 'DEV') {
+  if (process.env.DEPLOYMENT == 'DEV') {
     const auth = require(process.cwd() + "/../../public/resources/auth.json");
     
     return auth
   }
-  if (process.env.NEXT_PUBLIC_DEPLOYMENT == 'PROD') {
+  if (process.env.DEPLOYMENT == 'PROD') {
 
     return {
       clientId: process.env.ASGARDEO_CLIENT_ID,

@@ -9,7 +9,7 @@ export async function middleware(request, event) {
         return NextResponse.redirect(new URL(request.nextUrl.href.split("/login")[0]));
     }
 
-    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV" && !request.nextUrl.pathname.endsWith('/login')) {
+    if (process.env.DEPLOYMENT === "DEV" && !request.nextUrl.pathname.endsWith('/login')) {
         return NextResponse.next();
     }
 
