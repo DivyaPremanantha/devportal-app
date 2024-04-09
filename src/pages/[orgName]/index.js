@@ -22,7 +22,10 @@ export async function getServerSideProps(context) {
     footerRef = process.env.ADMIN_API_URL + "admin/footer.html?orgName=" + context.params.orgName ;
 
     const htmlResponse = await fetch(htmlRef)
-    content.orgHTMLContent = await htmlResponse.text()
+    var htmlContent = await htmlResponse.text()
+
+    content.orgHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.AWS_URL + context.params.orgName + `/resources/stylesheet/`);
+    content.orgHTMLContent = htmlContent.replace('/resources/images/', process.env.AWS_URL + context.params.orgName + `/resources/images/`);
 
     const navResponse = await fetch(navRef)
     content.navContent = await navResponse.text()
