@@ -1,17 +1,10 @@
-import { getToken } from 'next-auth/jwt';
-import { NextResponse } from 'next/server';
+import NextAuth from 'next-auth';
+import { authConfig } from './api/auth/[...nextauth]/authConfig';
 
 
-export async function middleware(request, event) {
-    const token = await getToken({ req: request, secret: process.env.AUTH_SECRET});
-    const isAuthenticated = !!token;
-    if (request.nextUrl.pathname.endsWith('/login') && isAuthenticated) {
-        return NextResponse.redirect(new URL(request.nextUrl.href.split("/login")[0]));
-    }
-}
-
+export default NextAuth(authConfig).auth;
+ 
 export const config = {
-    matcher: [
-        '/:path*/login',
-    ]
-}
+  // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
+  matcher: [ "/((?!api/auth|resources|_next|fonts|examples|[\\w-]+\\.\\w+).*)",],
+};
