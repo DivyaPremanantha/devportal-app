@@ -17,7 +17,7 @@ export async function getServerSideProps(context) {
     var navRef;
     var footerRef;
 
-    if (process.env.DEPLOYMENT === "DEV") {
+    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
         content.apiHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/api-landing-page.html", 'utf8');
         try {
             content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/content-mock/" + context.params.apiName + "/apiMedatada.json", 'utf8'));
@@ -47,7 +47,7 @@ export async function getServerSideProps(context) {
 
         const htmlContent = await fetch(htmlRef);
         var contentRef = await htmlContent.text();
-        content.apiHTMLContent = contentRef.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`); 
+        content.apiHTMLContent = contentRef.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
 
         const resp = await fetch(apiContentRef);
         if (resp.status != 200) {
@@ -80,7 +80,10 @@ function API({ content }) {
             for (const [key, value] of Object.entries(content.apiResources.apiInfo.apiArtifacts.apiImages)) {
                 if (document.getElementById(key) !== null) {
                     const apiImage = document.getElementById(key);
-                    apiImage.src = process.env.NEXT_PUBLIC_AWS_URL + content.orgName + value;
+                    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV")
+                        apiImage.src = value;
+                    else
+                        apiImage.src = process.env.NEXT_PUBLIC_AWS_URL + content.orgName + value;
                 }
             }
             if (document.getElementById("api-landing-page-heading") != null)
@@ -101,7 +104,7 @@ function API({ content }) {
             //render rest of the API Landin Page content through a markdown
             if (content.apiPage != null)
                 createRoot(document.getElementById("api-details")).render(<Markdown rehypePlugins={[rehypeRaw]}>{content.apiPage}</Markdown>);
-        } 
+        }
     }, []);
 
     return (

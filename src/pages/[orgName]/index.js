@@ -10,9 +10,8 @@ export async function getServerSideProps(context) {
   var htmlRef;
   var navRef;
   var footerRef;
-  var orgContent;
 
-  if (process.env.DEPLOYMENT === "DEV") {
+  if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
     content.orgHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/org-landing-page.html", 'utf8');
     content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
     content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
