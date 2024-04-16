@@ -40,7 +40,9 @@ export async function getServerSideProps(context) {
         footerRef = process.env.ADMIN_API_URL + "admin/footer.html?orgName=" + context.params.orgName;
 
         const navResponse = await fetch(navRef)
-        content.navContent = await navResponse.text()
+        var navContent = await navResponse.text()
+        var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
+        content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
 
         const footerResponse = await fetch(footerRef)
         content.footerContent = await footerResponse.text()
