@@ -22,7 +22,7 @@ export default function Tile({ content }) {
                                 <div class="components-section">
                                     <div class="components-inner-section">
                                         <img loading="lazy"
-                                            srcset={content.apiResources[index].apiInfo.apiArtifacts.apiImages["api-detail-page-image"]}
+                                            srcset={process.env.NEXT_PUBLIC_AWS_URL + content.orgName + content.apiResources[index].apiInfo.apiArtifacts.apiImages["api-detail-page-image"]}
                                             class="components-img" />
 
                                         <div class="components-inner-section-bottom">

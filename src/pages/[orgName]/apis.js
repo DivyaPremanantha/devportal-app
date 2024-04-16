@@ -29,7 +29,8 @@ export async function getServerSideProps(context) {
     content.navContent = await navResponse.text()
 
     const componentResponse = await fetch(componentRef);
-    content.componentsHTMLContent = await componentResponse.text();
+    var contentRef = await componentResponse.text();
+    content.componentsHTMLContent = contentRef.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`); 
 
     const footerResponse = await fetch(footerRef)
     content.footerContent = await footerResponse.text()

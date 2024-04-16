@@ -45,8 +45,9 @@ export async function getServerSideProps(context) {
         const footerResponse = await fetch(footerRef)
         content.footerContent = await footerResponse.text()
 
-        const res = await fetch(htmlRef);
-        content.apiHTMLContent = await res.text();
+        const htmlContent = await fetch(htmlRef);
+        var contentRef = await htmlContent.text();
+        content.apiHTMLContent = contentRef.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`); 
 
         const resp = await fetch(apiContentRef);
         if (resp.status != 200) {
@@ -54,7 +55,6 @@ export async function getServerSideProps(context) {
         } else {
             content.apiResources = await resp.json();
         }
-
 
         const apiMDRes = await fetch(apiContentRefMD);
         if (apiMDRes.status != 200) {
@@ -80,7 +80,7 @@ function API({ content }) {
             for (const [key, value] of Object.entries(content.apiResources.apiInfo.apiArtifacts.apiImages)) {
                 if (document.getElementById(key) !== null) {
                     const apiImage = document.getElementById(key);
-                    apiImage.src = value;
+                    apiImage.src = process.env.NEXT_PUBLIC_AWS_URL + content.orgName + value;
                 }
             }
             if (document.getElementById("api-landing-page-heading") != null)

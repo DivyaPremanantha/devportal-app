@@ -24,8 +24,8 @@ export async function getServerSideProps(context) {
     const htmlResponse = await fetch(htmlRef)
     var htmlContent = await htmlResponse.text()
 
-    content.orgHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.AWS_URL + context.params.orgName + `/resources/stylesheet/`);
-    content.orgHTMLContent = htmlContent.replace('/resources/images/', process.env.AWS_URL + context.params.orgName + `/resources/images/`);
+    content.orgHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
+    content.orgHTMLContent = htmlContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
 
     const navResponse = await fetch(navRef)
     content.navContent = await navResponse.text()
