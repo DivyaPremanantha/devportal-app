@@ -4,7 +4,6 @@ import Navbar from '../../app/navbar';
 import { useRouter } from "next/router";
 import Footer from '../../app/footer';
 import { promises as fs } from 'fs';
-// import getSelectionText from '../../app/util';
 
 export async function getServerSideProps(context) {
   const content = {}
@@ -31,7 +30,7 @@ export async function getServerSideProps(context) {
     var navContent = await navResponse.text()
     var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
     content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
-    
+
     const footerResponse = await fetch(footerRef)
     content.footerContent = await footerResponse.text()
   }
@@ -42,8 +41,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function Page({ content }) {
-  // getSelectionText();
-
 
   const router = useRouter();
   router.asPath = "/" + content.orgName;
