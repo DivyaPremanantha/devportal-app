@@ -9,7 +9,6 @@ function Login() {
     const callbackUrl = (router.query?.callbackUrl) ?? "/";
     console.log("Login");
     console.log(callbackUrl);
-    signIn("asgardeo");
     signIn("asgardeo", { callbackUrl: callbackUrl });
 
     // const { data: session, status } = useSession();
