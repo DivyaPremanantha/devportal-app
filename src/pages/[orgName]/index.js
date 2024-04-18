@@ -23,11 +23,13 @@ export async function getServerSideProps(context) {
     const htmlResponse = await fetch(htmlRef)
     var htmlContent = await htmlResponse.text()
 
-    content.orgHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
-    content.orgHTMLContent = htmlContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
+    var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
+    content.orgHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
 
     const navResponse = await fetch(navRef)
-    content.navContent = await navResponse.text()
+    var navContent = await navResponse.text()
+    var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
+    content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
 
     const footerResponse = await fetch(footerRef)
     content.footerContent = await footerResponse.text()
