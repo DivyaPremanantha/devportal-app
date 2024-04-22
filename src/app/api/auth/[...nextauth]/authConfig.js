@@ -1,4 +1,4 @@
-import { NextAuthConfig } from 'next-auth';
+import { fetchProviders } from '../../../../pages/signIn';
 
 function isAuthenticatedPage(authenticatedPages, currentPage) {
     console.log(authenticatedPages);
@@ -26,13 +26,14 @@ function handleAuth(orgDDetailResponse, currentPage) {
     return false;
 }
 
+let prof;
+
 export const authConfig = {
     pages: {
-        signIn: '/login',
+        signIn: '/signIn',
     },
     callbacks: {
         async authorized({ auth, request: { nextUrl } }) {
-
             const isLoggedIn = !!auth?.user;
             const organizationName = nextUrl.pathname.split("/")[1];
             if (isLoggedIn) {
@@ -44,7 +45,5 @@ export const authConfig = {
             }
         }
     },
-    providers: []
+    providers: [],
 }
-
-

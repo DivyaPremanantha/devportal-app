@@ -1,6 +1,5 @@
 import Navbar from '../../../../app/navbar';
 import Footer from '../../../../app/footer';
-import { Helmet } from "react-helmet";
 import Markdown from 'react-markdown'
 import { createRoot } from 'react-dom/client'
 import rehypeRaw from 'rehype-raw'

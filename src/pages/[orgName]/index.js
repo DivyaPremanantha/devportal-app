@@ -1,9 +1,9 @@
 import React from 'react';
-import { useEffect } from 'react';
 import Navbar from '../../app/navbar';
 import { useRouter } from "next/router";
 import Footer from '../../app/footer';
 import { promises as fs } from 'fs';
+import { signIn, signOut, useSession } from "next-auth/react"
 
 export async function getServerSideProps(context) {
   const content = {}
