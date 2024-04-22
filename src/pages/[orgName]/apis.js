@@ -4,6 +4,8 @@ import Footer from '../../app/footer';
 import { useRouter } from "next/router";
 import { promises as fs } from 'fs';
 import Tile from './tile';
+import { getToken } from "next-auth/jwt"
+
 
 export async function getServerSideProps(context) {
   const content = {}
@@ -21,6 +23,9 @@ export async function getServerSideProps(context) {
 
     content.componentsHTMLLineCount = content.componentsHTMLContent.split(/\r\n|\r|\n/).length;
   } else {
+    
+    const token = await getToken({ req: context.req, secret: process.env.AUTH_SECRET })
+
     navRef = process.env.ADMIN_API_URL + "admin/nav-bar.html?orgName=" + context.params.orgName ;
     componentRef = process.env.ADMIN_API_URL + "admin/components-page.html?orgName=" + context.params.orgName ;
     footerRef = process.env.ADMIN_API_URL + "admin/footer.html?orgName=" + context.params.orgName ;
@@ -40,8 +45,10 @@ export async function getServerSideProps(context) {
     const apiArtifactRef = process.env.METADATA_API_URL + "apiMetadata/apiList?orgName=" + context.params.orgName;
     const apiResponse = await fetch(apiArtifactRef);
     content.apiResources = await apiResponse.json();
+    content.token = token;
 
   }
+
 
   // Pass data to the page via props
   return { props: { content } }
