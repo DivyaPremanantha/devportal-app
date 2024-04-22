@@ -1,7 +1,6 @@
 import NextAuth from "next-auth"
 import AsgardeoProvider from "next-auth/providers/asgardeo";
 import { authConfig } from './authConfig';
-import  { NextApiRequest, NextApiResponse } from "next"
 
 
 
@@ -9,9 +8,7 @@ function getConfig() {
   if (process.env.NEXT_PUBLIC_DEPLOYMENT == 'DEV') {
     const auth = require(process.cwd() + "/../../public/resources/auth.json");
     auth.profile = (profile) => {
-
       return { role: profile.role ?? "user" }
-
     }
     return auth
   }
@@ -22,15 +19,13 @@ function getConfig() {
       clientSecret: process.env.ASGARDEO_CLIENT_SECRET,
       issuer: process.env.ASGARDEO_ISSUER,
       profile(profile) {
-        console.log("profile");
-
-        console.log(profile);
         return { role: profile.user_roles ?? "user" }
       }
     }
   }
 }
 const config = getConfig();
+
 export const { handlers: { GET, POST },
   auth, signIn, signOut } = NextAuth({
 
@@ -41,5 +36,17 @@ export const { handlers: { GET, POST },
         config,
 
       )
-    ]
+    ],
+    callbacks: {
+      jwt({ token, user }) {
+        console.log("roles")
+        console.log(user)
+        if (user) token.role = user.role
+        return token
+      },
+      session({ session, token }) {
+        session.user.role = token.role
+        return session
+      }
+    }
   })
