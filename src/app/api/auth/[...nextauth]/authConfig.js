@@ -1,5 +1,3 @@
-import { fetchProviders } from '../../../../pages/signIn';
-
 function isAuthenticatedPage(authenticatedPages, currentPage) {
     console.log(authenticatedPages);
 

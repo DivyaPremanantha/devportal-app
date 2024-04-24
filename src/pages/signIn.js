@@ -1,6 +1,6 @@
 import React from "react";
 import { signIn  } from "next-auth/react"
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 
 export function getProviders() {
     return require(process.cwd() + "/../../public/resources/auth.json");
