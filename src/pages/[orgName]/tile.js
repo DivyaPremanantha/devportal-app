@@ -9,7 +9,7 @@ export default function Tile({ content }) {
         }
         return chunkedArr;
     };
-    const userRoles = content.token.role.split(" ");
+    let userRoles = [];
     const data = chunkArray(content.apiResources, 4);
     return (
         <div class="components-div">
@@ -20,6 +20,11 @@ export default function Tile({ content }) {
                             index = index + (i * 4);
                             var auth = content.apiResources[index].apiInfo.authorizedRoles;
                             var authorized = false;
+                            if (auth.length > 0 && auth[0] !== "") {
+                                userRoles = content.token.role.split(" ")
+                            } else {
+                                authorized = true;
+                            }
                             for (const role of userRoles) {
                                 if (auth.includes(role)) {
                                     authorized = true;
