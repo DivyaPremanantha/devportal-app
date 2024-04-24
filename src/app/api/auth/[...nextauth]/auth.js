@@ -7,5 +7,15 @@ console.log(providers);
 export const { handlers: { GET, POST },
   auth, signIn, signOut } = NextAuth({
     ...authConfig,
-    providers
+    providers: providers,
+    callbacks: {
+      jwt({ token, user }) {
+        if (user) token.role = user.role
+        return token
+      },
+      session({ session, token }) {
+        session.user.role = token.role
+        return session
+      }
+    }
   })
