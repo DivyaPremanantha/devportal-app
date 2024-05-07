@@ -1,6 +1,4 @@
 function isAuthenticatedPage(authenticatedPages, currentPage) {
-    console.log(authenticatedPages);
-
     for (const page of authenticatedPages) {
         if (page === 'ORGLANDING' && currentPage.split("/").length === 2) {
             return true;
@@ -37,9 +35,11 @@ export const authConfig = {
             if (isLoggedIn) {
                 return true;
             } else {
-                const organisationDetails = await fetch(process.env.ADMIN_API_URL + "admin/organisation?orgName=" + organizationName);
-                const orgDDetailResponse = await organisationDetails.json();
-                return !handleAuth(orgDDetailResponse, nextUrl.pathname);
+                if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD") {
+                    const organisationDetails = await fetch(process.env.ADMIN_API_URL + "admin/organisation?orgName=" + organizationName);
+                    const orgDDetailResponse = await organisationDetails.json();
+                    return !handleAuth(orgDDetailResponse, nextUrl.pathname);
+                }
             }
         }
     },
