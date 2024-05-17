@@ -12,7 +12,7 @@ const loadProviders = providers.map(provider => {
   };
 });
 
-console.log(providers);
+//console.log(providers);
 
 export const { handlers: { GET, POST },
   auth, signIn, signOut } = NextAuth({

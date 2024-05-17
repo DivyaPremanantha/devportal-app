@@ -1,5 +1,5 @@
 function isAuthenticatedPage(authenticatedPages, currentPage) {
-    console.log(authenticatedPages);
+    //console.log(authenticatedPages);
 
     for (const page of authenticatedPages) {
         if (page === 'ORGLANDING' && currentPage.split("/").length === 2) {

@@ -1,21 +1,25 @@
 import * as React from 'react';
-import RedocScript from './tryoutscript';
+import { API } from '@stoplight/elements';
+import dynamic from "next/dynamic";
 
+export async function getServerSideProps(context) {
 
-export function getServerSideProps(context) {
-
+    var swaggerInfo = {};
     const organisation = context.params.orgName;
     const apiName = context.params.apiName;
-    return { props: { organisation, apiName } };
+    swaggerInfo.organisation = organisation;
+    swaggerInfo.apiName = apiName;
+    return { props: { swaggerInfo } };
 }
 
+export default function Tryout({ swaggerInfo }) {
 
-export default function Tryout({ organisation, apiName }) {
+    const TryoutScript = dynamic(() => import('./tryoutscript'), { ssr: false })
 
     return (
         <div>
-            <RedocScript orgName={organisation} apiName={apiName}/>
-        </div>
+        <TryoutScript content={swaggerInfo} />
+      </div>
     )
 
 }
