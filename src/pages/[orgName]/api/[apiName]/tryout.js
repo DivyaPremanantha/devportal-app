@@ -2,27 +2,46 @@ import * as React from 'react';
 import { API } from '@stoplight/elements';
 import dynamic from "next/dynamic";
 
+
 export async function getServerSideProps(context) {
 
-    var swaggerInfo = {};
+
+    const content = {}
     const organisation = context.params.orgName;
     const apiName = context.params.apiName;
-    swaggerInfo.organisation = organisation;
-    swaggerInfo.apiName = apiName;
-    return { props: { swaggerInfo } };
+    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
+        content.pageHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/tryout.html", 'utf8');
+    } else {
+        const htmlRef = process.env.ADMIN_API_URL + "admin/tryout.html?orgName=" + organisation;
+        const htmlResponse = await fetch(htmlRef);
+        var htmlContent = await htmlResponse.text()
+
+
+        var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + organisation + `/resources/stylesheet/`);
+        content.pageHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + organisation + `/resources/images/`);
+    }
+    if (content.hasOwnProperty("pageHTMLContent")) {
+        content.pageHTMLLineCount = content.pageHTMLContent.split(/\r\n|\r|\n/).length;
+    } else {
+        content.pageHTMLLineCount = 1;
+    }
+    content.organisation = organisation;
+    content.apiName = apiName;
+    return { props: { content } };
 }
 
-export default function Tryout({ swaggerInfo }) {
+
+export default function Tryout({ content }) {
+
 
     const TryoutScript = dynamic(() => import('./tryoutscript'), { ssr: false })
-
     return (
         <div>
-        <TryoutScript content={swaggerInfo} />
-      </div>
+            {content.pageHTMLLineCount > 14 ? (
+                <div dangerouslySetInnerHTML={{ __html: content.pageHTMLContent }}></div>
+            ) : (
+                <TryoutScript content={content} />
+            )}
+        </div>
     )
-
 }
-
-
-
