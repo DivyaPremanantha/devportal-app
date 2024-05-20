@@ -43,7 +43,7 @@ export async function getServerSideProps(context) {
       const footerResponse = await fetch(footerRef)
       content.footerContent = await footerResponse.text()
 
-      const apiArtifactRef = process.env.METADATA_API_URL + "apiMetadata/apiList?orgName=" + context.params.orgName;
+      const apiArtifactRef = process.env.NEXT_PUBLIC_METADATA_API_URL + "apiMetadata/apiList?orgName=" + context.params.orgName;
       const apiResponse = await fetch(apiArtifactRef);
       content.apiResources = await apiResponse.json();
       content.token = token;

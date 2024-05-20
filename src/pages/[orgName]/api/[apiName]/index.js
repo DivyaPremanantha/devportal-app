@@ -6,7 +6,8 @@ import rehypeRaw from 'rehype-raw'
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { promises as fs } from 'fs';
-import React from 'react';
+import * as React from 'react';
+import './../../../../../src/app/api.css'
 
 export async function getServerSideProps(context) {
     const content = {}
@@ -33,8 +34,8 @@ export async function getServerSideProps(context) {
 
     } else {
         htmlRef = process.env.ADMIN_API_URL + "admin/api-landing-page.html?orgName=" + context.params.orgName;
-        apiContentRef = process.env.METADATA_API_URL + "apiMetadata/api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
-        apiContentRefMD = process.env.METADATA_API_URL + "apiMetadata/apiContent.md?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
+        apiContentRef = process.env.NEXT_PUBLIC_METADATA_API_URL + "apiMetadata/api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
+        apiContentRefMD = process.env.NEXT_PUBLIC_METADATA_API_URL + "apiMetadata/apiContent.md?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
         navRef = process.env.ADMIN_API_URL + "admin/nav-bar.html?orgName=" + context.params.orgName;
         footerRef = process.env.ADMIN_API_URL + "admin/footer.html?orgName=" + context.params.orgName;
 
@@ -112,6 +113,15 @@ function API({ content }) {
         <div>
             <Navbar content={content} />
             <div dangerouslySetInnerHTML={{ __html: content.apiHTMLContent }}></div>
+            <div class="relative">
+                <div class="card">
+                    <div class="container">
+                        <h4>
+                        <a href={ content.apiResources.apiInfo.apiName + "/tryout"} > {content.apiResources.apiInfo.apiName}</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
             <Footer content={content} />
         </div>
     )
