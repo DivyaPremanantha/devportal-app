@@ -36,9 +36,14 @@ export const authConfig = {
                 return true;
             } else {
                 if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD") {
-                    const organisationDetails = await fetch(process.env.ADMIN_API_URL + "admin/organisation?orgName=" + organizationName);
-                    const orgDDetailResponse = await organisationDetails.json();
-                    return !handleAuth(orgDDetailResponse, nextUrl.pathname);
+                    try {
+                        const organisationDetails = await fetch(process.env.ADMIN_API_URL + "admin/organisation?orgName=" + organizationName);
+                        const orgDDetailResponse = await organisationDetails.json();
+                        return !handleAuth(orgDDetailResponse, nextUrl.pathname);
+                    } catch (error) {
+                        console.error('Authentication failed', error);
+                        return;
+                    }
                 }
             }
         }
