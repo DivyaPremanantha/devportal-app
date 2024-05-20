@@ -20,7 +20,7 @@ export default function Tile({ content }) {
                             index = index + (i * 4);
                             var auth = content.apiResources[index].apiInfo.authorizedRoles;
                             var authorized = false;
-                            if (auth.length > 0 && auth[0] !== "") {
+                            if (auth != undefined && auth.length > 0 && auth[0] !== "") {
                                 userRoles = content.token.role.split(" ")
                             } else {
                                 authorized = true;
