@@ -15,10 +15,15 @@ export async function getServerSideProps(context) {
         try {
             const htmlRef = process.env.ADMIN_API_URL + "admin/sign-in.html?orgName=" + context.query.callbackUrl.split("/")[3];
             const htmlResponse = await fetch(htmlRef);
-            var htmlContent = await htmlResponse.text()
 
-            var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.query.callbackUrl.split("/")[3] + `/resources/stylesheet/`);
-            content.pageHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.query.callbackUrl.split("/")[3] + `/resources/images/`);
+            if (!htmlResponse.ok) {
+                content.pageHTMLContent = '<h3>Please create an Organization</h3>';
+                content.pageHTMLLineCount = content.pageHTMLContent.split(/\r\n|\r|\n/).length;
+            } else {
+                var htmlContent = await htmlResponse.text();
+                var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.query.callbackUrl.split("/")[3] + `/resources/stylesheet/`);
+                content.pageHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.query.callbackUrl.split("/")[3] + `/resources/images/`);
+            }
         } catch (error) {
             console.error('Error fetching content:', error);
             content.pageHTMLContent = '<h3>Please upload authentication content</h3>';
@@ -41,8 +46,10 @@ export default function SignInPage({ providers, content }) {
 
     return (
         <div>
-            {/* <div dangerouslySetInnerHTML={{ __html: content.pageHTMLContent }}></div> */}
-            {content.pageHTMLLineCount > 14 || content.pageHTMLLineCount == 1 ? (
+            <div dangerouslySetInnerHTML={{ __html: content.pageHTMLContent }}></div>
+            {content.pageHTMLLineCount == 1 ? (
+                console.log("Error fetching content")
+            ) : content.pageHTMLLineCount > 14 ? (
                 <div dangerouslySetInnerHTML={{ __html: content.pageHTMLContent }}></div>
             ) : (
                 <div className="container">

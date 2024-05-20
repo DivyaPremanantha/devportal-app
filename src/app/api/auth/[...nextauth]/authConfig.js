@@ -15,7 +15,7 @@ function isAuthenticatedPage(authenticatedPages, currentPage) {
 }
 
 function handleAuth(orgDDetailResponse, currentPage) {
-    if (!orgDDetailResponse.isPublic) {
+    if (orgDDetailResponse.hasOwnProperty("isPublic") && !orgDDetailResponse.isPublic) {
         const authenticatedPages = orgDDetailResponse["authenticatedPages"];
         return isAuthenticatedPage(authenticatedPages, currentPage);
     }
@@ -40,6 +40,7 @@ export const authConfig = {
                         const organisationDetails = await fetch(process.env.ADMIN_API_URL + "admin/organisation?orgName=" + organizationName);
                         const orgDDetailResponse = await organisationDetails.json();
                         return !handleAuth(orgDDetailResponse, nextUrl.pathname);
+                        
                     } catch (error) {
                         console.error('Authentication failed', error);
                         return;
