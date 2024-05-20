@@ -6,7 +6,7 @@ import Head from 'next/head';
 
 export default function RedocScript({ content }) {
 
-const url = "http://localhost:9090/"+ "apiMetadata/apiDefinition?orgName=" + content.organisation + "&apiID=" + content.apiName
+const url = process.env.METADATA_API_URL+ "apiMetadata/apiDefinition?orgName=" + content.organisation + "&apiID=" + content.apiName
   return (
     <>
       <Head>
