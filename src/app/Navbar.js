@@ -6,15 +6,21 @@ import { useSession, signIn, signOut } from "next-auth/react"
 function Navbar({ content }) {
 
   useEffect(() => {
-    document.getElementById("org-logo").href = "/" + content.orgName;
-    document.getElementById("org-home").href = "/" + content.orgName;
-    document.getElementById("org-apis").href = "/" + content.orgName + "/apis"; 
-    document.getElementById("org-login").href = "#";
-    document.getElementById("org-login").addEventListener("click", function () {
-      signIn("asgardeo");
-    });
-
-
+    if (document.getElementById("org-logo") != null) {
+      document.getElementById("org-logo").href = "/" + content.orgName;
+    }
+    if (document.getElementById("org-home") != null) {
+      document.getElementById("org-logo").href = "/" + content.orgName;
+    }
+    if (document.getElementById("org-apis") != null) {
+      document.getElementById("org-apis").href = "/" + content.orgName + "/apis";
+    }
+    if (document.getElementById("org-login") != null) {
+      document.getElementById("org-login").href = "#";
+      document.getElementById("org-login").addEventListener("click", function () {
+        signIn("asgardeo");
+      });
+    }
   }, []);
 
   return (

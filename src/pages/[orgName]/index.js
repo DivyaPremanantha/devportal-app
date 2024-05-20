@@ -17,23 +17,28 @@ export async function getServerSideProps(context) {
     content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
   } else {
     console.log("context.params", context);
-    htmlRef = process.env.ADMIN_API_URL + "admin/org-landing-page.html?orgName=" + context.params.orgName ;
-    navRef = process.env.ADMIN_API_URL + "admin/nav-bar.html?orgName=" + context.params.orgName ;
-    footerRef = process.env.ADMIN_API_URL + "admin/footer.html?orgName=" + context.params.orgName ;
+    htmlRef = process.env.ADMIN_API_URL + "admin/org-landing-page.html?orgName=" + context.params.orgName;
+    navRef = process.env.ADMIN_API_URL + "admin/nav-bar.html?orgName=" + context.params.orgName;
+    footerRef = process.env.ADMIN_API_URL + "admin/footer.html?orgName=" + context.params.orgName;
 
-    const htmlResponse = await fetch(htmlRef)
-    var htmlContent = await htmlResponse.text()
+    try {
+      const htmlResponse = await fetch(htmlRef)
+      var htmlContent = await htmlResponse.text()
 
-    var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
-    content.orgHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
+      var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
+      content.orgHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
 
-    const navResponse = await fetch(navRef)
-    var navContent = await navResponse.text()
-    var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
-    content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
+      const navResponse = await fetch(navRef)
+      var navContent = await navResponse.text()
+      var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
+      content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
 
-    const footerResponse = await fetch(footerRef)
-    content.footerContent = await footerResponse.text()
+      const footerResponse = await fetch(footerRef)
+      content.footerContent = await footerResponse.text()
+    } catch (error) {
+      console.error('Error fetching org:', error);
+      content.orgHTMLContent = '<h3>Please upload organization content</h3>';
+    }
   }
 
   content.orgName = context.params.orgName;
