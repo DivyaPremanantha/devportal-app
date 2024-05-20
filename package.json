@@ -1,6 +1,6 @@
 {
   "name": "devportal-app",
-  "version": "1.0.36",
+  "version": "1.0.38",
   "scripts": {
     "dev": "npm run sync --watch & next dev",
     "build": "npm run sync && next build",
