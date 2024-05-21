@@ -7,7 +7,7 @@ import Head from 'next/head';
 export default function RedocScript({ content }) {
 
 const url = process.env.NEXT_PUBLIC_METADATA_API_LOCAL_URL + "apiMetadata/apiDefinition?orgName=" + content.organisation + "&apiID=" + content.apiName
-
+console.log(content.swagger);
   return (
     <>
       <Head>
@@ -15,7 +15,7 @@ const url = process.env.NEXT_PUBLIC_METADATA_API_LOCAL_URL + "apiMetadata/apiDef
         <link rel="stylesheet" href="https://unpkg.com/@stoplight/elements/styles.min.css"></link>
       </Head>
       <body>
-        <elements-api apiDescriptionUrl={url} router="hash" layout="sidebar" />
+        <elements-api apiDescriptionDocument={content.swagger} router="hash" layout="sidebar" />
       </body>
     </>
   )

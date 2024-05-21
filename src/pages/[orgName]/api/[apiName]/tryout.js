@@ -14,9 +14,7 @@ export async function getServerSideProps(context) {
     } else {
         const htmlRef = process.env.ADMIN_API_URL + "admin/tryout.html?orgName=" + organisation;
         const htmlResponse = await fetch(htmlRef);
-        var htmlContent = await htmlResponse.text()
-
-
+        var htmlContent = await htmlResponse.text();
         var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + organisation + `/resources/stylesheet/`);
         content.pageHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + organisation + `/resources/images/`);
     }
@@ -25,14 +23,16 @@ export async function getServerSideProps(context) {
     } else {
         content.pageHTMLLineCount = 1;
     }
+    const url = process.env.NEXT_PUBLIC_METADATA_API_LOCAL_URL + "apiMetadata/apiDefinition?orgName=" + organisation + "&apiID=" + apiName;
+    const swaggerResponse = await fetch(url);
+    const swaggerText = await swaggerResponse.text();
     content.organisation = organisation;
     content.apiName = apiName;
+    content.swagger = swaggerText;
     return { props: { content } };
 }
 
-
 export default function Tryout({ content }) {
-
 
     const TryoutScript = dynamic(() => import('./tryoutscript'), { ssr: false })
     return (
