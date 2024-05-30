@@ -7,7 +7,6 @@ import Head from 'next/head';
 export default function RedocScript({ content }) {
 
 const url = process.env.NEXT_PUBLIC_METADATA_API_LOCAL_URL + "apiMetadata/apiDefinition?orgName=" + content.organisation + "&apiID=" + content.apiName
-console.log(content.swagger);
   return (
     <>
       <Head>

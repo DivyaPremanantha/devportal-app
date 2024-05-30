@@ -33,24 +33,29 @@ export async function getServerSideProps(context) {
         content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
 
     } else {
-        htmlRef = process.env.ADMIN_API_URL + "admin/api-landing-page.html?orgName=" + context.params.orgName;
-        apiContentRef = process.env.NEXT_PUBLIC_METADATA_API_URL + "apiMetadata/api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
-        apiContentRefMD = process.env.NEXT_PUBLIC_METADATA_API_URL + "apiMetadata/apiContent.md?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
-        navRef = process.env.ADMIN_API_URL + "admin/nav-bar.html?orgName=" + context.params.orgName;
-        footerRef = process.env.ADMIN_API_URL + "admin/footer.html?orgName=" + context.params.orgName;
+        htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "api-landing-page.html?orgName=" + context.params.orgName;
+        apiContentRef = process.env.NEXT_PUBLIC_METADATA_API_URL + "api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
+        apiContentRefMD = process.env.NEXT_PUBLIC_METADATA_API_URL + "apiContent.md?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
+        navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "nav-bar.html?orgName=" + context.params.orgName;
+        footerRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "footer.html?orgName=" + context.params.orgName;
 
         const navResponse = await fetch(navRef)
         var navContent = await navResponse.text()
-        var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
-        content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
 
         const footerResponse = await fetch(footerRef)
         content.footerContent = await footerResponse.text()
 
         const htmlContent = await fetch(htmlRef);
         var contentRef = await htmlContent.text();
-        content.apiHTMLContent = contentRef.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
 
+        if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
+            content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.ADMIN_API_URL + "admin/style.css?orgName=" + context.params.orgName);
+            content.apiHTMLContent = contentRef.replace('/resources/stylesheet/api-landing-page.css', process.env.ADMIN_API_URL + "admin/api-landing-page.css?orgName=" + context.params.orgName);
+        } else {
+            var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
+            content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
+            content.apiHTMLContent = contentRef.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
+        }
         const resp = await fetch(apiContentRef);
         if (resp.status != 200) {
             content.apiHTMLContent = '<h3>API not found</h3>';
@@ -84,7 +89,10 @@ function API({ content }) {
                     const apiImage = document.getElementById(key);
                     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV")
                         apiImage.src = value;
-                    else
+                    else if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
+                        var fileName = value.split('images/')[1];
+                        apiImage.src = process.env.NEXT_PUBLIC_METADATA_API_URL + fileName + "?orgName=" + content.orgName + "&apiID=" + content.apiName;
+                    } else
                         apiImage.src = process.env.NEXT_PUBLIC_AWS_URL + content.orgName + value;
                 }
             }
@@ -107,6 +115,14 @@ function API({ content }) {
             if (content.apiPage != null)
                 createRoot(document.getElementById("api-details")).render(<Markdown rehypePlugins={[rehypeRaw]}>{content.apiPage}</Markdown>);
         }
+        var imageTags = document.getElementsByTagName("img");
+        var imageTagList = Array.prototype.slice.call(imageTags);
+        imageTagList.forEach(element => {
+            if (element.src.includes("/resources/images")) {
+                var imageName = element.src.split("/images/")[1];
+                element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
+            }
+        });
     }, []);
 
     return (
@@ -117,7 +133,7 @@ function API({ content }) {
                 <div class="card">
                     <div class="container">
                         <h4>
-                        <a href={ content.apiResources.apiInfo.apiName + "/tryout"} > {content.apiResources.apiInfo.apiName}</a>
+                            <a href={content.apiResources.apiInfo.apiName + "/tryout"} > {content.apiResources.apiInfo.apiName}</a>
                         </h4>
                     </div>
                 </div>

@@ -3,7 +3,7 @@ import Navbar from '../../app/navbar';
 import { useRouter } from "next/router";
 import Footer from '../../app/footer';
 import { promises as fs } from 'fs';
-import { signIn, signOut, useSession } from "next-auth/react"
+import { useEffect } from "react";
 
 export async function getServerSideProps(context) {
   const content = {}
@@ -16,28 +16,35 @@ export async function getServerSideProps(context) {
     content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
     content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
   } else {
-    htmlRef = process.env.ADMIN_API_URL + "admin/org-landing-page.html?orgName=" + context.params.orgName;
-    navRef = process.env.ADMIN_API_URL + "admin/nav-bar.html?orgName=" + context.params.orgName;
-    footerRef = process.env.ADMIN_API_URL + "admin/footer.html?orgName=" + context.params.orgName;
+    htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "org-landing-page.html?orgName=" + context.params.orgName;
+    navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "nav-bar.html?orgName=" + context.params.orgName;
+    footerRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "footer.html?orgName=" + context.params.orgName;
 
     try {
       const htmlResponse = await fetch(htmlRef)
 
       if (htmlResponse.ok) {
         var htmlContent = await htmlResponse.text()
-        var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
-        content.orgHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
-  
         const navResponse = await fetch(navRef)
         var navContent = await navResponse.text()
-        var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
-        content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
-  
         const footerResponse = await fetch(footerRef)
         content.footerContent = await footerResponse.text()
+
+        if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
+          var modifiedNavContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "style.css?orgName=" + context.params.orgName);
+          content.navContent = modifiedNavContent;
+          var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/org-landing-page.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "org-landing-page.css?orgName=" + context.params.orgName);
+          content.orgHTMLContent = modifiedHTMLContent;
+        } else {
+          var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
+          content.orgHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
+          var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
+          content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
+        }
       } else {
         content.orgHTMLContent = '<h3>Please create and upload organization content</h3>';
       }
+
     } catch (error) {
       console.error('Error fetching org:', error);
       content.orgHTMLContent = '<h3>Please create and upload organization content</h3>';
@@ -54,6 +61,16 @@ export default function Page({ content }) {
   const router = useRouter();
   router.asPath = "/" + content.orgName;
 
+  useEffect(() => {
+    var imageTags = document.getElementsByTagName("img");
+    var imageTagList = Array.prototype.slice.call(imageTags);
+    imageTagList.forEach(element => {
+      var imageName = element.src.split("/images/")[1];
+      if (element.src.includes("/resources/images")) {
+        element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
+      }
+    });
+  }, []);
   return (
     <div>
       <Navbar content={content} />
