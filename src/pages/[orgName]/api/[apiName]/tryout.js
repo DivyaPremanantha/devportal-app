@@ -40,8 +40,8 @@ export async function getServerSideProps(context) {
 
         const url = process.env.NEXT_PUBLIC_METADATA_API_LOCAL_URL + "apiDefinition?orgName=" + organisation + "&apiID=" + apiName;
         const swaggerResponse = await fetch(url);
-        content.swagger  = await swaggerResponse.text();
-        content.organisation = organisation;
+        content.swagger = await swaggerResponse.text();
+        content.orgName = organisation;
         content.apiName = apiName;
     }
     if (content.hasOwnProperty("pageHTMLContent")) {
@@ -55,16 +55,18 @@ export async function getServerSideProps(context) {
 
 export default function Tryout({ content }) {
 
-    useEffect(() => {
-        var imageTags = document.getElementsByTagName("img");
-        var imageTagList = Array.prototype.slice.call(imageTags);
-        imageTagList.forEach(element => {
-            if (element.src.includes("/resources/images")) {
-                var imageName = element.src.split("/images/")[1];
-                element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.organisation;
-            }
-        });
-    }, []);
+    if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
+        useEffect(() => {
+            var imageTags = document.getElementsByTagName("img");
+            var imageTagList = Array.prototype.slice.call(imageTags);
+            imageTagList.forEach(element => {
+                if (element.src.includes("/resources/images")) {
+                    var imageName = element.src.split("/images/")[1];
+                    element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
+                }
+            });
+        }, []);
+    }
 
     const TryoutScript = dynamic(() => import('./tryoutscript'), { ssr: false })
     return (

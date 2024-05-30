@@ -2,6 +2,8 @@ import React from "react";
 import { signIn } from "next-auth/react"
 import { useRouter } from 'next/router'
 import { promises as fs } from 'fs';
+import { useEffect } from "react";
+
 
 export function getProviders() {
     return require(process.cwd() + "/../../public/resources/auth.json");
@@ -9,11 +11,12 @@ export function getProviders() {
 
 export async function getServerSideProps(context) {
     const content = {}
+    const orgName = context.query.callbackUrl.split("/")[3];
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
         content.pageHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/sign-in.html", 'utf8');
     } else {
         try {
-            const htmlRef = process.env.ADMIN_API_URL + "admin/sign-in.html?orgName=" + context.query.callbackUrl.split("/")[3];
+            const htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "sign-in.html?orgName=" + orgName;
             const htmlResponse = await fetch(htmlRef);
 
             if (!htmlResponse.ok) {
@@ -21,8 +24,13 @@ export async function getServerSideProps(context) {
                 content.pageHTMLLineCount = content.pageHTMLContent.split(/\r\n|\r|\n/).length;
             } else {
                 var htmlContent = await htmlResponse.text();
-                var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.query.callbackUrl.split("/")[3] + `/resources/stylesheet/`);
-                content.pageHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.query.callbackUrl.split("/")[3] + `/resources/images/`);
+                if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
+                    content.pageHTMLContent = htmlContent.replace('/resources/stylesheet/sign-in.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "sign-in.css?orgName=" + orgName);
+                } else {
+                    var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + orgName + `/resources/stylesheet/`);
+                    console.log(modifiedHTMLContent);
+                    content.pageHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + orgName + `/resources/images/`);
+                }
             }
         } catch (error) {
             console.error('Error fetching content:', error);
@@ -43,7 +51,18 @@ export async function getServerSideProps(context) {
 export default function SignInPage({ providers, content }) {
     const router = useRouter();
     const callbackUrl = (router.query?.callbackUrl);
-
+    if(process.env.NEXT_PUBLIC_STORAGE === "DB"){
+    useEffect(() => {
+        var imageTags = document.getElementsByTagName("img");
+        var imageTagList = Array.prototype.slice.call(imageTags);
+        imageTagList.forEach(element => {
+          var imageName = element.src.split("/images/")[1];
+          if (element.src.includes("/resources/images")) {
+            element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
+          }
+        });
+      }, []);
+    }
     return (
         <div>
             <div dangerouslySetInnerHTML={{ __html: content.pageHTMLContent }}></div>

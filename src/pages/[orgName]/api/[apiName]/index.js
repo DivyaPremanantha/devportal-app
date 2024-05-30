@@ -49,8 +49,8 @@ export async function getServerSideProps(context) {
         var contentRef = await htmlContent.text();
 
         if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
-            content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.ADMIN_API_URL + "admin/style.css?orgName=" + context.params.orgName);
-            content.apiHTMLContent = contentRef.replace('/resources/stylesheet/api-landing-page.css', process.env.ADMIN_API_URL + "admin/api-landing-page.css?orgName=" + context.params.orgName);
+            content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "admin/style.css?orgName=" + context.params.orgName);
+            content.apiHTMLContent = contentRef.replace('/resources/stylesheet/api-landing-page.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "admin/api-landing-page.css?orgName=" + context.params.orgName);
         } else {
             var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
             content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
@@ -115,6 +115,8 @@ function API({ content }) {
             if (content.apiPage != null)
                 createRoot(document.getElementById("api-details")).render(<Markdown rehypePlugins={[rehypeRaw]}>{content.apiPage}</Markdown>);
         }
+        if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
+
         var imageTags = document.getElementsByTagName("img");
         var imageTagList = Array.prototype.slice.call(imageTags);
         imageTagList.forEach(element => {
@@ -123,6 +125,7 @@ function API({ content }) {
                 element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
             }
         });
+    }
     }, []);
 
     return (
