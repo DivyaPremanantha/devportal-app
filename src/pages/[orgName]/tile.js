@@ -39,11 +39,16 @@ export default function Tile({ content }) {
                                                 <img loading="lazy"
                                                     srcset={content.apiResources[index].apiInfo.apiArtifacts.apiImages["api-detail-page-image"]}
                                                     class="components-img" />
+                                            ) : process.env.NEXT_PUBLIC_STORAGE === 'DB' ? (
+                                                <img loading="lazy"
+                                                    srcset={process.env.NEXT_PUBLIC_METADATA_API_URL + content.apiResources[index].apiInfo.apiArtifacts.apiImages["api-detail-page-image"].split('/images/')[1] + "?orgName=" + content.orgName + "&apiID=" + content.apiResources[index].apiInfo.apiName}
+                                                    class="components-img" />
                                             ) : (
                                                 <img loading="lazy"
                                                     srcset={process.env.NEXT_PUBLIC_AWS_URL + content.orgName + content.apiResources[index].apiInfo.apiArtifacts.apiImages["api-detail-page-image"]}
                                                     class="components-img" />
-                                            )}
+                                            )
+                                            }
                                             <div class="components-inner-section-bottom">
                                                 <div>
                                                     <a href={"api/" + content.apiResources[index].apiInfo.apiName} >
