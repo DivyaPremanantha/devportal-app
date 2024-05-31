@@ -10,7 +10,7 @@ function Navbar({ content }) {
       document.getElementById("org-logo").href = "/" + content.orgName;
     }
     if (document.getElementById("org-home") != null) {
-      document.getElementById("org-logo").href = "/" + content.orgName;
+      document.getElementById("org-home").href = "/" + content.orgName;
     }
     if (document.getElementById("org-apis") != null) {
       document.getElementById("org-apis").href = "/" + content.orgName + "/apis";
