@@ -21,6 +21,19 @@ function Navbar({ content }) {
         signIn("asgardeo");
       });
     }
+
+    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
+      const linkElement = document.createElement('a');
+      linkElement.href = "/" + content.orgName + '/upload';
+
+      const imgElement = document.createElement('img');
+      imgElement.src = '/images/upload.png';
+      imgElement.style.width = '50px';
+      imgElement.style.height = '50px';
+
+      linkElement.appendChild(imgElement);
+      document.getElementById("nav-bar").appendChild(linkElement);
+    } 
   }, []);
 
   return (
