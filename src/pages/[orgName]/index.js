@@ -15,16 +15,16 @@ export async function getServerSideProps(context) {
     content.orgHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/org-landing-page.html", 'utf8');
     content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
     content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
-    let response = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/content-mock/orgContent.json", 'utf8'));
+    let response = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/orgContent.json", 'utf8'));
     content.orgName = response.orgName;
   } else {
     htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "org-landing-page.html?orgName=" + context.params.orgName;
     navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "nav-bar.html?orgName=" + context.params.orgName;
     footerRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "footer.html?orgName=" + context.params.orgName;
+    content.orgName = context.params.orgName;
 
     try {
       const htmlResponse = await fetch(htmlRef)
-
       if (htmlResponse.ok) {
         var htmlContent = await htmlResponse.text()
         const navResponse = await fetch(navRef)
