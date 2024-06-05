@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
 import './upload.css';
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
-import { promises as fs } from 'fs';
-import { useEffect } from "react";
-
-
 
 export async function getServerSideProps(context) {
     var content = {}
