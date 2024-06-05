@@ -31,20 +31,6 @@
     font-weight: bold;
   }
   
-  .form-group input[type="text"],
-  .form-group input[type="checkbox"] {
-    width: calc(100% - 20px);
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    
-  }
-  
-  .form-group input[type="checkbox"] {
-    width: auto;
-  }
-  
   .form-container {
     display: flex;
     justify-content: center;
@@ -72,3 +58,7 @@
     background-color: #e1c1a8;
   }
   
+  .submitting {
+    background-color: #e1c1a8; /* Remove hover effect */
+    cursor: not-allowed; /* Change cursor to not-allowed */
+  }

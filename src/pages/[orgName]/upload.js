@@ -14,7 +14,6 @@ export async function getServerSideProps(context) {
     content.isPublic = response.isPublic;
     content.authenticatedPages = response.authenticatedPages;
 
-
     console.log('Generating zip file...');
 
     var file_system = require('fs');
@@ -22,7 +21,6 @@ export async function getServerSideProps(context) {
 
     // var output = file_system.createWriteStream(context.params.orgName + '.zip');
     var output = file_system.createWriteStream("./public/" + response.orgName + '.zip');
-
     var archive = archiver('zip');
 
     output.on('close', function () {
@@ -35,13 +33,8 @@ export async function getServerSideProps(context) {
     });
 
     archive.pipe(output);
-
-    // append files from a sub-directory, putting its contents at the root of archive
     archive.directory(process.cwd() + "/../../public", false);
-
-    // append files from a sub-directory and naming it `new-subdir` within the archive
     archive.directory('subdir/', 'new-subdir');
-
     archive.finalize();
 
     return { props: { content } }
@@ -50,11 +43,7 @@ export async function getServerSideProps(context) {
 
 
 export default function Upload({ content }) {
-
-    // Define state variables for each input
-    const [orgName, setOrgName] = useState('');
-    const [isPublic, setIsPublic] = useState(false);
-    const [authenticatedPages, setAuthenticatedPages] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false); // State to track form submission
 
     // Handle form submission
     const handleSubmit = async (event) => {
@@ -65,6 +54,7 @@ export default function Upload({ content }) {
             formData.authenticatedPages = content.authenticatedPages;
 
         try {
+            setIsSubmitting(true);
             const orgResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + 'organisation', {
                 method: 'POST',
                 headers: {
@@ -91,11 +81,20 @@ export default function Upload({ content }) {
                     },
                     body: zipBlob,
                 });
-                await orgContentResponse.json();
+                let response = await orgContentResponse;
                 console.log('Form Data Submitted:', result);
+                console.log('Org Content Submitted:', orgContentResponse);
+
+                if (orgContentResponse.ok) {
+                    window.confirm('Form submitted successfully!');
+                } else {
+                    window.confirm('Failed to submit form data');
+                }
             }
         } catch (error) {
             console.error('Error submitting form:', error);
+        } finally {
+            setIsSubmitting(false); // Re-enable form submission button after submission process is complete
         }
     };
 
@@ -103,26 +102,28 @@ export default function Upload({ content }) {
         <div>
             <Navbar content={content} />
             <div class="content">
-            <div class="form-container">
-                <form onSubmit={handleSubmit} className="request-form">
-                    <div className="form-group">
-                        <label htmlFor="orgName">
-                            <span className="label-text">Organization Name:</span> <span className="value-text">{content.orgName}</span>
-                        </label>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="isPublic">
-                            <span className="label-text">Is Public:</span> <span className="value-text">{content.isPublic ? 'True' : 'False'}</span>
-                        </label>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="authenticatedPages">
-                            <span className="label-text">Authenticated Pages:</span> <span className="value-text">{content.authenticatedPages}</span>
-                        </label>
-                    </div>
-                    <button type="submit" className="submit-button">Submit</button>
-                </form>
-            </div>
+                <div class="form-container">
+                    <form onSubmit={handleSubmit} className="request-form">
+                        <div className="form-group">
+                            <label htmlFor="orgName">
+                                <span className="label-text">Organization Name:</span> <span className="value-text">{content.orgName}</span>
+                            </label>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="isPublic">
+                                <span className="label-text">Is Public:</span> <span className="value-text">{content.isPublic ? 'True' : 'False'}</span>
+                            </label>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="authenticatedPages">
+                                <span className="label-text">Authenticated Pages:</span> <span className="value-text">{content.authenticatedPages}</span>
+                            </label>
+                        </div>
+                        <button type="submit" className={`submit-button ${isSubmitting ? 'submitting' : ''}`} disabled={isSubmitting}>
+                            {isSubmitting ? 'Submitting...' : 'Submit'} {/* Change button text while submitting */}
+                        </button>
+                    </form>
+                </div>
             </div>
             <Footer content={content} />
         </div>
