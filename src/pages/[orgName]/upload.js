@@ -1,15 +1,27 @@
 import React, { useState } from 'react';
 import './upload.css';
+import { promises as fs } from 'fs';
+import Navbar from '../../app/navbar';
+import Footer from '../../app/footer';
 
 export async function getServerSideProps(context) {
     var content = {}
+    content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
+    content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
+
+    let response = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/orgContent.json", 'utf8'));
+    content.orgName = response.orgName;
+    content.isPublic = response.isPublic;
+    content.authenticatedPages = response.authenticatedPages;
+
+
     console.log('Generating zip file...');
 
     var file_system = require('fs');
     var archiver = require('archiver');
 
     // var output = file_system.createWriteStream(context.params.orgName + '.zip');
-    var output = file_system.createWriteStream("./public/test" + '.zip');
+    var output = file_system.createWriteStream("./public/" + response.orgName + '.zip');
 
     var archive = archiver('zip');
 
@@ -31,10 +43,7 @@ export async function getServerSideProps(context) {
     archive.directory('subdir/', 'new-subdir');
 
     archive.finalize();
-    content.orgName = context.params.orgName;
-    // content.test = await fs.readFile('MNMTaxiSolution.zip', 'utf8');
 
-    // console.log('test:', content.test);
     return { props: { content } }
 
 }
@@ -50,11 +59,10 @@ export default function Upload({ content }) {
     // Handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const formData = {
-            orgName,
-            isPublic,
-            authenticatedPages: authenticatedPages.split(',').map(page => page.trim()), // Convert to an array
-        };
+        const formData = {};
+        formData.orgName = content.orgName,
+            formData.isPublic = content.isPublic,
+            formData.authenticatedPages = content.authenticatedPages;
 
         try {
             const orgResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + 'organisation', {
@@ -65,10 +73,10 @@ export default function Upload({ content }) {
                 body: JSON.stringify(formData),
             });
             const result = await orgResponse.json();
+            console.log('Form Data Submitted:', result);
             if (!orgResponse.ok) {
                 throw new Error('Failed to submit form data');
             } else {
-
                 const zipResponse = await fetch("/" + formData.orgName + '.zip');
 
                 if (!zipResponse.ok) {
@@ -92,36 +100,31 @@ export default function Upload({ content }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="request-form">
-            <div className="form-group">
-                <label htmlFor="orgName">Organization Name:</label>
-                <input
-                    type="text"
-                    id="orgName"
-                    value={orgName}
-                    onChange={(e) => setOrgName(e.target.value)}
-                    required
-                />
+        <div>
+            <Navbar content={content} />
+            <div class="content">
+            <div class="form-container">
+                <form onSubmit={handleSubmit} className="request-form">
+                    <div className="form-group">
+                        <label htmlFor="orgName">
+                            <span className="label-text">Organization Name:</span> <span className="value-text">{content.orgName}</span>
+                        </label>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="isPublic">
+                            <span className="label-text">Is Public:</span> <span className="value-text">{content.isPublic ? 'True' : 'False'}</span>
+                        </label>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="authenticatedPages">
+                            <span className="label-text">Authenticated Pages:</span> <span className="value-text">{content.authenticatedPages}</span>
+                        </label>
+                    </div>
+                    <button type="submit" className="submit-button">Submit</button>
+                </form>
             </div>
-            <div className="form-group">
-                <label htmlFor="isPublic">Is Public:</label>
-                <input
-                    type="checkbox"
-                    id="isPublic"
-                    checked={isPublic}
-                    onChange={(e) => setIsPublic(e.target.checked)}
-                />
             </div>
-            <div className="form-group">
-                <label htmlFor="authenticatedPages">Authenticated Pages (comma separated):</label>
-                <input
-                    type="text"
-                    id="authenticatedPages"
-                    value={authenticatedPages}
-                    onChange={(e) => setAuthenticatedPages(e.target.value)}
-                />
-            </div>
-            <button type="submit" className="submit-button">Submit</button>
-        </form>
+            <Footer content={content} />
+        </div>
     );
 }

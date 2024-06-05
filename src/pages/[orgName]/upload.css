@@ -1,26 +1,28 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f4f4f4;
-}
-
 .request-form {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+}
   
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 300px 20px; /* Adjust padding to avoid content being hidden behind navbar */
+  box-sizing: border-box;
+}
   .form-group {
     margin-bottom: 15px;
+  }
+  
+  .value-text {
+    font-weight: normal;
+    color: #666;
+    font-weight: bold;
   }
   
   .form-group label {
@@ -43,6 +45,15 @@ body {
     width: auto;
   }
   
+  .form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+  }
+
   .submit-button {
     display: block;
     width: 100%;
