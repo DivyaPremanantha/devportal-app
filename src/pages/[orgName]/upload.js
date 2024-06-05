@@ -18,8 +18,6 @@ export async function getServerSideProps(context) {
 
     var file_system = require('fs');
     var archiver = require('archiver');
-
-    // var output = file_system.createWriteStream(context.params.orgName + '.zip');
     var output = file_system.createWriteStream("./public/" + response.orgName + '.zip');
     var archive = archiver('zip');
 
@@ -38,7 +36,6 @@ export async function getServerSideProps(context) {
     archive.finalize();
 
     return { props: { content } }
-
 }
 
 

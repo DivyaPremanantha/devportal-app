@@ -6,59 +6,63 @@
   background-color: #f9f9f9;
   box-sizing: border-box;
 }
-  
+
 .content {
   display: flex;
   justify-content: center;
   align-items: center;
   flex: 1;
-  padding: 300px 20px; /* Adjust padding to avoid content being hidden behind navbar */
+  padding: 300px 20px;
+  /* Adjust padding to avoid content being hidden behind navbar */
   box-sizing: border-box;
 }
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .value-text {
-    font-weight: normal;
-    color: #666;
-    font-weight: bold;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .form-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-  }
 
-  .submit-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    border: 2px solid #b08e77;
-    background-color: #c0a78c; 
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    color: #fff;
-  }
-  
-  .submit-button:hover {
-    background-color: #e1c1a8;
-  }
-  
-  .submitting {
-    background-color: #e1c1a8; /* Remove hover effect */
-    cursor: not-allowed; /* Change cursor to not-allowed */
-  }
+.form-group {
+  margin-bottom: 15px;
+}
+
+.value-text {
+  font-weight: normal;
+  color: #666;
+  font-weight: bold;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+
+.submit-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid #b08e77;
+  background-color: #c0a78c;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.submit-button:hover {
+  background-color: #e1c1a8;
+}
+
+.submitting {
+  background-color: #e1c1a8;
+  /* Remove hover effect */
+  cursor: not-allowed;
+  /* Change cursor to not-allowed */
+}
