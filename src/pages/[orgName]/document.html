@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="document.css">
+</head>
+<body>
+    <div class="notice-container">
+      <h1 class="notice-title">Production Environment Notice</h1>
+      <p class="notice-text">
+        Modifications to the web app content, look, and feel need to be done in the development mode. Follow the following steps to upload the content for the production environment:
+        <ul class="notice-list">
+            <li>Stop the server and start the development environment using the command: <code class="code-block">MODE=DEV docker compose up</code></li>
+            <li>Make the necessary modifications to display the organization content according to the organization's theme.</li>
+            <li>Update the <code class="code-block">orgContent.json</code> file in the resources folder to reflect your organization information.</li>
+            <li>Once satisfied with the modifications, click the upload icon in the navigation bar.</li>
+            <li>The next page will display the organization information.</li>
+            <li>Click the upload button to upload the content to the production environment.</li>
+        </ul>
+      </p>
+      <p class="notice-text">
+        If you have already done the changes, use the following link to upload the content:
+      </p>
+      <p class="notice-text">
+        Note: The organization information is loaded from <code class="code-block">orgContent.json</code>
+      </p>
+      <a href="/orgName/upload" class="upload-link">Upload Content</a>
+    </div>
+  </body>
+</html>

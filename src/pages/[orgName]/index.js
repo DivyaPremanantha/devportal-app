@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Footer from '../../app/footer';
 import { promises as fs } from 'fs';
 import { useEffect } from "react";
+import './document.css'; 
 
 export async function getServerSideProps(context) {
   const content = {}
@@ -44,12 +45,14 @@ export async function getServerSideProps(context) {
           content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
         }
       } else {
-        content.orgHTMLContent = '<h3>Please create and upload organization content</h3>';
+        let orgContent = await fs.readFile(process.cwd() + "/src/pages/[orgName]/document.html", 'utf8');
+        let response = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/orgContent.json", 'utf8'));
+        content.orgHTMLContent = orgContent.replace('orgName', response.orgName);
       }
 
     } catch (error) {
       console.error('Error fetching org:', error);
-      content.orgHTMLContent = '<h3>Please create and upload organization content</h3>';
+      content.orgHTMLContent = await fs.readFile(process.cwd() + "/src/pages/[orgName]/document.html", 'utf8');
     }
   }
 
