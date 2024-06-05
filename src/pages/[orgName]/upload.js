@@ -79,13 +79,11 @@ export default function Upload({ content }) {
                     body: zipBlob,
                 });
                 let response = await orgContentResponse;
-                console.log('Form Data Submitted:', result);
-                console.log('Org Content Submitted:', orgContentResponse);
 
                 if (orgContentResponse.ok) {
-                    window.confirm('Form submitted successfully!');
+                    window.confirm('Content uploaded successfully!');
                 } else {
-                    window.confirm('Failed to submit form data');
+                    window.confirm('Failed to upload content');
                 }
             }
         } catch (error) {
@@ -117,7 +115,7 @@ export default function Upload({ content }) {
                             </label>
                         </div>
                         <button type="submit" className={`submit-button ${isSubmitting ? 'submitting' : ''}`} disabled={isSubmitting}>
-                            {isSubmitting ? 'Submitting...' : 'Submit'} {/* Change button text while submitting */}
+                            {isSubmitting ? 'Uploading...' : 'Upload'}
                         </button>
                     </form>
                 </div>
