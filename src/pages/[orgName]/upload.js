@@ -45,6 +45,7 @@ export default function Upload({ content }) {
     // Handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         const formData = {};
         formData.orgName = content.orgName,
             formData.isPublic = content.isPublic,
@@ -52,38 +53,66 @@ export default function Upload({ content }) {
 
         try {
             setIsSubmitting(true);
-            const orgResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + 'organisation', {
-                method: 'POST',
+            console.log('Submitting form with data:', formData);
+            const zipResponse = await fetch("/" + formData.orgName + '.zip');
+
+            if (!zipResponse.ok) {
+                throw new Error('Failed to fetch zip file from local repository');
+            }
+            const zipArrayBuffer = await zipResponse.arrayBuffer();
+            const zipBlob = new Blob([zipArrayBuffer], { type: 'application/zip' });
+
+            const orgDetails = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + 'organisation?orgName=' + formData.orgName, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
             });
-            const result = await orgResponse.json();
-            console.log('Form Data Submitted:', result);
-            if (!orgResponse.ok) {
-                throw new Error('Failed to submit form data');
-            } else {
-                const zipResponse = await fetch("/" + formData.orgName + '.zip');
+            let orgDetailResult = await orgDetails.json();
 
-                if (!zipResponse.ok) {
-                    throw new Error('Failed to fetch zip file from local repository');
-                }
-                const zipArrayBuffer = await zipResponse.arrayBuffer();
-                const zipBlob = new Blob([zipArrayBuffer], { type: 'application/zip' });
-                const orgContentResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + 'orgContent?orgName=' + formData.orgName, {
-                    method: 'POST',
+            console.log('orgDetailResult:', orgDetailResult);
+
+            let contentUploadResponse;
+            if (orgDetails.ok) {
+                let orgResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + 'orgContent?orgName=' + formData.orgName, {
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/zip',
                     },
                     body: zipBlob,
                 });
-                let response = await orgContentResponse;
+                contentUploadResponse = await orgResponse.text();
 
-                if (orgContentResponse.ok) {
-                    window.confirm('Content uploaded successfully!');
+                if (orgResponse.ok) {
+                    window.confirm('Modified content uploaded successfully!');
                 } else {
                     window.confirm('Failed to upload content');
+                }
+            } else {
+                let orgResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + 'organisation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+                const orgResponseJson = await orgResponse.json();
+
+                if (orgResponse.ok) {
+                    const orgContentResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + 'orgContent?orgName=' + formData.orgName, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/zip',
+                        },
+                        body: zipBlob,
+                    });
+                    contentUploadResponse = await orgContentResponse.text();
+
+                    if (orgContentResponse.ok) {
+                        window.confirm('Content uploaded successfully!');
+                    } else {
+                        window.confirm('Failed to upload content');
+                    }
                 }
             }
         } catch (error) {
