@@ -82,7 +82,7 @@ export default function Components({ content }) {
     }
   }, []);
   return (
-    <div className='wrapper'>
+    <div>
       <Navbar content={content} />
       <div dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>
       {content.componentsHTMLLineCount > 14 && content.componentsHTMLLineCount == 31 ? (
