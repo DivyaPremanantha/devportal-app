@@ -70,14 +70,16 @@ export default function Components({ content }) {
   router.asPath = "/" + content.orgName;
 
   useEffect(() => {
-    var imageTags = document.getElementsByTagName("img");
-    var imageTagList = Array.prototype.slice.call(imageTags);
-    imageTagList.forEach(element => {
-      var imageName = element.src.split("/images/")[1];
-      if (element.src.includes("/resources/images")) {
-        element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
-      }
-    });
+    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD" && process.env.NEXT_PUBLIC_STORAGE === "DB") {
+      var imageTags = document.getElementsByTagName("img");
+      var imageTagList = Array.prototype.slice.call(imageTags);
+      imageTagList.forEach(element => {
+        var imageName = element.src.split("/images/")[1];
+        if (element.src.includes("/resources/images")) {
+          element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
+        }
+      });
+    }
   }, []);
   return (
     <div>

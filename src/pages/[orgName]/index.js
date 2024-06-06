@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Footer from '../../app/footer';
 import { promises as fs } from 'fs';
 import { useEffect } from "react";
-import './document.css'; 
+import './document.css';
 
 export async function getServerSideProps(context) {
   const content = {}
@@ -66,9 +66,8 @@ export default function Page({ content }) {
   const router = useRouter();
   router.asPath = "/" + content.orgName;
 
-  console.log(process.env.NEXT_PUBLIC_AWS_URL);
-  if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
-    useEffect(() => {
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD" && process.env.NEXT_PUBLIC_STORAGE === "DB") {
       var imageTags = document.getElementsByTagName("img");
       var imageTagList = Array.prototype.slice.call(imageTags);
       imageTagList.forEach(element => {
@@ -77,8 +76,9 @@ export default function Page({ content }) {
           element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
         }
       });
-    }, []);
-  }
+    }
+  }, []);
+
   return (
     <div>
       <Navbar content={content} />
