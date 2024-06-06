@@ -41,7 +41,7 @@ export default function Tile({ content }) {
                                                     class="components-img" />
                                             ) : process.env.NEXT_PUBLIC_STORAGE === "DB" ? (
                                                 <img loading="lazy"
-                                                    srcset={process.env.NEXT_PUBLIC_METADATA_API_URL + content.apiResources[index].apiInfo.apiArtifacts.apiImages["api-detail-page-image"].split('/images/')[1] + "?orgName=" + content.orgName + "&apiID=" + content.apiResources[index].apiInfo.apiName}
+                                                    srcset={process.env.NEXT_PUBLIC_METADATA_LOCAL_API_URL + content.apiResources[index].apiInfo.apiArtifacts.apiImages["api-detail-page-image"].split('/images/')[1] + "?orgName=" + content.orgName + "&apiID=" + content.apiResources[index].apiInfo.apiName}
                                                     class="components-img" />
                                             ) : (
                                                 <img loading="lazy"

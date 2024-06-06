@@ -34,9 +34,9 @@ export async function getServerSideProps(context) {
         content.footerContent = await footerResponse.text()
 
         if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
-          var modifiedNavContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "style.css?orgName=" + context.params.orgName);
+          var modifiedNavContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "style.css?orgName=" + context.params.orgName);
           content.navContent = modifiedNavContent;
-          var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/org-landing-page.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "org-landing-page.css?orgName=" + context.params.orgName);
+          var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/org-landing-page.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "org-landing-page.css?orgName=" + context.params.orgName);
           content.orgHTMLContent = modifiedHTMLContent;
         } else {
           var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
@@ -73,7 +73,7 @@ export default function Page({ content }) {
       imageTagList.forEach(element => {
         var imageName = element.src.split("/images/")[1];
         if (element.src.includes("/resources/images")) {
-          element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
+          element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + imageName + '?orgName=' + content.orgName;
         }
       });
     }

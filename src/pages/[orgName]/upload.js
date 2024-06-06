@@ -62,7 +62,7 @@ export default function Upload({ content }) {
             const zipArrayBuffer = await zipResponse.arrayBuffer();
             const zipBlob = new Blob([zipArrayBuffer], { type: 'application/zip' });
 
-            const orgDetails = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + 'organisation?orgName=' + formData.orgName, {
+            const orgDetails = await fetch(process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + 'organisation?orgName=' + formData.orgName, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ export default function Upload({ content }) {
 
             let contentUploadResponse;
             if (orgDetails.ok) {
-                let orgResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + 'orgContent?orgName=' + formData.orgName, {
+                let orgResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + 'orgContent?orgName=' + formData.orgName, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/zip',
@@ -89,7 +89,7 @@ export default function Upload({ content }) {
                     window.confirm('Failed to upload content');
                 }
             } else {
-                let orgResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + 'organisation', {
+                let orgResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + 'organisation', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ export default function Upload({ content }) {
                 const orgResponseJson = await orgResponse.json();
 
                 if (orgResponse.ok) {
-                    const orgContentResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + 'orgContent?orgName=' + formData.orgName, {
+                    const orgContentResponse = await fetch(process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + 'orgContent?orgName=' + formData.orgName, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/zip',

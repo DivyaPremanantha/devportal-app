@@ -48,9 +48,9 @@ export async function getServerSideProps(context) {
         const htmlContent = await fetch(htmlRef);
         var contentRef = await htmlContent.text();
 
-        if (process.env.NEXT_PUBLIC_AWS_URL === "") {
-            content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "style.css?orgName=" + context.params.orgName);
-            content.apiHTMLContent = contentRef.replace('/resources/stylesheet/api-landing-page.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "api-landing-page.css?orgName=" + context.params.orgName);
+        if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
+            content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "style.css?orgName=" + context.params.orgName);
+            content.apiHTMLContent = contentRef.replace('/resources/stylesheet/api-landing-page.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "api-landing-page.css?orgName=" + context.params.orgName);
         } else {
             var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
             content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
@@ -89,9 +89,9 @@ function API({ content }) {
                     const apiImage = document.getElementById(key);
                     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV")
                         apiImage.src = value;
-                    else if (process.env.NEXT_PUBLIC_AWS_URL === undefined) {
+                    else if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
                         var fileName = value.split('images/')[1];
-                        apiImage.src = process.env.NEXT_PUBLIC_METADATA_API_URL + fileName + "?orgName=" + content.orgName + "&apiID=" + content.apiName;
+                        apiImage.src = process.env.NEXT_PUBLIC_METADATA_LOCAL_API_URL + fileName + "?orgName=" + content.orgName + "&apiID=" + content.apiName;
                     } else
                         apiImage.src = process.env.NEXT_PUBLIC_AWS_URL + content.orgName + value;
                 }

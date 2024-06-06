@@ -39,7 +39,7 @@ export const authConfig = {
                     try {
                         let orgDDetailResponse;
                         if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD") {
-                            const organisationDetails = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + "admin/organisation?orgName=" + organizationName);
+                            const organisationDetails = await fetch(process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "admin/organisation?orgName=" + organizationName);
                             orgDDetailResponse = await organisationDetails.json();
                         } else {
                             const organisationDetails = await fetch(process.env.NEXT_PUBLIC_DEV_URL + "resources/orgContent.json");

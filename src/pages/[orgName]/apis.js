@@ -40,8 +40,8 @@ export async function getServerSideProps(context) {
         var navContent = await navResponse.text()
 
         if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
-          content.componentsHTMLContent = contentRef.replace('/resources/stylesheet/components.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "components.css?orgName=" + context.params.orgName);
-          content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "style.css?orgName=" + context.params.orgName);
+          content.componentsHTMLContent = contentRef.replace('/resources/stylesheet/components.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "components.css?orgName=" + context.params.orgName);
+          content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "style.css?orgName=" + context.params.orgName);
         } else {
           content.componentsHTMLContent = contentRef.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
           content.navContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
@@ -69,18 +69,6 @@ export default function Components({ content }) {
   const router = useRouter();
   router.asPath = "/" + content.orgName;
 
-  useEffect(() => {
-    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD" && process.env.NEXT_PUBLIC_STORAGE === "DB") {
-      var imageTags = document.getElementsByTagName("img");
-      var imageTagList = Array.prototype.slice.call(imageTags);
-      imageTagList.forEach(element => {
-        var imageName = element.src.split("/images/")[1];
-        if (element.src.includes("/resources/images")) {
-          element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
-        }
-      });
-    }
-  }, []);
   return (
     <div>
       <Navbar content={content} />
