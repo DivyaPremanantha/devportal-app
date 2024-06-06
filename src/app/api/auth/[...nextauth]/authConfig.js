@@ -35,16 +35,23 @@ export const authConfig = {
             if (isLoggedIn) {
                 return true;
             } else {
-                if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD") {
+                if (process.env.NEXT_PUBLIC_AUTHENTICATOE_ENABLED === 'true') {
                     try {
-                        const organisationDetails = await fetch(process.env.ADMIN_API_URL + "admin/organisation?orgName=" + organizationName);
-                        const orgDDetailResponse = await organisationDetails.json();
+                        let orgDDetailResponse;
+                        if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD") {
+                            const organisationDetails = await fetch(process.env.ADMIN_API_URL + "admin/organisation?orgName=" + organizationName);
+                            orgDDetailResponse = await organisationDetails.json();
+                        } else {
+                            const organisationDetails = await fetch(process.env.NEXT_PUBLIC_DEV_URL + "resources/orgContent.json");
+                            orgDDetailResponse = await organisationDetails.json();
+                        }
                         return !handleAuth(orgDDetailResponse, nextUrl.pathname);
-                        
                     } catch (error) {
                         console.error('Authentication failed', error);
                         return;
                     }
+                } else {
+                    return true;
                 }
             }
         }
