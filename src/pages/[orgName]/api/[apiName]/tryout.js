@@ -30,9 +30,9 @@ export async function getServerSideProps(context) {
         const footerResponse = await fetch(footerRef)
         content.footerContent = await footerResponse.text()
 
-        if (process.env.NEXT_PUBLIC_AWS_URL === "") {
-            content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "style.css?orgName=" + context.params.orgName);
-            content.pageHTMLContent = htmlContent.replace('/resources/stylesheet/tryout.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "tryout.css?orgName=" + context.params.orgName);
+        if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
+            content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "style.css?orgName=" + context.params.orgName);
+            content.pageHTMLContent = htmlContent.replace('/resources/stylesheet/tryout.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "tryout.css?orgName=" + context.params.orgName);
         } else {
             content.pageHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + organisation + `/resources/stylesheet/`);
             content.navContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
