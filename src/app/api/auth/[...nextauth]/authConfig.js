@@ -6,12 +6,14 @@ function isAuthenticatedPage(authenticatedPages, currentPage) {
         if (page === 'APILISTING' && currentPage.match(/(.*(apis))/)) {
             return true;
         }
-        if (page === 'APILANDING' && currentPage.match(/(.*(api)(?!s).*)/)) {
+        if (page === 'APILANDING' && currentPage.match(/(.*(api)(?!s|(.*tryout)).*)/)) {
+            return true;
+        }
+        if (page === 'APITRYOUT' && currentPage.match(/(.*(api)(?!s).*tryout)/)) {
             return true;
         }
     }
     return false;
-
 }
 
 function handleAuth(orgDDetailResponse, currentPage) {
@@ -21,8 +23,6 @@ function handleAuth(orgDDetailResponse, currentPage) {
     }
     return false;
 }
-
-let prof;
 
 export const authConfig = {
     pages: {
@@ -39,7 +39,7 @@ export const authConfig = {
                     try {
                         let orgDDetailResponse;
                         if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD") {
-                            const organisationDetails = await fetch(process.env.ADMIN_API_URL + "admin/organisation?orgName=" + organizationName);
+                            const organisationDetails = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + "admin/organisation?orgName=" + organizationName);
                             orgDDetailResponse = await organisationDetails.json();
                         } else {
                             const organisationDetails = await fetch(process.env.NEXT_PUBLIC_DEV_URL + "resources/orgContent.json");

@@ -33,7 +33,7 @@ export async function getServerSideProps(context) {
         const footerResponse = await fetch(footerRef)
         content.footerContent = await footerResponse.text()
 
-        if (process.env.NEXT_PUBLIC_AWS_URL === "") {
+        if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
           var modifiedNavContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "style.css?orgName=" + context.params.orgName);
           content.navContent = modifiedNavContent;
           var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/org-landing-page.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "org-landing-page.css?orgName=" + context.params.orgName);
@@ -67,7 +67,7 @@ export default function Page({ content }) {
   router.asPath = "/" + content.orgName;
 
   console.log(process.env.NEXT_PUBLIC_AWS_URL);
-  if (process.env.NEXT_PUBLIC_AWS_URL === undefined) {
+  if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
     useEffect(() => {
       var imageTags = document.getElementsByTagName("img");
       var imageTagList = Array.prototype.slice.call(imageTags);
