@@ -6,12 +6,14 @@ function isAuthenticatedPage(authenticatedPages, currentPage) {
         if (page === 'APILISTING' && currentPage.match(/(.*(apis))/)) {
             return true;
         }
-        if (page === 'APILANDING' && currentPage.match(/(.*(api)(?!s).*)/)) {
+        if (page === 'APILANDING' && currentPage.match(/(.*(api)(?!s|(.*tryout)).*)/)) {
+            return true;
+        }
+        if (page === 'APITRYOUT' && currentPage.match(/(.*(api)(?!s).*tryout)/)) {
             return true;
         }
     }
     return false;
-
 }
 
 function handleAuth(orgDDetailResponse, currentPage) {
@@ -21,8 +23,6 @@ function handleAuth(orgDDetailResponse, currentPage) {
     }
     return false;
 }
-
-let prof;
 
 export const authConfig = {
     pages: {
@@ -37,10 +37,10 @@ export const authConfig = {
             } else {
                 if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD") {
                     try {
-                        const organisationDetails = await fetch(process.env.ADMIN_API_URL + "admin/organisation?orgName=" + organizationName);
+                        const organisationDetails = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + "organisation?orgName=" + organizationName);
                         const orgDDetailResponse = await organisationDetails.json();
                         return !handleAuth(orgDDetailResponse, nextUrl.pathname);
-                        
+
                     } catch (error) {
                         console.error('Authentication failed', error);
                         return;

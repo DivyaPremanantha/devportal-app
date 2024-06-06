@@ -39,7 +39,7 @@ export async function getServerSideProps(context) {
         const navResponse = await fetch(navRef)
         var navContent = await navResponse.text()
 
-        if (process.env.NEXT_PUBLIC_AWS_URL === "") {
+        if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
           content.componentsHTMLContent = contentRef.replace('/resources/stylesheet/components.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "components.css?orgName=" + context.params.orgName);
           content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "style.css?orgName=" + context.params.orgName);
         } else {

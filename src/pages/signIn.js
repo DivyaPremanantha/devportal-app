@@ -24,7 +24,7 @@ export async function getServerSideProps(context) {
                 content.pageHTMLLineCount = content.pageHTMLContent.split(/\r\n|\r|\n/).length;
             } else {
                 var htmlContent = await htmlResponse.text();
-                if (process.env.NEXT_PUBLIC_AWS_URL === "") {
+                if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
                     content.pageHTMLContent = htmlContent.replace('/resources/stylesheet/sign-in.css', process.env.NEXT_PUBLIC_ADMIN_API_URL + "sign-in.css?orgName=" + orgName);
                 } else {
                     var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + orgName + `/resources/stylesheet/`);
@@ -51,7 +51,7 @@ export async function getServerSideProps(context) {
 export default function SignInPage({ providers, content }) {
     const router = useRouter();
     const callbackUrl = (router.query?.callbackUrl);
-    if (process.env.NEXT_PUBLIC_AWS_URL === "") {
+    if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
         useEffect(() => {
             var imageTags = document.getElementsByTagName("img");
             var imageTagList = Array.prototype.slice.call(imageTags);
@@ -61,6 +61,7 @@ export default function SignInPage({ providers, content }) {
                     element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
                 }
             });
+           
         }, []);
     }
     return (
