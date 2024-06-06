@@ -38,7 +38,7 @@ export async function getServerSideProps(context) {
             content.navContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
         }
 
-        const url = process.env.NEXT_PUBLIC_METADATA_API_LOCAL_URL + "apiDefinition?orgName=" + organisation + "&apiID=" + apiName;
+        const url = process.env.NEXT_PUBLIC_METADATA_API_URL + "apiDefinition?orgName=" + organisation + "&apiID=" + apiName;
         const swaggerResponse = await fetch(url);
         content.swagger = await swaggerResponse.text();
         content.orgName = organisation;
