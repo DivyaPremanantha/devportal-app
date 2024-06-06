@@ -1,11 +1,15 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
-    display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     margin: 0;
+  }
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
   }
 
   .notice-container {
