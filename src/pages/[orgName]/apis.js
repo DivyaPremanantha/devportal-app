@@ -76,7 +76,7 @@ export default function Components({ content }) {
       imageTagList.forEach(element => {
         var imageName = element.src.split("/images/")[1];
         if (element.src.includes("/resources/images")) {
-          element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
+          element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + imageName + '?orgName=' + content.orgName;
         }
       });
     }
