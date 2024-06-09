@@ -12,13 +12,16 @@ export async function getServerSideProps(context) {
     const apiName = context.params.apiName;
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
         try {
-            const swagger = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/content-mock/" + apiName + "/apiMedatada.json", 'utf8')).apiInfo.openApiDefinition;
+            const swagger = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/content-mock/" + apiName + "/apiMedatada.json", 'utf8')).apiInfo.openApiDefinition;
             content.swagger = JSON.stringify(swagger);
         } catch (e) {
             content.apiHTMLContent = '<h3>API not found</h3>';
         }
-        content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
-        content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
+        content.navContent = await fs.readFile(process.cwd() + "/public/resources/template/nav-bar.html", 'utf8');
+        content.footerContent = await fs.readFile(process.cwd() + "/public/resources/template/footer.html", 'utf8');
+        let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/orgContent.json", 'utf8'));
+        content.orgName = response.orgName;
+        
     } else {
         const htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "tryout.html?orgName=" + organisation;
         const navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "nav-bar.html?orgName=" + context.params.orgName;
@@ -29,6 +32,7 @@ export async function getServerSideProps(context) {
         var navContent = await navResponse.text()
         const footerResponse = await fetch(footerRef)
         content.footerContent = await footerResponse.text()
+        content.orgName = organisation;
 
         if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
             content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "style.css?orgName=" + context.params.orgName);
@@ -41,7 +45,6 @@ export async function getServerSideProps(context) {
         const url = process.env.NEXT_PUBLIC_METADATA_API_URL + "apiDefinition?orgName=" + organisation + "&apiID=" + apiName;
         const swaggerResponse = await fetch(url);
         content.swagger = await swaggerResponse.text();
-        content.orgName = organisation;
         content.apiName = apiName;
     }
     if (content.hasOwnProperty("pageHTMLContent")) {

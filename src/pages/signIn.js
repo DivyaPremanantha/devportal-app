@@ -3,24 +3,20 @@ import { signIn } from "next-auth/react"
 import { useRouter } from 'next/router'
 import { promises as fs } from 'fs';
 import { useEffect } from "react";
-
-
-export function getProviders() {
-    return require(process.cwd() + "/../../public/resources/auth.json");
-}
+import '../pages/[orgName]/document.css';
 
 export async function getServerSideProps(context) {
     const content = {}
     const orgName = context.query.callbackUrl.split("/")[3];
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-        content.pageHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/sign-in.html", 'utf8');
+        content.pageHTMLContent = await fs.readFile(process.cwd() + "/public/resources/template/sign-in.html", 'utf8');
     } else {
         try {
             const htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "sign-in.html?orgName=" + orgName;
             const htmlResponse = await fetch(htmlRef);
 
             if (!htmlResponse.ok) {
-                content.pageHTMLContent = '<h3>Please create an Organization</h3>';
+                content.pageHTMLContent = await fs.readFile(process.cwd() + "/src/pages/[orgName]/document.html", 'utf8');
                 content.pageHTMLLineCount = content.pageHTMLContent.split(/\r\n|\r|\n/).length;
             } else {
                 var htmlContent = await htmlResponse.text();
@@ -28,7 +24,6 @@ export async function getServerSideProps(context) {
                     content.pageHTMLContent = htmlContent.replace('/resources/stylesheet/sign-in.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "sign-in.css?orgName=" + orgName);
                 } else {
                     var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + orgName + `/resources/stylesheet/`);
-                    console.log(modifiedHTMLContent);
                     content.pageHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + orgName + `/resources/images/`);
                 }
             }
@@ -40,7 +35,7 @@ export async function getServerSideProps(context) {
     content.pageHTMLLineCount = content.pageHTMLContent.split(/\r\n|\r|\n/).length;
 
     try {
-        let providers = getProviders(context);
+        let providers = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/auth.json", 'utf8'));
         return { props: { providers, content } };
     } catch (error) {
         console.error('Error fetching providers:', error);
@@ -61,32 +56,38 @@ export default function SignInPage({ providers, content }) {
                     element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + imageName + '?orgName=' + content.orgName;
                 }
             });
-           
+
         }, []);
     }
     return (
         <div>
             <div dangerouslySetInnerHTML={{ __html: content.pageHTMLContent }}></div>
-            {content.pageHTMLLineCount == 1 ? (
+            {content.pageHTMLLineCount == 1 && content.componentsHTMLLineCount != 31 ? (
                 console.log("Error fetching content")
-            ) : content.pageHTMLLineCount > 14 ? (
+            ) : content.pageHTMLLineCount > 14 && content.componentsHTMLLineCount != 31 ? (
                 <div dangerouslySetInnerHTML={{ __html: content.pageHTMLContent }}></div>
             ) : (
                 <div className="container">
-                    <h2>Choose Authentication Method:</h2>
-                    {providers.map((provider) => (
-                        <form
-                            key={provider.id} // Adding a unique key to each form element
-                            onSubmit={async (e) => {
-                                e.preventDefault(); // Prevent default form submission
-                                await signIn(provider.id, { callbackUrl: callbackUrl });
-                            }}
-                        >
-                            <button type="submit" class="auth-button">
-                                <span>Sign in with {provider.name}</span>
-                            </button>
-                        </form>
-                    ))}
+                    {providers[0].clientId !== "" ? (
+                        <div>
+                            <h2>Choose Authentication Method:</h2>
+                            {providers.map((provider) => (
+                                <form
+                                    key={provider.id} // Adding a unique key to each form element
+                                    onSubmit={async (e) => {
+                                        e.preventDefault(); // Prevent default form submission
+                                        await signIn(provider.id, { callbackUrl: callbackUrl });
+                                    }}
+                                >
+                                    <button type="submit" class="auth-button">
+                                        <span>Sign in with {provider.name}</span>
+                                    </button>
+                                </form>
+                            ))}
+                        </div>
+                    ) : (
+                        <h2> Please update authernticator infometion </h2>
+                    )}
                 </div>
             )
             }

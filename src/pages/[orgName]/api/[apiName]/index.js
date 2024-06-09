@@ -18,26 +18,28 @@ export async function getServerSideProps(context) {
     var footerRef;
 
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-        content.apiHTMLContent = await fs.readFile(process.cwd() + "/../../public/resources/template/api-landing-page.html", 'utf8');
+        content.apiHTMLContent = await fs.readFile(process.cwd() + "/public/resources/template/api-landing-page.html", 'utf8');
         try {
-            content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/content-mock/" + context.params.apiName + "/apiMedatada.json", 'utf8'));
+            content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/content-mock/" + context.params.apiName + "/apiMedatada.json", 'utf8'));
         } catch (e) {
             content.apiHTMLContent = '<h3>API not found</h3>';
         }
         try {
-            content.apiPage = await fs.readFile(process.cwd() + "/../../public/resources/content-mock/" + context.params.apiName + "/apiContent.md", 'utf8');
+            content.apiPage = await fs.readFile(process.cwd() + "/public/resources/content-mock/" + context.params.apiName + "/apiContent.md", 'utf8');
         } catch (e) {
             content.apiPage = 'API content not uploaded';
         }
-        content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
-        content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
-
+        content.navContent = await fs.readFile(process.cwd() + "/public/resources/template/nav-bar.html", 'utf8');
+        content.footerContent = await fs.readFile(process.cwd() + "/public/resources/template/footer.html", 'utf8');
+        let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/orgContent.json", 'utf8'));
+        content.orgName = response.orgName;
     } else {
         htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "api-landing-page.html?orgName=" + context.params.orgName;
         apiContentRef = process.env.NEXT_PUBLIC_METADATA_API_URL + "api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
         apiContentRefMD = process.env.NEXT_PUBLIC_METADATA_API_URL + "apiContent.md?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
         navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "nav-bar.html?orgName=" + context.params.orgName;
         footerRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "footer.html?orgName=" + context.params.orgName;
+        content.orgName = context.params.orgName;
 
         const navResponse = await fetch(navRef)
         var navContent = await navResponse.text()
@@ -71,7 +73,6 @@ export async function getServerSideProps(context) {
         }
     }
 
-    content.orgName = context.params.orgName;
     content.apiName = context.params.apiName;
 
     // Pass data to the page via props
@@ -121,7 +122,7 @@ function API({ content }) {
             imageTagList.forEach(element => {
                 if (element.src.includes("/resources/images")) {
                     var imageName = element.src.split("/images/")[1];
-                    element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + imageName + '?orgName=' + content.orgName;
+                    element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + imageName + '?orgName=' + content.orgName;
                 }
             });
         }

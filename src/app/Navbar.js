@@ -15,12 +15,6 @@ function Navbar({ content }) {
     if (document.getElementById("org-apis") != null) {
       document.getElementById("org-apis").href = "/" + content.orgName + "/apis";
     }
-    if (document.getElementById("org-login") != null) {
-      document.getElementById("org-login").href = "#";
-      document.getElementById("org-login").addEventListener("click", function () {
-        signIn("asgardeo");
-      });
-    }
 
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
       const linkElement = document.createElement('a');

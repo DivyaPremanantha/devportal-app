@@ -6,10 +6,10 @@ import Footer from '../../app/footer';
 
 export async function getServerSideProps(context) {
     var content = {}
-    content.navContent = await fs.readFile(process.cwd() + "/../../public/resources/template/nav-bar.html", 'utf8');
-    content.footerContent = await fs.readFile(process.cwd() + "/../../public/resources/template/footer.html", 'utf8');
+    content.navContent = await fs.readFile(process.cwd() + "/public/resources/template/nav-bar.html", 'utf8');
+    content.footerContent = await fs.readFile(process.cwd() + "/public/resources/template/footer.html", 'utf8');
 
-    let response = JSON.parse(await fs.readFile(process.cwd() + "/../../public/resources/orgContent.json", 'utf8'));
+    let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/orgContent.json", 'utf8'));
     content.orgName = response.orgName;
     content.isPublic = response.isPublic;
     content.authenticatedPages = response.authenticatedPages;
@@ -31,7 +31,7 @@ export async function getServerSideProps(context) {
     });
 
     archive.pipe(output);
-    archive.directory(process.cwd() + "/../../public", false);
+    archive.directory(process.cwd() + "/public/resources", "/resources");
     archive.directory('subdir/', 'new-subdir');
     archive.finalize();
 
@@ -110,6 +110,7 @@ export default function Upload({ content }) {
 
                     if (orgContentResponse.ok) {
                         window.confirm('Content uploaded successfully!');
+                        //TODO: Remove generated file
                     } else {
                         window.confirm('Failed to upload content');
                     }
