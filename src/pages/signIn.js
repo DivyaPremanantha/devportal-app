@@ -3,7 +3,7 @@ import { signIn } from "next-auth/react"
 import { useRouter } from 'next/router'
 import { promises as fs } from 'fs';
 import { useEffect } from "react";
-import '../pages/[orgName]/document.css';
+import '../pages/[orgName]/error.css';
 
 export async function getServerSideProps(context) {
     const content = {}
@@ -16,7 +16,7 @@ export async function getServerSideProps(context) {
             const htmlResponse = await fetch(htmlRef);
 
             if (!htmlResponse.ok) {
-                content.pageHTMLContent = await fs.readFile(process.cwd() + "/src/pages/[orgName]/document.html", 'utf8');
+                content.pageHTMLContent = await fs.readFile(process.cwd() + "/src/pages/[orgName]/error.html", 'utf8');
                 content.pageHTMLLineCount = content.pageHTMLContent.split(/\r\n|\r|\n/).length;
             } else {
                 var htmlContent = await htmlResponse.text();

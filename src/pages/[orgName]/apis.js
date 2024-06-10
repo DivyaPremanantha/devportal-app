@@ -6,7 +6,7 @@ import { promises as fs } from 'fs';
 import Tile from './tile';
 import { getToken } from "next-auth/jwt"
 import { useEffect } from "react";
-import './document.css';
+import './error.css';
 
 export async function getServerSideProps(context) {
   const content = {}
@@ -47,7 +47,7 @@ export async function getServerSideProps(context) {
           content.navContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
         }
       } else {
-        content.componentsHTMLContent = await fs.readFile(process.cwd() + "/src/pages/[orgName]/document.html", 'utf8');
+        content.componentsHTMLContent = await fs.readFile(process.cwd() + "/src/pages/[orgName]/error.html", 'utf8');
       }
 
       const apiArtifactRef = process.env.NEXT_PUBLIC_METADATA_API_URL + "apiList?orgName=" + context.params.orgName;
