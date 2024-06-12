@@ -19,9 +19,9 @@ export async function getServerSideProps(context) {
     let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/orgContent.json", 'utf8'));
     content.orgName = response.orgName;
   } else {
-    htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "org-landing-page.html?orgName=" + context.params.orgName;
-    navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "nav-bar.html?orgName=" + context.params.orgName;
-    footerRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "footer.html?orgName=" + context.params.orgName;
+    htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=org-landing-page.html";
+    navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=nav-bar.html";
+    footerRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=footer.html";
     content.orgName = context.params.orgName;
 
     try {
@@ -34,9 +34,9 @@ export async function getServerSideProps(context) {
         content.footerContent = await footerResponse.text()
 
         if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
-          var modifiedNavContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "style.css?orgName=" + context.params.orgName);
+          var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=");
           content.navContent = modifiedNavContent;
-          var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/org-landing-page.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "org-landing-page.css?orgName=" + context.params.orgName);
+          var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=");
           content.orgHTMLContent = modifiedHTMLContent;
         } else {
           var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
@@ -56,7 +56,6 @@ export async function getServerSideProps(context) {
     }
   }
 
-  // content.orgName = context.params.orgName;
   // Pass data to the page via props
   return { props: { content } }
 }
@@ -73,7 +72,7 @@ export default function Page({ content }) {
       imageTagList.forEach(element => {
         var imageName = element.src.split("/images/")[1];
         if (element.src.includes("/resources/images")) {
-          element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + imageName + '?orgName=' + content.orgName;
+          element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + 'orgFiles?orgName=' + content.orgName + "&fileName=" + imageName;
         }
       });
     }

@@ -19,7 +19,11 @@ function isAuthenticatedPage(authenticatedPages, currentPage) {
 function handleAuth(orgDDetailResponse, currentPage) {
     if (orgDDetailResponse.hasOwnProperty("isPublic") && !orgDDetailResponse.isPublic) {
         const authenticatedPages = orgDDetailResponse["authenticatedPages"];
-        return isAuthenticatedPage(authenticatedPages, currentPage);
+        if (authenticatedPages.length !== 0) {
+            return isAuthenticatedPage(authenticatedPages, currentPage);
+        } else {
+            return true;
+        }
     }
     return false;
 }
@@ -41,6 +45,7 @@ export const authConfig = {
                         if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD") {
                             const organisationDetails = await fetch(process.env.NEXT_PUBLIC_ADMIN_API_URL + "organisation?orgName=" + organizationName);
                             orgDDetailResponse = await organisationDetails.json();
+                            console.log(orgDDetailResponse);
                         } else {
                             const organisationDetails = await fetch(process.env.NEXT_PUBLIC_DEV_URL + "resources/orgContent.json");
                             orgDDetailResponse = await organisationDetails.json();

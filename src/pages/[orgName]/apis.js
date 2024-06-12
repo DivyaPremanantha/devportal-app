@@ -26,9 +26,9 @@ export async function getServerSideProps(context) {
     try {
       const token = await getToken({ req: context.req, secret: process.env.AUTH_SECRET })
 
-      navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "nav-bar.html?orgName=" + context.params.orgName;
-      componentRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "components-page.html?orgName=" + context.params.orgName;
-      footerRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "footer.html?orgName=" + context.params.orgName;
+      navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=nav-bar.html";
+      componentRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=components-page.html" ;
+      footerRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=footer.html";
       const componentResponse = await fetch(componentRef);
       content.orgName = context.params.orgName;
 
@@ -40,8 +40,8 @@ export async function getServerSideProps(context) {
         var navContent = await navResponse.text()
 
         if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
-          content.componentsHTMLContent = contentRef.replace('/resources/stylesheet/components.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "components.css?orgName=" + context.params.orgName);
-          content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "style.css?orgName=" + context.params.orgName);
+          content.componentsHTMLContent = contentRef.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=");
+          content.navContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=");
         } else {
           content.componentsHTMLContent = contentRef.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
           content.navContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
@@ -76,7 +76,7 @@ export default function Components({ content }) {
       imageTagList.forEach(element => {
         var imageName = element.src.split("/images/")[1];
         if (element.src.includes("/resources/images")) {
-          element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + imageName + '?orgName=' + content.orgName;
+          element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + 'orgFiles?orgName=' + content.orgName + "&fileName=" + imageName;
         }
       });
     }

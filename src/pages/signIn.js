@@ -12,7 +12,7 @@ export async function getServerSideProps(context) {
         content.pageHTMLContent = await fs.readFile(process.cwd() + "/public/resources/template/sign-in.html", 'utf8');
     } else {
         try {
-            const htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "sign-in.html?orgName=" + orgName;
+            const htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + orgName + "&fileName=sign-in.html";
             const htmlResponse = await fetch(htmlRef);
 
             if (!htmlResponse.ok) {
@@ -21,7 +21,7 @@ export async function getServerSideProps(context) {
             } else {
                 var htmlContent = await htmlResponse.text();
                 if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
-                    content.pageHTMLContent = htmlContent.replace('/resources/stylesheet/sign-in.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "sign-in.css?orgName=" + orgName);
+                    content.pageHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "orgFiles?orgName=" + orgName + "&fileName=");
                 } else {
                     var modifiedHTMLContent = htmlContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + orgName + `/resources/stylesheet/`);
                     content.pageHTMLContent = modifiedHTMLContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + orgName + `/resources/images/`);
@@ -53,7 +53,7 @@ export default function SignInPage({ providers, content }) {
             imageTagList.forEach(element => {
                 var imageName = element.src.split("/images/")[1];
                 if (element.src.includes("/resources/images")) {
-                    element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + imageName + '?orgName=' + content.orgName;
+                    element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + 'orgFiles?orgName=' + content.orgName + "&fileName=" + imageName;
                 }
             });
 
@@ -86,7 +86,7 @@ export default function SignInPage({ providers, content }) {
                             ))}
                         </div>
                     ) : (
-                        <h2> Please update authernticator infometion </h2>
+                        <h2> Please update authernticator information in the auth.json file </h2>
                     )}
                 </div>
             )

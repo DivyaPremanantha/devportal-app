@@ -34,11 +34,11 @@ export async function getServerSideProps(context) {
         let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/orgContent.json", 'utf8'));
         content.orgName = response.orgName;
     } else {
-        htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "api-landing-page.html?orgName=" + context.params.orgName;
+        htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=api-landing-page.html";
         apiContentRef = process.env.NEXT_PUBLIC_METADATA_API_URL + "api?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
         apiContentRefMD = process.env.NEXT_PUBLIC_METADATA_API_URL + "apiContent.md?orgName=" + context.params.orgName + "&apiID=" + context.params.apiName;
-        navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "nav-bar.html?orgName=" + context.params.orgName;
-        footerRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "footer.html?orgName=" + context.params.orgName;
+        navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=nav-bar.html";
+        footerRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=footer.html";
         content.orgName = context.params.orgName;
 
         const navResponse = await fetch(navRef)
@@ -51,8 +51,8 @@ export async function getServerSideProps(context) {
         var contentRef = await htmlContent.text();
 
         if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
-            content.navContent = navContent.replace('/resources/stylesheet/style.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "style.css?orgName=" + context.params.orgName);
-            content.apiHTMLContent = contentRef.replace('/resources/stylesheet/api-landing-page.css', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "api-landing-page.css?orgName=" + context.params.orgName);
+            content.navContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=");
+            content.apiHTMLContent = contentRef.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=");
         } else {
             var modifiedNavContent = navContent.replace('/resources/stylesheet/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/stylesheet/`);
             content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
@@ -122,7 +122,7 @@ function API({ content }) {
             imageTagList.forEach(element => {
                 if (element.src.includes("/resources/images")) {
                     var imageName = element.src.split("/images/")[1];
-                    element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + imageName + '?orgName=' + content.orgName;
+                    element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + 'orgFiles?orgName=' + content.orgName + "&fileName=" + imageName;
                 }
             });
         }
@@ -132,15 +132,16 @@ function API({ content }) {
         <div>
             <Navbar content={content} />
             <div dangerouslySetInnerHTML={{ __html: content.apiHTMLContent }}></div>
-            <div class="relative">
-                <div class="card">
-                    <div class="container">
-                        <h4>
-                            <a href={content.apiResources.apiInfo.apiName + "/tryout"} > {content.apiResources.apiInfo.apiName}</a>
-                        </h4>
+            {content.apiResources != null &&
+                <div class="relative">
+                    <div class="card">
+                        <div class="container">
+                            <h4>
+                                <a href={content.apiResources.apiInfo.apiName + "/tryout"} > {content.apiResources.apiInfo.apiName}</a>
+                            </h4>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </div>}
             <Footer content={content} />
         </div>
     )
