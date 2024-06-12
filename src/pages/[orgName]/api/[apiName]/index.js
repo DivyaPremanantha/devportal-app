@@ -137,7 +137,7 @@ function API({ content }) {
                     <div class="card">
                         <div class="container">
                             <h4>
-                                <a href={content.apiResources.apiInfo.apiName + "/tryout"} > {content.apiResources.apiInfo.apiName}</a>
+                                <a href={content.apiResources.apiInfo.apiName + "/tryout"} class="try-out-link"> Try It Out </a>
                             </h4>
                         </div>
                     </div>

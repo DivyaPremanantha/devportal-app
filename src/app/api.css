@@ -1,7 +1,8 @@
 .card {
+    display: flex;
+    justify-content: left;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    width: 20%;
   }
   
   .card:hover {
@@ -14,6 +15,7 @@
 
   div.relative {
     position: relative;
-    left: 30px;
-    
+    right: 30px;
+    display: flex;
+    justify-content: right;
   }
