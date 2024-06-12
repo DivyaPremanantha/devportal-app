@@ -26,7 +26,7 @@
         "apiName": "FamousAttractionsAPI",
         "apiArtifacts": {
             "apiImages": {
-                "api-landing-page-image": "/resources/content-mock/api-images/accommodation.png",
+                "api-landing-page-image": "/resources/content-mock/api-images/attractions.jpeg",
                 "api-detail-page-image": "/resources/content-mock/api-images/attractions-mini.jpeg"
             }
         }
@@ -37,50 +37,8 @@
         "apiName": "HotelAvailabilityAPI",
         "apiArtifacts": {
             "apiImages": {
-                "api-landing-page-image": "/resources/content-mock/api-images/accommodation.png",
+                "api-landing-page-image": "/resources/content-mock/api-images/hotel-availability.jpeg",
                 "api-detail-page-image": "/resources/content-mock/api-images/hotel-availability-mini.jpeg"
-            }
-        }
-    }
-},
-{
-    "apiInfo": {
-        "apiName": "AirlineDealsAPI",
-        "apiArtifacts": {
-            "apiImages": {
-                "api-landing-page-image": "/resources/content-mock/api-images/accommodation.png",
-                "api-detail-page-image": "/resources/content-mock/api-images/airline-deals-mini.jpeg"
-            }
-        }
-    }
-},{
-    "apiInfo": {
-        "apiName": "AuthenticFoodAPI",
-        "apiArtifacts": {
-            "apiImages": {
-                "api-landing-page-image": "/resources/content-mock/api-images/accommodation.png",
-                "api-detail-page-image": "/resources/content-mock/api-images/authentic-food-mini.jpeg"
-            }
-        }
-    }
-},
-{
-    "apiInfo": {
-        "apiName": "LocalFestivalsAPI",
-        "apiArtifacts": {
-            "apiImages": {
-                "api-landing-page-image": "/resources/content-mock/api-images/accommodation.png",
-                "api-detail-page-image": "/resources/content-mock/api-images/local-festival-mini.jpeg"
-            }
-        }
-    }
-},{
-    "apiInfo": {
-        "apiName": "RoadTravelAPI",
-        "apiArtifacts": {
-            "apiImages": {
-                "api-landing-page-image": "/resources/content-mock/api-images/accommodation.png",
-                "api-detail-page-image": "/resources/content-mock/api-images/road-travel-mini.jpeg"
             }
         }
     }
