@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Footer from '../../app/footer';
 import { promises as fs } from 'fs';
 import { useEffect } from "react";
-import './document.css';
+import './error.css';
 
 export async function getServerSideProps(context) {
   const content = {}
@@ -45,14 +45,14 @@ export async function getServerSideProps(context) {
           content.navContent = modifiedNavContent.replace('/resources/images/', process.env.NEXT_PUBLIC_AWS_URL + context.params.orgName + `/resources/images/`);
         }
       } else {
-        let orgContent = await fs.readFile(process.cwd() + "/src/pages/[orgName]/document.html", 'utf8');
+        let orgContent = await fs.readFile(process.cwd() + "/src/pages/[orgName]/error.html", 'utf8');
         let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/orgContent.json", 'utf8'));
         content.orgHTMLContent = orgContent.replace('orgName', response.orgName);
       }
 
     } catch (error) {
       console.error('Error fetching org:', error);
-      content.orgHTMLContent = await fs.readFile(process.cwd() + "/src/pages/[orgName]/document.html", 'utf8');
+      content.orgHTMLContent = await fs.readFile(process.cwd() + "/src/pages/[orgName]/error.html", 'utf8');
     }
   }
 

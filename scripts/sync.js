@@ -9,7 +9,7 @@ const destination = "./public/resources" // Usually "./public/assets/" or "./pub
 const watch = process.argv.includes("--watch")
 
 // Copy files on startup
-fs.copySync(source, destination, { recursive: true })
+// fs.copySync(source, destination, { recursive: true })
 
 // Watch for changes if --watch flag is present
 

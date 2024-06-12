@@ -1,0 +1,22 @@
+{
+    "apiInfo": {
+        "apiName": "LeisureActivitiesAPI",
+        "openApiDefinition": {
+            "info": {
+                "version": "1.0.0",
+                "title": "The Leisure Activities API",
+                "description": "The Leisure Activities API is a comprehensive tool designed to provide users with access to a diverse range of recreational pursuits and pastimes. With this API, developers can effortlessly integrate functionalities that enable users to explore, discover, and engage in various leisure activities tailored to their preferences and interests."
+            }
+        },
+        "apiArtifacts": {
+            "apiImages": {
+                "api-landing-page-image": "/resources/content-mock/api-images/leisure.jpeg",
+                "api-detail-page-image": "/resources/content-mock/api-images/leisure-mini.jpeg"
+            }
+        }
+    },
+    "serverUrl": {
+        "sandboxUrl": "https://leisure.api.sandbox.abc.com",
+        "productionUrl": "https://leisure.api.abc.com"
+    }
+}
