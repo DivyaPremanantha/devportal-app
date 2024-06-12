@@ -116,7 +116,7 @@ function API({ content }) {
             if (content.apiPage != null)
                 createRoot(document.getElementById("api-details")).render(<Markdown rehypePlugins={[rehypeRaw]}>{content.apiPage}</Markdown>);
         }
-        if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
+        if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD" && process.env.NEXT_PUBLIC_STORAGE === "DB") {
             var imageTags = document.getElementsByTagName("img");
             var imageTagList = Array.prototype.slice.call(imageTags);
             imageTagList.forEach(element => {

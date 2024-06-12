@@ -21,7 +21,7 @@ export async function getServerSideProps(context) {
         content.footerContent = await fs.readFile(process.cwd() + "/public/resources/template/footer.html", 'utf8');
         let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/orgContent.json", 'utf8'));
         content.orgName = response.orgName;
-        
+
     } else {
         const htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + organisation + "&fileName=tryout.html";
         const navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=nav-bar.html";
@@ -58,7 +58,7 @@ export async function getServerSideProps(context) {
 
 export default function Tryout({ content }) {
 
-    if (process.env.NEXT_PUBLIC_AWS_URL === undefined) {
+    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD" && process.env.NEXT_PUBLIC_STORAGE === "DB") {
         useEffect(() => {
             var imageTags = document.getElementsByTagName("img");
             var imageTagList = Array.prototype.slice.call(imageTags);
