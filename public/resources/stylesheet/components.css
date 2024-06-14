@@ -1,8 +1,8 @@
 .components-div {
-    margin-top: 25px;
     width: 100%;
     flex: 1;
     min-height: 800px;
+    min-width: 1730px;
   }
   @media (max-width: 991px) {
     .components-div {
