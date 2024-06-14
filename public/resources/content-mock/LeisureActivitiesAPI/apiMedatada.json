@@ -1,7 +1,7 @@
 {
     "apiInfo": {
         "apiName": "LeisureActivitiesAPI",
-        "openApiDefinition":{
+        "openApiDefinition": {
             "openapi": "3.0.1",
             "info": {
               "title": "Leisure Activities API",
@@ -459,9 +459,15 @@
               }
             }
           } ,
+        "apiArtifacts": {
+            "apiImages": {
+                "api-landing-page-image": "/resources/content-mock/api-images/leisure.jpeg",
+                "api-detail-page-image": "/resources/content-mock/api-images/leisure-mini.jpeg"
+            }
+        }
+    },
     "serverUrl": {
         "sandboxUrl": "https://leisure.api.sandbox.abc.com",
         "productionUrl": "https://leisure.api.abc.com"
     }
-}
 }
