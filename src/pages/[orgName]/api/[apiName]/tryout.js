@@ -65,7 +65,7 @@ export default function Tryout({ content }) {
             imageTagList.forEach(element => {
                 if (element.src.includes("/resources/images")) {
                     var imageName = element.src.split("/images/")[1];
-                    element.src = process.env.NEXT_PUBLIC_ADMIN_API_URL + 'orgFiles?orgName=' + content.orgName + "&fileName=" + imageName;
+                    element.src = process.env.NEXT_PUBLIC_ADMIN_LOCAL_API_URL + 'orgFiles?orgName=' + content.orgName + "&fileName=" + imageName;
                 }
             });
         }, []);
