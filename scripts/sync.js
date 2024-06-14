@@ -25,8 +25,6 @@ const watch = process.argv.includes("--watch")
     const destinationPath = path.join(destination, relativePath)
     if (event === "unlink") {
       fs.removeSync(destinationPath)
-    } else {
-      fs.copySync(filePath, destinationPath)
     }
   })
 // }
