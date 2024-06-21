@@ -86,11 +86,6 @@ export default function Components({ content }) {
     <div>
       <Navbar content={content} />
       <div dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>
-      {content.componentsHTMLLineCount > 14 && content.componentsHTMLLineCount == 31 ? (
-        <div dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>
-      ) : (
-        <Tile content={content} />
-      )}
       <Footer content={content} />
     </div>
   );
