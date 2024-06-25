@@ -4,7 +4,33 @@
         <link rel="stylesheet" href="/resources/stylesheet/components.css">
     </head>
     <body>
-        <script>createGrid();</script>
-        <script>fillGrid(5, 5, 4, 2, "green")</script>
+        <script>
+        function poll(interval, maxAttempts) {
+            let attempts = 0;
+            const executePoll = async (resolve, reject) => {
+                attempts++;
+                try {
+                    createGrid()
+                    fillGrid( 4, apiList, mode, tile)
+                } catch (error) {
+                    if (attempts >= maxAttempts) {
+                        reject(new Error('Max attempts reached to pull data from the server.'));
+                    } else {
+                        setTimeout(() => executePoll(resolve, reject), interval);
+                    }
+                }
+            };
+            return new Promise(executePoll);
+        }
+
+        async function onPageLoad() {
+            try {
+                const details = await poll(2000, 10);
+            } catch (error) {
+                console.error('Failed to fetch details:', error);
+            }
+        }
+        window.addEventListener('load', onPageLoad);
+        </script>      
     </body>
 </html>

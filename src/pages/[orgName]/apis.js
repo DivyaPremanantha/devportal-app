@@ -13,10 +13,12 @@ export async function getServerSideProps(context) {
   var navRef;
   var componentRef;
   var footerRef;
+  var tileContent;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
     content.navContent = await fs.readFile(process.cwd() + "/public/resources/template/nav-bar.html", 'utf8');
     content.footerContent = await fs.readFile(process.cwd() + "/public/resources/template/footer.html", 'utf8');
+    content.tileContent = await fs.readFile(process.cwd() + "/public/resources/template/apitile.html", 'utf8');
     content.componentsHTMLContent = await fs.readFile(process.cwd() + "/public/resources/template/components-page.html", 'utf8');
     content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/content-mock/apiMedatada.json", 'utf8'));
     content.componentsHTMLLineCount = content.componentsHTMLContent.split(/\r\n|\r|\n/).length;
@@ -65,11 +67,26 @@ export async function getServerSideProps(context) {
   return { props: { content } }
 }
 
+
+export function getAPIList(content) {
+  console.log("getAPIList");
+  console.log(content.length);
+  return content;
+}
+
+
 export default function Components({ content }) {
   const router = useRouter();
   router.asPath = "/" + content.orgName;
 
   useEffect(() => {
+    window.apiList = content.apiResources;
+    window.tile = content.tileContent;
+    window.mode = process.env.NEXT_PUBLIC_DEPLOYMENT;
+    window.onload =  function(){
+      window.apiList = content.apiResources;
+      window.mode = process.env.NEXT_PUBLIC_DEPLOYMENT;
+    };
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD" && process.env.NEXT_PUBLIC_STORAGE === "DB") {
       var imageTags = document.getElementsByTagName("img");
       var imageTagList = Array.prototype.slice.call(imageTags);
@@ -80,12 +97,18 @@ export default function Components({ content }) {
         }
       });
     }
+   
   }, []);
+
+
 
   return (
     <div>
       <Navbar content={content} />
       <div dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>
+      <script>
+      
+      </script>
       <Footer content={content} />
     </div>
   );
