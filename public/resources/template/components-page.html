@@ -6,7 +6,7 @@
 
 <body>
     <script>
-        
+
         const chunkArray = (arr, size) => {
             const chunkedArr = [];
             for (let i = 0; i < arr.length; i += size) {
@@ -60,7 +60,7 @@
             const executePoll = async (resolve, reject) => {
                 attempts++;
                 try {
-                    let details = getDetails();
+                    let details = getAPIMetadata();
                     if (details.apiList.length != 0) {
                         fillGrid(4, details.apiList, details.mode, details.tile)
                     }
