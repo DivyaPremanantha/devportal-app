@@ -1,42 +1,39 @@
 <html>
-
-<head>
-    <script type="text/javascript" src="/resources/js/gridTraverse.js"></script>
-    <link rel="stylesheet" href="/resources/stylesheet/components.css">
-</head>
-<script>
-    function poll(interval, maxAttempts) {
-        let attempts = 0;
-        const executePoll = async (resolve, reject) => {
-            attempts++;
-            try {
-                createGrid()
-                let details = getDetails();
-                if (details.apiList.length != 0) {
-                    fillGrid(4, details.apiList, details.mode, details.tile)
+    <head>
+        <script type="text/javascript" src="/resources/js/gridTraverse.js"></script>
+        <link rel="stylesheet" href="/resources/stylesheet/components.css">
+    </head>
+    <body>
+        <script>
+        function poll(interval, maxAttempts) {
+            let attempts = 0;
+            const executePoll = async (resolve, reject) => {
+                attempts++;
+                try {
+                    createGrid()
+                    let details = getDetails();
+                    if (details.apiList.length != 0) {
+                        fillGrid(4, details.apiList, details.mode, details.tile)
+                    }
+                } catch (error) {
+                    if (attempts >= maxAttempts) {
+                        reject(new Error('Max attempts reached to pull data from the server.'));
+                    } else {
+                        setTimeout(() => executePoll(resolve, reject), interval);
+                    }
                 }
-            } catch (error) {
-                if (attempts >= maxAttempts) {
-                    reject(new Error('Max attempts reached to pull data from the server.'));
-                } else {
-                    setTimeout(() => executePoll(resolve, reject), interval);
-                }
-            }
-        };
-        return new Promise(executePoll);
-    }
-
-    async function onPageLoad() {
-        try {
-            const details = await poll(2000, 10);
-        } catch (error) {
-            console.error('Failed to fetch details:', error);
+            };
+            return new Promise(executePoll);
         }
-    }
-    window.addEventListener('load', onPageLoad);
-</script>
 
-<body>
-</body>
-
+        async function onPageLoad() {
+            try {
+                const details = await poll(2000, 10);
+            } catch (error) {
+                console.error('Failed to fetch details:', error);
+            }
+        }
+        window.addEventListener('load', onPageLoad);
+        </script>      
+    <body></body>
 </html>
