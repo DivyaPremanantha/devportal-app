@@ -67,26 +67,12 @@ export async function getServerSideProps(context) {
   return { props: { content } }
 }
 
-
-export function getAPIList(content) {
-  console.log("getAPIList");
-  console.log(content.length);
-  return content;
-}
-
-
 export default function Components({ content }) {
   const router = useRouter();
   router.asPath = "/" + content.orgName;
 
   useEffect(() => {
-    window.apiList = content.apiResources;
-    window.tile = content.tileContent;
-    window.mode = process.env.NEXT_PUBLIC_DEPLOYMENT;
-    window.onload =  function(){
-      window.apiList = content.apiResources;
-      window.mode = process.env.NEXT_PUBLIC_DEPLOYMENT;
-    };
+    window.getDetails = () => getProps(content);
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD" && process.env.NEXT_PUBLIC_STORAGE === "DB") {
       var imageTags = document.getElementsByTagName("img");
       var imageTagList = Array.prototype.slice.call(imageTags);
@@ -100,17 +86,19 @@ export default function Components({ content }) {
    
   }, []);
 
-
-
   return (
     <div>
       <Navbar content={content} />
       <div dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>
-      <script>
-      
-      </script>
       <Footer content={content} />
     </div>
   );
+}
 
+export function getProps(content) {
+  return { 
+    apiList: content.apiResources,
+    tile: content.tileContent,
+    mode: process.env.NEXT_PUBLIC_DEPLOYMENT,
+  }
 }
