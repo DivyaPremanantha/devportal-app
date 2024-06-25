@@ -89,7 +89,7 @@ export default function Components({ content }) {
   return (
     <div>
       <Navbar content={content} />
-      <div dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>
+      <div id='components-page-wrapper' class="components-page" dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>
       <Footer content={content} />
     </div>
   );

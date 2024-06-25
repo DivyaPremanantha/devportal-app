@@ -6,14 +6,6 @@
 
 <body>
     <script>
-        const createGrid = () => {
-            console.log("creategrid")
-            const markup = '<div  id="container" >'
-            var newElement = document.createElement('div');
-            newElement.innerHTML = markup;
-            document.body.appendChild(newElement)
-        }
-
         const layoutGrid = (height, width) => {
             const container = document.getElementById('container')
             container.style.gridTemplateColumns = 'repeat(${width}, 1fr)'
@@ -31,10 +23,10 @@
         const fillGrid = (cols, apiList, mode, tile) => {
 
             const data = chunkArray(apiList, cols, tile);
-            const container = document.getElementById('container')
+            const container = document.getElementById('components-page-wrapper')
             for (i = 0; i < data.length; ++i) {
                 const colDiv = document.createElement('div');
-                colDiv.className = 'components-div components-page'
+                colDiv.className = 'components-div'
                 container.appendChild(colDiv)
                 for (j = 0; j < data[i].length; ++j) {
                     let markup = tile;
@@ -73,7 +65,6 @@
             const executePoll = async (resolve, reject) => {
                 attempts++;
                 try {
-                    createGrid()
                     let details = getDetails();
                     if (details.apiList.length != 0) {
                         fillGrid(4, details.apiList, details.mode, details.tile)
