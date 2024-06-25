@@ -8,12 +8,29 @@ import { getToken } from "next-auth/jwt"
 import { useEffect } from "react";
 import './error.css';
 
+function replaceImagePath(content) {
+  var apiList = content.apiResources;
+    var editedAPIList = [];
+    for (var i = 0; i < apiList.length; ++i) {
+      var imagePath = apiList[i].apiInfo.apiArtifacts.apiImages["api-detail-page-image"]
+      if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
+        apiList[i].apiInfo.imagePath = imagePath;
+      } else if(process.env.NEXT_PUBLIC_STORAGE === "DB"){
+        apiList[i].apiInfo.imagePath = process.env.NEXT_PUBLIC_METADATA_LOCAL_API_URL + imagePath.split('/images/')[1] + "?orgName=" + content.orgName + "&apiID=" + apiList[i].apiInfo.apiName;
+      } else {
+        apiList[i].apiInfo.imagePath = process.env.NEXT_PUBLIC_AWS_URL + content.orgName + imagePath;
+      }
+      editedAPIList.push(apiList[i]);
+    }
+    return editedAPIList;
+}
+
 export async function getServerSideProps(context) {
   const content = {}
   var navRef;
   var componentRef;
   var footerRef;
-  var titelRef;
+  var tileRef;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
     content.navContent = await fs.readFile(process.cwd() + "/public/resources/template/nav-bar.html", 'utf8');
@@ -29,9 +46,9 @@ export async function getServerSideProps(context) {
       const token = await getToken({ req: context.req, secret: process.env.AUTH_SECRET })
 
       navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=nav-bar.html";
-      componentRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=components-page.html" ;
+      componentRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=components-page.html";
       footerRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=footer.html";
-      titelRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=apitile.html";
+      tileRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=apitile.html";
       const componentResponse = await fetch(componentRef);
       content.orgName = context.params.orgName;
 
@@ -59,6 +76,9 @@ export async function getServerSideProps(context) {
       const apiArtifactRef = process.env.NEXT_PUBLIC_METADATA_API_URL + "apiList?orgName=" + context.params.orgName;
       const apiResponse = await fetch(apiArtifactRef);
       content.apiResources = await apiResponse.json();
+      console.log("API");
+
+      console.log(content.apiResources);
       content.token = token;
     } catch (error) {
       console.error('Error fetching API content:', error);
@@ -66,7 +86,8 @@ export async function getServerSideProps(context) {
     }
   }
   content.componentsHTMLLineCount = content.componentsHTMLContent.split(/\r\n|\r|\n/).length;
-
+  content.apiResources = replaceImagePath(content);
+  console.log(content.apiResources)
   // Pass data to the page via props
   return { props: { content } }
 }
@@ -87,7 +108,7 @@ export default function Components({ content }) {
         }
       });
     }
-   
+
   }, []);
 
   return (
@@ -100,9 +121,9 @@ export default function Components({ content }) {
 }
 
 export function getProps(content) {
-  return { 
+  return {
+    token: content.token,
     apiList: content.apiResources,
-    tile: content.tileContent,
-    mode: process.env.NEXT_PUBLIC_DEPLOYMENT,
+    tile: content.tileContent
   }
 }

@@ -20,7 +20,7 @@
             return chunkedArr;
         };
 
-        const fillGrid = (cols, apiList, mode, tile) => {
+        const fillGrid = (cols, apiList, tile) => {
 
             const data = chunkArray(apiList, cols, tile);
             const container = document.getElementById('components-page-wrapper')
@@ -37,7 +37,7 @@
                     if (document.getElementById("tileImage") !== null) {
                         const apiImage = document.getElementById("tileImage");
                         apiImage.id = "tileImage" + i + j;
-                        var imagePath = data[i][j].apiInfo.apiArtifacts.apiImages["api-detail-page-image"];
+                        var imagePath = data[i][j].apiInfo.imagePath;
                         const api = document.getElementById("tileImage" + i + j);
                         api.src = imagePath;
                     }
@@ -67,7 +67,7 @@
                 try {
                     let details = getDetails();
                     if (details.apiList.length != 0) {
-                        fillGrid(4, details.apiList, details.mode, details.tile)
+                        fillGrid(4, details.apiList, details.tile)
                     }
                 } catch (error) {
                     console.error('Failed to fetch details:', error);
