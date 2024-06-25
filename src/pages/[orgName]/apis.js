@@ -13,7 +13,7 @@ export async function getServerSideProps(context) {
   var navRef;
   var componentRef;
   var footerRef;
-  var tileContent;
+  var titelRef;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
     content.navContent = await fs.readFile(process.cwd() + "/public/resources/template/nav-bar.html", 'utf8');
@@ -31,11 +31,15 @@ export async function getServerSideProps(context) {
       navRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=nav-bar.html";
       componentRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=components-page.html" ;
       footerRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=footer.html";
+      titelRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=apitile.html";
       const componentResponse = await fetch(componentRef);
       content.orgName = context.params.orgName;
 
       if (componentResponse.ok) {
         var contentRef = await componentResponse.text();
+        const apiTileContent = await fetch(componentRef)
+        const apiTileResponse = await apiTileContent.text()
+        content.tileContent = apiTileResponse
         const footerResponse = await fetch(footerRef)
         content.footerContent = await footerResponse.text()
         const navResponse = await fetch(navRef)
@@ -106,9 +110,6 @@ export default function Components({ content }) {
     <div>
       <Navbar content={content} />
       <div dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>
-      <script>
-      
-      </script>
       <Footer content={content} />
     </div>
   );
