@@ -6,12 +6,7 @@
 
 <body>
     <script>
-        const layoutGrid = (height, width) => {
-            const container = document.getElementById('container')
-            container.style.gridTemplateColumns = 'repeat(${width}, 1fr)'
-            container.style.gridTemplateRows = 'repeat(${height}, 1fr)'
-        }
-
+        
         const chunkArray = (arr, size) => {
             const chunkedArr = [];
             for (let i = 0; i < arr.length; i += size) {
