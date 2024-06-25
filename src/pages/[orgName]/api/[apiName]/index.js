@@ -75,6 +75,18 @@ export async function getServerSideProps(context) {
 
     content.apiName = context.params.apiName;
 
+    if (content.apiResources != null && content.apiResources.apiInfo != null) {
+        let value = content.apiResources.apiInfo.apiArtifacts.apiImages["api-landing-page-image"];
+        if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV")
+            content.apiImageSrc = value;
+        else if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
+            var fileName = value.split('images/')[1];
+            content.apiImageSrc = process.env.NEXT_PUBLIC_METADATA_LOCAL_API_URL + fileName + "?orgName=" + content.orgName + "&apiID=" + content.apiName;
+        } else {
+            content.apiImageSrc = process.env.NEXT_PUBLIC_AWS_URL + content.orgName + value;
+        }
+    }
+
     // Pass data to the page via props
     return { props: { content } }
 }
@@ -84,38 +96,6 @@ function API({ content }) {
     // router.asPath = "/" + content.orgName;
 
     useEffect(() => {
-        if (content.apiResources != null && content.apiResources.apiInfo != null) {
-            for (const [key, value] of Object.entries(content.apiResources.apiInfo.apiArtifacts.apiImages)) {
-                if (document.getElementById(key) !== null) {
-                    const apiImage = document.getElementById(key);
-                    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV")
-                        apiImage.src = value;
-                    else if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
-                        var fileName = value.split('images/')[1];
-                        apiImage.src = process.env.NEXT_PUBLIC_METADATA_LOCAL_API_URL + fileName + "?orgName=" + content.orgName + "&apiID=" + content.apiName;
-                    } else
-                        apiImage.src = process.env.NEXT_PUBLIC_AWS_URL + content.orgName + value;
-                }
-            }
-            if (document.getElementById("api-landing-page-heading") != null)
-                document.getElementById("api-landing-page-heading").innerHTML = content.apiResources.apiInfo.openApiDefinition.info.title;
-
-            if (document.getElementById("api-landing-page-description") != null)
-                document.getElementById("api-landing-page-description").innerHTML = content.apiResources.apiInfo.openApiDefinition.info.description;
-
-            if (document.getElementById("api-version") != null)
-                document.getElementById("api-version").innerHTML = content.apiResources.apiInfo.openApiDefinition.info.version;
-
-            if (document.getElementById("api-url") != null)
-                document.getElementById("api-url").innerHTML = content.apiResources.serverUrl.productionUrl;
-
-            if (document.getElementById("api-url") != null)
-                document.getElementById("api-url").href = content.apiResources.serverUrl.productionUrl;
-
-            //render rest of the API Landin Page content through a markdown
-            if (content.apiPage != null)
-                createRoot(document.getElementById("api-details")).render(<Markdown rehypePlugins={[rehypeRaw]}>{content.apiPage}</Markdown>);
-        }
         if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD" && process.env.NEXT_PUBLIC_STORAGE === "DB") {
             var imageTags = document.getElementsByTagName("img");
             var imageTagList = Array.prototype.slice.call(imageTags);
@@ -126,6 +106,7 @@ function API({ content }) {
                 }
             });
         }
+        window.getAPIDetails = () => getAPIProps(content);
     }, []);
 
     return (
@@ -148,3 +129,11 @@ function API({ content }) {
 }
 
 export default API;
+
+export function getAPIProps(content) {
+    return {
+        apiResources: content.apiResources,
+        apiPage: content.apiPage,
+        apiImageSrc: content.apiImageSrc,
+    }
+}
