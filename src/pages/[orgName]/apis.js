@@ -113,7 +113,7 @@ export default function Components({ content }) {
   router.asPath = "/" + content.orgName;
 
   useEffect(() => {
-    window.getDetails = () => getProps(content);
+    window.getAPIMetadata = () => getAPIMetadataProps(content);
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "PROD" && process.env.NEXT_PUBLIC_STORAGE === "DB") {
       var imageTags = document.getElementsByTagName("img");
       var imageTagList = Array.prototype.slice.call(imageTags);
@@ -136,9 +136,8 @@ export default function Components({ content }) {
   );
 }
 
-export function getProps(content) {
-  return {
-    token: content.token,
+export function getAPIMetadataProps(content) {
+  return { 
     apiList: content.apiResources,
     tile: content.tileContent
   }
