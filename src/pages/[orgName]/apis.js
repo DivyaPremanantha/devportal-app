@@ -8,21 +8,38 @@ import { getToken } from "next-auth/jwt"
 import { useEffect } from "react";
 import './error.css';
 
-function replaceImagePath(content) {
+function editAPIDetails(content) {
   var apiList = content.apiResources;
-    var editedAPIList = [];
-    for (var i = 0; i < apiList.length; ++i) {
-      var imagePath = apiList[i].apiInfo.apiArtifacts.apiImages["api-detail-page-image"]
-      if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-        apiList[i].apiInfo.imagePath = imagePath;
-      } else if(process.env.NEXT_PUBLIC_STORAGE === "DB"){
-        apiList[i].apiInfo.imagePath = process.env.NEXT_PUBLIC_METADATA_LOCAL_API_URL + imagePath.split('/images/')[1] + "?orgName=" + content.orgName + "&apiID=" + apiList[i].apiInfo.apiName;
-      } else {
-        apiList[i].apiInfo.imagePath = process.env.NEXT_PUBLIC_AWS_URL + content.orgName + imagePath;
-      }
-      editedAPIList.push(apiList[i]);
+  var editedAPIList = [];
+  let userRoles = [];
+  for (var i = 0; i < apiList.length; ++i) {
+    var imagePath = apiList[i].apiInfo.apiArtifacts.apiImages["api-detail-page-image"]
+    if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
+      apiList[i].apiInfo.imagePath = imagePath;
+    } else if (process.env.NEXT_PUBLIC_STORAGE === "DB") {
+      apiList[i].apiInfo.imagePath = process.env.NEXT_PUBLIC_METADATA_LOCAL_API_URL + imagePath.split('/images/')[1]
+        + "?orgName=" + content.orgName + "&apiID=" + apiList[i].apiInfo.apiName;
+    } else {
+      apiList[i].apiInfo.imagePath = process.env.NEXT_PUBLIC_AWS_URL + content.orgName + imagePath;
     }
-    return editedAPIList;
+    var auth = apiList[i].apiInfo.authorizedRoles;
+    var authorized = false;
+    if (auth != undefined && auth.length > 0 && auth[0] !== "") {
+      userRoles = content.token.role.split(" ")
+    } else {
+      authorized = true;
+    }
+    for (const role of userRoles) {
+      if (auth.includes(role)) {
+        authorized = true;
+        break;
+      }
+    }
+    apiList[i].apiInfo.authorized = authorized;
+
+    editedAPIList.push(apiList[i]);
+  }
+  return editedAPIList;
 }
 
 export async function getServerSideProps(context) {
@@ -86,8 +103,7 @@ export async function getServerSideProps(context) {
     }
   }
   content.componentsHTMLLineCount = content.componentsHTMLContent.split(/\r\n|\r|\n/).length;
-  content.apiResources = replaceImagePath(content);
-  console.log(content.apiResources)
+  content.apiResources = editAPIDetails(content);
   // Pass data to the page via props
   return { props: { content } }
 }
