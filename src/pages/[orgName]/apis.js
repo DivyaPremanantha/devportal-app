@@ -71,7 +71,7 @@ export async function getServerSideProps(context) {
 
       if (componentResponse.ok) {
         var contentRef = await componentResponse.text();
-        const apiTileContent = await fetch(componentRef)
+        const apiTileContent = await fetch(tileRef)
         const apiTileResponse = await apiTileContent.text()
         content.tileContent = apiTileResponse
         const footerResponse = await fetch(footerRef)
