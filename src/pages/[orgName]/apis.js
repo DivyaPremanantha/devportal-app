@@ -7,6 +7,7 @@ import Tile from './tile';
 import { getToken } from "next-auth/jwt"
 import { useEffect } from "react";
 import './error.css';
+import Handlebars from "handlebars";
 
 function editAPIDetails(content) {
   var apiList = content.apiResources;
@@ -127,17 +128,24 @@ export default function Components({ content }) {
 
   }, []);
 
+  const template = Handlebars.compile(content.componentsHTMLContent);
+  const context = { details: getAPIMetadataProps(content)};
+  console.log(context.details.apiList[0].apiInfo.apiName);
+
+
+  const html = template(context);
+
   return (
     <div>
       <Navbar content={content} />
-      <div id='components-page-wrapper' class="components-page" dangerouslySetInnerHTML={{ __html: content.componentsHTMLContent }}></div>
+      <div id='components-page-wrapper' class="components-page" dangerouslySetInnerHTML={{ __html: html }}></div>
       <Footer content={content} />
     </div>
   );
 }
 
 export function getAPIMetadataProps(content) {
-  return { 
+  return {
     apiList: content.apiResources,
     tile: content.tileContent
   }

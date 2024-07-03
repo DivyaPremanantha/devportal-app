@@ -5,92 +5,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/resources/stylesheet/api-landing-page.css">
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script>
-    const loadAPIContent = (details) => {
-      console.log("apiResources", details.apiResources);
-      if (details.apiResources != null && details.apiResources.apiInfo != null) {
-        for (const [key, value] of Object.entries(details.apiResources.apiInfo.apiArtifacts.apiImages)) {
-          if (document.getElementById("api-landing-page-image") != null)
-            document.getElementById("api-landing-page-image").src = details.apiImageSrc;
-
-          if (document.getElementById("api-landing-page-heading") != null)
-            document.getElementById("api-landing-page-heading").innerHTML = details.apiResources.apiInfo.openApiDefinition.info.title;
-
-          if (document.getElementById("api-landing-page-description") != null)
-            document.getElementById("api-landing-page-description").innerHTML = details.apiResources.apiInfo.openApiDefinition.info.description;
-
-          if (document.getElementById("api-version") != null)
-            document.getElementById("api-version").innerHTML = details.apiResources.apiInfo.openApiDefinition.info.version;
-
-          if (document.getElementById("api-url") != null)
-            document.getElementById("api-url").innerHTML = details.apiResources.serverUrl.productionUrl;
-
-          if (document.getElementById("api-url") != null)
-            document.getElementById("api-url").href = details.apiResources.serverUrl.productionUrl;
-
-          if (document.getElementById(key) !== null) {
-            const apiImage = document.getElementById(key);
-            apiImage.src = value;
-          }
-          //render rest of the API Landin Page content through a markdown
-          if (details.apiPage != null)
-            document.getElementById("api-details").innerHTML = marked.parse(details.apiPage);
-        }
-      }
-    }
-  </script>
-  <script>
-    function poll(interval, maxAttempts) {
-      let attempts = 0;
-      const executePoll = async (resolve, reject) => {
-        attempts++;
-        try {
-          let details = getAPIDetails();
-          if (details.apiResources.length != 0) {
-            loadAPIContent(details);
-          }
-        } catch (error) {
-          if (attempts >= maxAttempts) {
-            console.log(error);
-            reject(new Error('Max attempts reached to pull data from the server.'));
-          } else {
-            setTimeout(() => executePoll(resolve, reject), interval);
-          }
-        }
-      };
-      return new Promise(executePoll);
-    }
-
-    async function onPageLoad() {
-      try {
-        const details = await poll(2000, 10);
-      } catch (error) {
-        console.error('Failed to fetch details:', error);
-      }
-    }
-    window.addEventListener('load', onPageLoad);
-  </script>
 </head>
 
 <body>
   <div class="api-section">
     <div class="api-header">
-      <h1 id="api-landing-page-heading"></h1>
+      <h1>{{details.apiResources.apiInfo.openApiDefinition.info.title}}</h1>
     </div>
     <div class="container">
       <div class="version">
-        <p>Version: <span id="api-version"></span></p>
+        <p>Version: <span>{{details.apiResources.apiInfo.openApiDefinition.info.version}}</span></p>
       </div>
       <div class="url">
-        <p>URL: <a id="api-url"></a> </p>
+        <p>URL: <a href={{details.apiResources.serverUrl.productionUrl}}> {{details.apiResources.serverUrl.productionUrl}} </a></p>
       </div>
     </div>
     <div class="api-description-section">
-      <img id="api-landing-page-image" class="api-image"></img>
-      <p class="api-description" id="api-landing-page-description"></p>
+      <img class="api-image" src= {{details.apiImageSrc}}></img>
+      <p class="api-description" id="api-description">{{details.apiResources.apiInfo.openApiDefinition.info.description}}</p>
     </div>
-    <div id="api-details"></div>
+    <div id="api-details">{{{details.apiPage}}}</div>
   </div>
 </body>
 

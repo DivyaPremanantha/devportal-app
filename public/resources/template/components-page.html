@@ -2,90 +2,28 @@
 
 <head>
     <link rel="stylesheet" href="/resources/stylesheet/components.css">
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.min.js"></script>
+
 </head>
 
 <body>
-    <script>
-
-        const chunkArray = (arr, size) => {
-            const chunkedArr = [];
-            for (let i = 0; i < arr.length; i += size) {
-                chunkedArr.push(arr.slice(i, i + size));
-            }
-            return chunkedArr;
-        };
-
-        const fillGrid = (cols, apiList, tile) => {
-
-            const data = chunkArray(apiList, cols, tile);
-            const container = document.getElementById('components-page-wrapper')
-            for (i = 0; i < data.length; ++i) {
-                const colDiv = document.createElement('div');
-                colDiv.className = 'components-div'
-                container.appendChild(colDiv)
-                for (j = 0; j < data[i].length; ++j) {
-                    let markup = tile;
-                    const apiTileDiv = document.createElement('div');
-                    apiTileDiv.className = "components-section";
-                    apiTileDiv.innerHTML = markup;
-                    colDiv.appendChild(apiTileDiv)
-                    if (document.getElementById("tileImage") !== null) {
-                        const apiImage = document.getElementById("tileImage");
-                        apiImage.id = "tileImage" + i + j;
-                        var imagePath = data[i][j].apiInfo.imagePath;
-                        const api = document.getElementById("tileImage" + i + j);
-                        api.src = imagePath;
-                    }
-                    if (document.getElementById("apiLink") !== null) {
-                        const apiLink = document.getElementById("apiLink");
-                        apiLink.id = "apiLink" + i + j;
-                        var link = "api/" + data[i][j].apiInfo.apiName;
-                        const apiLinkNew = document.getElementById("apiLink" + i + j);
-                        apiLinkNew.href = link;
-                    }
-                    if (document.getElementById("apiName") !== null) {
-                        const apiName = document.getElementById("apiName");
-                        apiName.id = "apiName" + i + j;
-                        var name = data[i][j].apiInfo.apiName;
-                        const apiNameNew = document.getElementById("apiName" + i + j);
-                        apiNameNew.innerHTML = name;
-                    }
-                }
-            }
-        }
-    </script>
-    <script>
-        function poll(interval, maxAttempts) {
-            let attempts = 0;
-            const executePoll = async (resolve, reject) => {
-                attempts++;
-                try {
-                    let details = getAPIMetadata();
-                    if (details.apiList.length != 0) {
-                        fillGrid(4, details.apiList, details.tile)
-                    }
-                } catch (error) {
-                    console.error('Failed to fetch details:', error);
-                    if (attempts >= maxAttempts) {
-                        reject(new Error('Max attempts reached to pull data from the server.'));
-                    } else {
-                        setTimeout(() => executePoll(resolve, reject), interval);
-                    }
-                }
-            };
-            return new Promise(executePoll);
-        }
-
-        async function onPageLoad() {
-            try {
-                const details = await poll(2000, 10);
-            } catch (error) {
-                console.error('Failed to fetch details:', error);
-            }
-        }
-        window.addEventListener('load', onPageLoad);
-    </script>
-
-    <body></body>
+    {{#details.apiList}}
+    <div class="components-inner-section"> 
+        <img class="components-img" src={{apiInfo.imagePath}}></img>
+        <div class="components-inner-section-bottom">
+            <div>
+                <a href=api/{{apiInfo.apiName}}>
+                    <img loading="lazy"
+                        srcset="https://cdn.builder.io/api/v1/image/assets/TEMP/a9e36320710efb2e55281c303545f10439ec511a9f954d0feba84c5287d41c8a?apiKey=5054b86bb369459e857ad81bc8b6e736&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/a9e36320710efb2e55281c303545f10439ec511a9f954d0feba84c5287d41c8a?apiKey=5054b86bb369459e857ad81bc8b6e736&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/a9e36320710efb2e55281c303545f10439ec511a9f954d0feba84c5287d41c8a?apiKey=5054b86bb369459e857ad81bc8b6e736&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/a9e36320710efb2e55281c303545f10439ec511a9f954d0feba84c5287d41c8a?apiKey=5054b86bb369459e857ad81bc8b6e736&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/a9e36320710efb2e55281c303545f10439ec511a9f954d0feba84c5287d41c8a?apiKey=5054b86bb369459e857ad81bc8b6e736&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/a9e36320710efb2e55281c303545f10439ec511a9f954d0feba84c5287d41c8a?apiKey=5054b86bb369459e857ad81bc8b6e736&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/a9e36320710efb2e55281c303545f10439ec511a9f954d0feba84c5287d41c8a?apiKey=5054b86bb369459e857ad81bc8b6e736&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/a9e36320710efb2e55281c303545f10439ec511a9f954d0feba84c5287d41c8a?apiKey=5054b86bb369459e857ad81bc8b6e736&"
+                        class="ref-img" />
+                </a>
+            </div>
+            <div class="components-heading-section">
+                <div class="tile-heading"> {{apiInfo.apiName}}</div>
+            </div>
+        </div>
+    </div>
+    {{/details.apiList}}
+</body>
 
 </html>

@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import { promises as fs } from 'fs';
 import * as React from 'react';
 import './../../../../../src/app/api.css'
+import Handlebars from "handlebars";
+import { marked } from 'marked';
 
 export async function getServerSideProps(context) {
     const content = {}
@@ -31,7 +33,7 @@ export async function getServerSideProps(context) {
         }
         content.navContent = await fs.readFile(process.cwd() + "/public/resources/template/nav-bar.html", 'utf8');
         content.footerContent = await fs.readFile(process.cwd() + "/public/resources/template/footer.html", 'utf8');
-        let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/orgContent.json", 'utf8'));
+        let response = JSON.parse(await fs.readFile(process.cwd() + "/public/mock/orgContent.json", 'utf8'));
         content.orgName = response.orgName;
     } else {
         htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=api-landing-page.html";
@@ -106,13 +108,17 @@ function API({ content }) {
                 }
             });
         }
-        window.getAPIDetails = () => getAPIProps(content);
     }, []);
+
+    const template = Handlebars.compile(content.apiHTMLContent);
+    const context = { details: getAPIProps(content)};
+    const html = template(context);
 
     return (
         <div>
+            {/* <pre>{content.apiJSContent}</pre> */}
             <Navbar content={content} />
-            <div dangerouslySetInnerHTML={{ __html: content.apiHTMLContent }}></div>
+            <div dangerouslySetInnerHTML={{ __html: html }}></div>
             {content.apiResources != null &&
                 <div class="relative">
                     <div class="card">
@@ -133,7 +139,7 @@ export default API;
 export function getAPIProps(content) {
     return {
         apiResources: content.apiResources,
-        apiPage: content.apiPage,
+        apiPage: marked(content.apiPage),
         apiImageSrc: content.apiImageSrc,
     }
 }
