@@ -51,13 +51,10 @@ export async function getServerSideProps(context) {
   var tileRef;
 
   if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-    content.navContent = await fs.readFile(process.cwd() + "/public/resources/template/nav-bar.html", 'utf8');
-    content.footerContent = await fs.readFile(process.cwd() + "/public/resources/template/footer.html", 'utf8');
-    content.tileContent = await fs.readFile(process.cwd() + "/public/resources/template/apitile.html", 'utf8');
-    content.componentsHTMLContent = await fs.readFile(process.cwd() + "/public/resources/template/components-page.html", 'utf8');
-    content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/content-mock/apiMedatada.json", 'utf8'));
+    content.componentsHTMLContent = await fs.readFile(process.cwd() + "/public/resources/layouts/components-page.inc", 'utf8');
+    content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/mock/apiMedatada.json", 'utf8'));
     content.componentsHTMLLineCount = content.componentsHTMLContent.split(/\r\n|\r|\n/).length;
-    let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/orgContent.json", 'utf8'));
+    let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/mock/orgContent.json", 'utf8'));
     content.orgName = response.orgName;
   } else {
     try {
@@ -72,9 +69,6 @@ export async function getServerSideProps(context) {
 
       if (componentResponse.ok) {
         var contentRef = await componentResponse.text();
-        const apiTileContent = await fetch(tileRef)
-        const apiTileResponse = await apiTileContent.text()
-        content.tileContent = apiTileResponse
         const footerResponse = await fetch(footerRef)
         content.footerContent = await footerResponse.text()
         const navResponse = await fetch(navRef)
@@ -125,7 +119,6 @@ export default function Components({ content }) {
         }
       });
     }
-
   }, []);
 
   const template = Handlebars.compile(content.componentsHTMLContent);
@@ -137,9 +130,7 @@ export default function Components({ content }) {
 
   return (
     <div>
-      <Navbar content={content} />
-      <div id='components-page-wrapper' class="components-page" dangerouslySetInnerHTML={{ __html: html }}></div>
-      <Footer content={content} />
+      <div dangerouslySetInnerHTML={{ __html: html }}></div>
     </div>
   );
 }
@@ -147,6 +138,5 @@ export default function Components({ content }) {
 export function getAPIMetadataProps(content) {
   return {
     apiList: content.apiResources,
-    tile: content.tileContent
   }
 }

@@ -1,8 +1,3 @@
-import Navbar from '../../../../app/navbar';
-import Footer from '../../../../app/footer';
-import Markdown from 'react-markdown'
-import { createRoot } from 'react-dom/client'
-import rehypeRaw from 'rehype-raw'
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { promises as fs } from 'fs';
@@ -20,20 +15,18 @@ export async function getServerSideProps(context) {
     var footerRef;
 
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-        content.apiHTMLContent = await fs.readFile(process.cwd() + "/public/resources/template/api-landing-page.html", 'utf8');
+        content.apiHTMLContent = await fs.readFile(process.cwd() + "/public/resources/layouts/api-landing-page.inc", 'utf8');
         try {
-            content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/content-mock/" + context.params.apiName + "/apiMedatada.json", 'utf8'));
+            content.apiResources = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/mock/" + context.params.apiName + "/apiMedatada.json", 'utf8'));
         } catch (e) {
             content.apiHTMLContent = '<h3>API not found</h3>';
         }
         try {
-            content.apiPage = await fs.readFile(process.cwd() + "/public/resources/content-mock/" + context.params.apiName + "/apiContent.md", 'utf8');
+            content.apiPage = await fs.readFile(process.cwd() + "/public/resources/mock/" + context.params.apiName + "/apiContent.md", 'utf8');
         } catch (e) {
             content.apiPage = 'API content not uploaded';
         }
-        content.navContent = await fs.readFile(process.cwd() + "/public/resources/template/nav-bar.html", 'utf8');
-        content.footerContent = await fs.readFile(process.cwd() + "/public/resources/template/footer.html", 'utf8');
-        let response = JSON.parse(await fs.readFile(process.cwd() + "/public/mock/orgContent.json", 'utf8'));
+        let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/mock/orgContent.json", 'utf8'));
         content.orgName = response.orgName;
     } else {
         htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + context.params.orgName + "&fileName=api-landing-page.html";
@@ -111,13 +104,11 @@ function API({ content }) {
     }, []);
 
     const template = Handlebars.compile(content.apiHTMLContent);
-    const context = { details: getAPIProps(content)};
+    const context = { details: getAPIProps(content) };
     const html = template(context);
 
     return (
         <div>
-            {/* <pre>{content.apiJSContent}</pre> */}
-            <Navbar content={content} />
             <div dangerouslySetInnerHTML={{ __html: html }}></div>
             {content.apiResources != null &&
                 <div class="relative">
@@ -129,7 +120,6 @@ function API({ content }) {
                         </div>
                     </div>
                 </div>}
-            <Footer content={content} />
         </div>
     )
 }

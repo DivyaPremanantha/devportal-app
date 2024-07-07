@@ -65,12 +65,8 @@ li {
 }
 
 .api-image{
+  width: 40%;
   height: auto;
   margin: 10px 60px 20px 0px;
   text-align: center;
-}
-
-img {
-  width: 40%;
-  height: auto;
 }

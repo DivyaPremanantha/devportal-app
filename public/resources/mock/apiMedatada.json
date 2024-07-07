@@ -1,0 +1,45 @@
+[{
+    "apiInfo": {
+        "apiName": "AccommodationAPI",
+        "authenticate": true,
+        "apiArtifacts": {
+            "apiImages": {
+                "api-landing-page-image": "/resources/mock/api-images/accommodation.png",
+                "api-detail-page-image": "/resources/mock/api-images/accommodation-mini.jpeg"
+            }
+        }
+    }
+},
+{
+    "apiInfo": {
+        "apiName": "LeisureActivitiesAPI",
+        "apiArtifacts": {
+            "apiImages": {
+                "api-landing-page-image": "/resources/mock/api-images/leisure.jpeg",
+                "api-detail-page-image": "/resources/mock/api-images/leisure-mini.jpeg"
+            }
+        }
+    }
+},
+{
+    "apiInfo": {
+        "apiName": "FamousAttractionsAPI",
+        "apiArtifacts": {
+            "apiImages": {
+                "api-landing-page-image": "/resources/mock/api-images/attractions.jpeg",
+                "api-detail-page-image": "/resources/mock/api-images/attractions-mini.jpeg"
+            }
+        }
+    }
+},
+{
+    "apiInfo": {
+        "apiName": "HotelAvailabilityAPI",
+        "apiArtifacts": {
+            "apiImages": {
+                "api-landing-page-image": "/resources/mock/api-images/hotel-availability.jpeg",
+                "api-detail-page-image": "/resources/mock/api-images/hotel-availability-mini.jpeg"
+            }
+        }
+    }
+}]

@@ -9,7 +9,7 @@ export async function getServerSideProps(context) {
     const content = {}
     const orgName = context.query.callbackUrl.split("/")[3];
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
-        content.pageHTMLContent = await fs.readFile(process.cwd() + "/public/resources/template/sign-in.html", 'utf8');
+        content.pageHTMLContent = await fs.readFile(process.cwd() + "/public/resources/pages/sign-in.inc", 'utf8');
     } else {
         try {
             const htmlRef = process.env.NEXT_PUBLIC_ADMIN_API_URL + "orgFiles?orgName=" + orgName + "&fileName=sign-in.html";
@@ -35,7 +35,7 @@ export async function getServerSideProps(context) {
     content.pageHTMLLineCount = content.pageHTMLContent.split(/\r\n|\r|\n/).length;
 
     try {
-        let providers = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/auth.json", 'utf8'));
+        let providers = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/mock/auth.json", 'utf8'));
         return { props: { providers, content } };
     } catch (error) {
         console.error('Error fetching providers:', error);

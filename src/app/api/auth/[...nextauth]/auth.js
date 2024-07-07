@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import { authConfig } from './authConfig';
 
-const providers = require(process.cwd() + "/public/resources/auth.json");
+const providers = require(process.cwd() + "/public/resources/mock/auth.json");
 
 const loadProviders = providers.map(provider => {
   return {

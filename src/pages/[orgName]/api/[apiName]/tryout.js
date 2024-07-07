@@ -12,14 +12,14 @@ export async function getServerSideProps(context) {
     const apiName = context.params.apiName;
     if (process.env.NEXT_PUBLIC_DEPLOYMENT === "DEV") {
         try {
-            const swagger = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/content-mock/" + apiName + "/apiMedatada.json", 'utf8')).apiInfo.openApiDefinition;
+            const swagger = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/mock/" + apiName + "/apiMedatada.json", 'utf8')).apiInfo.openApiDefinition;
             content.swagger = JSON.stringify(swagger);
         } catch (e) {
             content.apiHTMLContent = '<h3>API not found</h3>';
         }
-        content.navContent = await fs.readFile(process.cwd() + "/public/resources/template/nav-bar.html", 'utf8');
-        content.footerContent = await fs.readFile(process.cwd() + "/public/resources/template/footer.html", 'utf8');
-        let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/orgContent.json", 'utf8'));
+        content.navContent = await fs.readFile(process.cwd() + "/public/resources/pages/nav-bar.inc", 'utf8');
+        content.footerContent = await fs.readFile(process.cwd() + "/public/resources/pages/footer.inc", 'utf8');
+        let response = JSON.parse(await fs.readFile(process.cwd() + "/public/resources/mock/orgContent.json", 'utf8'));
         content.orgName = response.orgName;
 
     } else {

@@ -497,8 +497,8 @@
         },
         "apiArtifacts": {
             "apiImages": {
-                "api-landing-page-image": "/resources/content-mock/api-images/accommodation.png",
-                "api-detail-page-image": "/resources/content-mock/api-images/accommodation-mini.jpeg"
+                "api-landing-page-image": "/resources/mock/api-images/accommodation.png",
+                "api-detail-page-image": "/resources/mock/api-images/accommodation-mini.jpeg"
             }
         }
 

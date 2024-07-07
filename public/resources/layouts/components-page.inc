@@ -1,14 +1,16 @@
-<html>
+<nav class="navbar">
+    <div class="navbar-container">
+        <a id="org-logo" href="/ABCOrganization"><img src="/resources/images/logo.png" class="navbar-logo"></a>
+        <div class="navbar-links" id="nav-bar">
+            <a href="/ABCOrganization" class="navbar-link" id="org-home"> Home</a>
+            <a href="/ABCOrganization/apis" class="navbar-link" id="org-apis"> APIs</a>
+        </div>
+    </div>
+</nav>
 
-<head>
-    <link rel="stylesheet" href="/resources/stylesheet/components.css">
-    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.min.js"></script>
-
-</head>
-
-<body>
+<main class="components-page">
     {{#details.apiList}}
-    <div class="components-inner-section"> 
+    <section class="components-inner-section">
         <img class="components-img" src={{apiInfo.imagePath}}></img>
         <div class="components-inner-section-bottom">
             <div>
@@ -22,8 +24,10 @@
                 <div class="tile-heading"> {{apiInfo.apiName}}</div>
             </div>
         </div>
-    </div>
+    </section>
     {{/details.apiList}}
-</body>
+</main>
 
-</html>
+<footer>
+    &copy; 2023 XYZ Organization. All rights reserved.
+</footer>

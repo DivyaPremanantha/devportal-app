@@ -236,8 +236,8 @@
         } ,
         "apiArtifacts": {
             "apiImages": {
-                "api-landing-page-image": "/resources/content-mock/api-images/attractions.jpeg",
-                "api-detail-page-image": "/resources/content-mock/api-images/attractions-mini.jpeg"
+                "api-landing-page-image": "/resources/mock/api-images/attractions.jpeg",
+                "api-detail-page-image": "/resources/mock/api-images/attractions-mini.jpeg"
             }
         }
 
